@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SquaredStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:backgroundTint">@android:color/white</item>
+    </style>
+</resources>

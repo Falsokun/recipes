@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Recipes</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_favorite">Favourite</string>
+    <string name="home">Home</string>
+    <string name="my_recipes">My recipes</string>
+    <string name="write_name">Write name of the recipe</string>
+    <string name="add_products">Add products</string>
+    <string name="product_name_hint">Product name</string>
+    <string name="save">save</string>
+    <string name="next">Next</string>
+    <string name="choose_measure">Choose measuring</string>
+    <string name="choose_categories">Choose categories:</string>
+    <string name="choose_cooking_time">Choose cooking time</string>
+    <string name="persons_number">Portions</string>
+    <string name="write_recipe">Write recipe</string>
+    <string name="fill_data">Fill necessary data!</string>
+    <string name="cooking_time">Cooking time</string>
+    <string name="preparations">Preparations</string>
+    <string name="baking">Ready in</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="no_such_product">Product not found</string>
+    <string name="should_add">No such product in base. Would you like to add?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="edit">Edit</string>
+
+    <string-array name="measures_array">
+        <item>lt</item>
+        <item>kg</item>
+        <item>gr</item>
+        <item>cup</item>
+        <item>tsp</item>
+        <item>tbsp</item>
+        <item>pcs</item>
+    </string-array>
+</resources>

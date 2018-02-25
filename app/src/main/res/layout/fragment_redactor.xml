@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.hotger.recipes.viewmodel.RedactorViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:hint="@string/write_name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:text="@={model.currentRecipe.title}"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorHint" />
+
+        <ProgressBar
+            android:id="@+id/redactor_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:max="100" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/recipe_vp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_save"
+            android:layout_below="@id/redactor_progress"
+            android:elevation="4dp"
+            android:layout="@id/redactor_progress" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:text="@string/next" />
+    </RelativeLayout>
+</layout>

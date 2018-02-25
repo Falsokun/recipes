@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="com.hotger.recipes.viewmodel.RecipeViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{model.currentRecipe.title}"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/title_size" />
+
+            <LinearLayout
+                android:id="@+id/hotkeys"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/recipe_info"
+                    style="@style/SquaredStyle"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:drawableTop="@drawable/ic_info" />
+
+                <Button
+                    android:id="@+id/favorite"
+                    style="@style/SquaredStyle"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:drawableTint="@color/colorAccent"
+                    android:drawableTop="@drawable/ic_fav" />
+
+                <Button
+                    style="@style/SquaredStyle"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:drawableTint="@android:color/black"
+                    android:drawableTop="@drawable/ic_save" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/divider0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hotkeys"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line" />
+
+            <LinearLayout
+                android:id="@+id/porions_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider0">
+
+                <Button
+                    android:layout_width="64dp"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/button_border"
+                    android:text="@{model.currentRecipe.stringPortions}"
+                    android:textColor="@color/colorText" />
+
+                <TextView
+                    android:id="@+id/portions_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/persons_number"
+                    android:textColor="@color/colorText" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/porions_container"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line" />
+
+            <RelativeLayout
+                android:id="@+id/timing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider1"
+                android:gravity="center">
+
+                <include
+                    android:id="@+id/preparations"
+                    layout="@layout/progress_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    bind:cookingTime="@{model.currentRecipe.cookingTime}"
+                    bind:description="@{@string/preparations}"
+                    bind:stringTime="@{model.currentRecipe.getStringTime(model.currentRecipe.cookingTime)}" />
+
+                <include
+                    android:id="@+id/cooking"
+                    layout="@layout/progress_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/preparations"
+                    bind:cookingTime="@{30}"
+                    bind:description="@{@string/cooking_time}"
+                    bind:stringTime="@{model.currentRecipe.getStringTime(30)}" />
+
+                <include
+                    android:id="@+id/baking"
+                    layout="@layout/progress_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/cooking"
+                    bind:cookingTime="@{model.currentRecipe.cookingTime}"
+                    bind:description="@{@string/baking}"
+                    bind:stringTime="@{model.currentRecipe.getStringTime(model.currentRecipe.cookingTime)}" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/timing"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line" />
+
+            <TextView
+                android:id="@+id/ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider2"
+                android:text="@string/ingredients"
+                android:textColor="@color/colorText" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/products"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ingredients"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/products"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line" />
+
+            <com.nex3z.flowlayout.FlowLayout
+                android:id="@+id/category_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:flChildSpacing="8dp"
+                bind:flRowSpacing="8dp"
+                android:layout_below="@id/divider3" />
+
+            <TextView
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/category_container"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/dotted_line" />
+
+            <TextView
+                android:id="@+id/recipe_steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider4"
+                android:text="@{model.currentRecipe.preparations}"
+                android:textColor="@color/colorText"/>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

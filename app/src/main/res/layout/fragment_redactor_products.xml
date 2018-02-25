@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.hotger.recipes.viewmodel.RedactorViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/add_products"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <EditText
+            android:id="@+id/addProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:elevation="4dp"
+            android:hint="@string/add_products"
+            android:inputType="text"
+            android:maxLines="1"
+            android:text="@={model.productName}"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorHint" />
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addProductName"
+            android:background="@color/colorPrimaryDarkOpaque"
+            android:divider="@color/colorAccent"
+            android:dividerHeight="2px"
+            android:elevation="4dp"
+            android:translationZ="10dp"
+            android:visibility="@{model.productName.length() != 0 &amp;&amp; model.keyboardVisible? View.VISIBLE : View.GONE}" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/products_line_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addProductName" />
+
+    </RelativeLayout>
+</layout>

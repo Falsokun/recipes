@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:hint="@string/product_name_hint"
+            android:paddingLeft="@dimen/padding_dimen"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <Button
+            android:id="@+id/amount_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/amount_layout"
+            android:background="@android:color/transparent"
+            android:drawablePadding="-5dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:drawableTop="@drawable/ic_glass_white"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="8sp" />
+
+        <LinearLayout
+            android:id="@+id/amount_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/delete_product"
+            android:layout_alignWithParentIfMissing="true">
+
+            <ImageButton
+                android:id="@+id/btn_sub"
+                style="@style/SquaredStyle"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:scaleX="0.6"
+                android:scaleY="0.5"
+                android:src="@drawable/ic_action_remove"
+                android:tint="@color/colorPrimary" />
+
+            <EditText
+                android:id="@+id/final_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:minWidth="40dp"
+                android:width="64dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_add"
+                style="@style/SquaredStyle"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:scaleX="0.4"
+                android:scaleY="0.4"
+                android:src="@drawable/ic_action_add"
+                android:tint="@color/colorPrimary" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/delete_product"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/colorPrimaryDark" />
+
+    </RelativeLayout>
+</layout>

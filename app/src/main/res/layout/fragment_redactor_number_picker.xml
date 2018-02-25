@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.hotger.recipes.viewmodel.RedactorViewModel" />
+
+        <variable
+            name="isTimePicker"
+            type="android.databinding.ObservableBoolean" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/title"
+            android:gravity="center">
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/first_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layerType="hardware"
+                android:orientation="vertical"
+                app:np_dividerColor="@color/colorAccent"
+                app:np_min="0"
+                app:np_selectedTextColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/semicolon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/first_number"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text=":"
+                android:textColor="@color/colorAccent"
+                android:visibility="@{isTimePicker.get() ? View.VISIBLE : View.GONE}" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/second_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/semicolon"
+                android:layerType="hardware"
+                android:orientation="vertical"
+                android:visibility="@{isTimePicker.get() ? View.VISIBLE : View.GONE}"
+                app:np_dividerColor="@color/colorAccent"
+                app:np_min="0"
+                app:np_selectedTextColor="@color/colorAccent" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
