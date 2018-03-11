@@ -1,49 +1,65 @@
 package com.hotger.recipes.adapter;
 
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemRecipeBinding;
-import com.hotger.recipes.utils.Recipe;
-import com.hotger.recipes.utils.Utils;
-import com.hotger.recipes.view.MainActivity;
-import com.hotger.recipes.view.RecipeFragment;
+import com.hotger.recipes.utils.model.RecipePrev;
+import com.hotger.recipes.view.ControllableActivity;
 
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmRecyclerViewAdapter;
+import java.util.List;
 
-public class CardAdapter extends RealmRecyclerViewAdapter<Recipe, RecyclerView.ViewHolder> {
+/**
+ * Displaying recipes list
+ */
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
-    private MainActivity activity;
+    private ControllableActivity activity;
+    private List<RecipePrev> data;
+    public static int COLUMNS_COUNT = 3;
 
-    public CardAdapter(MainActivity activity, OrderedRealmCollection<Recipe> data) {
-        super(data, true, true);
+    public CardAdapter(ControllableActivity activity, List<RecipePrev> data) {
         this.activity = activity;
+        this.data = data;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ViewHolder(inflater.inflate(R.layout.item_recipe, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Recipe recipe = getItem(position);
-        final ItemRecipeBinding holderBinding = ((ViewHolder) holder).mBinding;
-        holderBinding.recipeName.setText(recipe.getTitle());
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        RecipePrev recipe = data.get(position);
+        final ItemRecipeBinding holderBinding = holder.mBinding;
+        holderBinding.recipeName.setText(recipe.getName());
+        Glide.with(activity).load(recipe.getImageUrl()).into(holderBinding.recipeImg);
         holderBinding.listItem.setOnClickListener(v -> {
-            openFragmentWithRecipe(recipe);
+            activity.openRecipe(recipe.getId());
         });
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemCount() {
+        return data.size() - data.size() % COLUMNS_COUNT;
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    public void clearData() {
+        data.clear();
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemRecipeBinding mBinding;
 
@@ -53,15 +69,12 @@ public class CardAdapter extends RealmRecyclerViewAdapter<Recipe, RecyclerView.V
         }
     }
 
-    public boolean isEmpty() {
-        return getData().isEmpty();
+    public List<RecipePrev> getData() {
+        return data;
     }
 
-    private void openFragmentWithRecipe(Recipe recipe) {
-        Fragment fragment = new RecipeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(Utils.RECIPE_ID, (int) recipe.getId());
-        fragment.setArguments(bundle);
-        activity.setCurrentFragment(fragment, true, RecipeFragment.class.getName());
+    public void setData(List<RecipePrev> data) {
+        this.data = data;
+        notifyDataSetChanged();
     }
 }

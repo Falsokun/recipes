@@ -47,14 +47,14 @@ public class NumberPickerFragment extends Fragment {
         if (isTimePicker.get()) {
             initTimePickerValues();
             if (mRedactorModel.isEdited()) {
-                mBinding.firstNumber.setValue(mRedactorModel.getCurrentRecipe().getCookingTime() / 60);
-                mBinding.secondNumber.setValue(mRedactorModel.getCurrentRecipe().getCookingTime() % 60);
+                mBinding.firstNumber.setValue(mRedactorModel.getCurrentRecipe().getTotalTimeInSeconds() / 60);
+                mBinding.secondNumber.setValue(mRedactorModel.getCurrentRecipe().getTotalTimeInSeconds() % 60);
             }
 
             mBinding.secondNumber.setOnValueChangedListener(mRedactorModel.getPickerChangedListener(isTimePicker.get(), false));
         } else {
             if (mRedactorModel.isEdited()) {
-                mBinding.firstNumber.setValue(mRedactorModel.getCurrentRecipe().getPortions());
+                mBinding.firstNumber.setValue(mRedactorModel.getCurrentRecipe().getNumberOfServings());
             }
             initNumberPickerValues();
         }
@@ -62,13 +62,13 @@ public class NumberPickerFragment extends Fragment {
     }
 
     private void initNumberPickerValues() {
-        mBinding.title.setText(getResources().getString(R.string.persons_number));
+        mBinding.name.setText(getResources().getString(R.string.persons_number));
         mBinding.firstNumber.setMinValue(1);
         mBinding.firstNumber.setMaxValue(MAX_PORTIONS);
     }
 
     private void initTimePickerValues() {
-        mBinding.title.setText(getResources().getString(R.string.choose_cooking_time));
+        mBinding.name.setText(getResources().getString(R.string.choose_cooking_time));
         mBinding.firstNumber.setMinValue(0);
         mBinding.secondNumber.setMinValue(0);
         mBinding.firstNumber.setMaxValue(MAX_HOURS);

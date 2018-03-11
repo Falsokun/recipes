@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
-import com.hotger.recipes.databinding.FragmentRedactorBinding;
+import com.hotger.recipes.databinding.ActivityRedactorBinding;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
 
@@ -17,7 +17,7 @@ public class RedactorActivity extends AppCompatActivity {
     /**
      * Binding variable
      */
-    private FragmentRedactorBinding mBinding;
+    private ActivityRedactorBinding mBinding;
 
     /**
      * Redactor model (model for every child fragment)
@@ -32,7 +32,8 @@ public class RedactorActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.fragment_redactor);
+        mRedactorModel = new RedactorViewModel(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_redactor);
         mBinding.setModel(mRedactorModel);
         initAdapter();
         mBinding.recipeVp.setAdapter(mRedactorAdapter);
@@ -63,16 +64,17 @@ public class RedactorActivity extends AppCompatActivity {
         if (mRedactorAdapter == null) {
             mRedactorAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             ProductsRedactorFragment fragment = new ProductsRedactorFragment();
-            fragment.setRedactorModel(mRedactorModel);
+            fragment.setInputModel(mRedactorModel.getInputProductsViewModel());
             mRedactorAdapter.addFragment(fragment);
 
-            CategoryFragment fragment1 = new CategoryFragment();
+            CategoryRedactorFragment fragment1 = new CategoryRedactorFragment();
             fragment1.setModel(mRedactorModel);
             mRedactorAdapter.addFragment(fragment1);
 
-            TextRedactorFragment fragment2 = new TextRedactorFragment();
-            fragment2.setRedactorModel(mRedactorModel);
-            mRedactorAdapter.addFragment(fragment2);
+            //TODO:Что-то с этим говном не так
+//            TextRedactorFragment fragment2 = new TextRedactorFragment();
+//            fragment2.setRedactorModel(mRedactorModel);
+//            mRedactorAdapter.addFragment(fragment2);
 
             NumberPickerFragment cookingTime = new NumberPickerFragment();
             Bundle bundle = new Bundle();
@@ -97,7 +99,7 @@ public class RedactorActivity extends AppCompatActivity {
      * @return progress in %
      */
     private int getProgress(int currentPosition) {
-        return (currentPosition + 1) * 100 / mRedactorAdapter.getCount() ;
+        return (currentPosition + 1) * 100 / mRedactorAdapter.getCount();
     }
 
     /**

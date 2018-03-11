@@ -2,36 +2,33 @@ package com.hotger.recipes.viewmodel;
 
 
 import android.databinding.Bindable;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ProductsAdapter;
-import com.hotger.recipes.utils.RealmString;
-import com.hotger.recipes.utils.Recipe;
-import com.hotger.recipes.view.MainActivity;
+import com.hotger.recipes.utils.model.Recipe;
+import com.hotger.recipes.view.ControllableActivity;
 
-import io.realm.RealmList;
+import java.util.ArrayList;
 
 public class RecipeViewModel extends ViewModel {
 
     private Recipe mCurrentRecipe;
-    private MainActivity activity;
+    private ControllableActivity activity;
     private ProductsAdapter productsAdapter;
 
-    public RecipeViewModel(int recipeId, MainActivity activity) {
+    public RecipeViewModel(int recipeId, ControllableActivity activity) {
         this.activity = activity;
-        mCurrentRecipe = activity
-                .getRealmInstance()
-                .where(Recipe.class)
-                .equalTo("id", recipeId)
-                .findAll()
-                .get(0);
-        productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false);
+        productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false, true);
+    }
+
+    public RecipeViewModel(Recipe recipe, ControllableActivity activity) {
+        this.activity = activity;
+        mCurrentRecipe = recipe;
+        productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false, true);
     }
 
     @Bindable
@@ -46,7 +43,6 @@ public class RecipeViewModel extends ViewModel {
 
     @Override
     public void OnResume() {
-        activity.setToolbarImage();
         activity.setUpNavigation(true);
     }
 
@@ -60,7 +56,7 @@ public class RecipeViewModel extends ViewModel {
     }
 
     public void addCategories(ViewGroup categoryContainer) {
-        RealmList<RealmString> categories = getCurrentRecipe().getCategories();
+        ArrayList<String> categories = getCurrentRecipe().getCategories();
         for (int i = 0; i < categories.size(); i++) {
             TableRow row = new TableRow(activity);
             row.setId(i);
@@ -68,7 +64,7 @@ public class RecipeViewModel extends ViewModel {
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             CheckBox checkBox = new CheckBox(activity);
             checkBox.setId(i);
-            checkBox.setText(categories.get(i).toString());
+            checkBox.setText(categories.get(i));
             checkBox.setBackground(activity.getDrawable(R.drawable.chekox_shape));
             checkBox.setPadding(30, 0, 30, 0);
             checkBox.setButtonDrawable(null);

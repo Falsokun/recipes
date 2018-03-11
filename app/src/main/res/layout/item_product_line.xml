@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="isDetailed"
+            type="boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/product_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:hint="@string/product_name_hint"
-            android:paddingLeft="@dimen/padding_dimen"
-            android:textColor="@color/colorPrimaryDark" />
+            android:layout_toLeftOf="@+id/amount_icon"
+            android:textColor="@color/colorPrimaryDark"
+            android:gravity="left"
+            android:layout_gravity="left"/>
 
         <Button
             android:id="@+id/amount_icon"
@@ -34,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/delete_product"
-            android:layout_alignWithParentIfMissing="true">
+            android:layout_alignWithParentIfMissing="true"
+            android:visibility="@{isDetailed ? View.VISIBLE : View.GONE}">
 
             <ImageButton
                 android:id="@+id/btn_sub"

@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentHomeBinding;
+import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BackStackFragment {
 
     FragmentHomeBinding mBinding;
 

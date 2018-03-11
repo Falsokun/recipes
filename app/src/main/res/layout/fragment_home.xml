@@ -15,7 +15,7 @@
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/else1"
+            android:id="@+id/showTest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/addReceipt"
@@ -29,7 +29,7 @@
             android:id="@+id/else2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/else1"
+            android:layout_below="@id/showTest"
             android:background="@color/colorPrimary"
             android:text="Import"
             android:textColor="@android:color/white" />

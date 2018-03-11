@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.utils.Utils;
+import com.hotger.recipes.view.CategoryFragment;
+import com.hotger.recipes.view.FridgeFragment;
+import com.hotger.recipes.view.HomeFragment;
+import com.hotger.recipes.view.MainActivity;
 import com.hotger.recipes.view.RecipeListFragment;
 
 public class BackStackFragment extends Fragment {
@@ -28,9 +32,10 @@ public class BackStackFragment extends Fragment {
     }
 
     private void replaceFragment() {
-        if (getChildFragmentManager().getBackStackEntryCount() != 0){
+        if (getChildFragmentManager().getBackStackEntryCount() != 0) {
             return;
         }
+
         int navigationId = getArguments().getInt(Utils.EXTRA_NAVIGATION_ID, -1);
         if (navigationId == -1) {
             return;
@@ -38,8 +43,20 @@ public class BackStackFragment extends Fragment {
 
         Fragment rootFragment = null;
         switch (navigationId) {
-            case R.id.menu_my_recipes:
+            case R.id.menu_categories:
+                rootFragment = new CategoryFragment();
+                break;
+            case R.id.menu_home:
+                rootFragment = new HomeFragment();
+                break;
+            case R.id.menu_fridge:
+                rootFragment = new FridgeFragment();
+                ((FridgeFragment) rootFragment)
+                        .setInputModel(Utils.getInputProductsModel((MainActivity) getActivity()));
+                break;
+            case RecipeListFragment.ID:
                 rootFragment = new RecipeListFragment();
+                rootFragment.setArguments(getArguments());
                 break;
             default:
                 break;

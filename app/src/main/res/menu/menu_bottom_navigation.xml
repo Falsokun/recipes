@@ -5,16 +5,27 @@
             android:id="@+id/menu_home"
             android:enabled="true"
             android:icon="@drawable/ic_home"
-            android:title="@string/home" />
+            android:name="@string/home"
+            android:title="@string/home"/>
         <item
-            android:id="@+id/menu_my_recipes"
+            android:id="@+id/menu_categories"
             android:enabled="true"
             android:icon="@drawable/ic_bookmark"
-            android:title="@string/my_recipes" />
+            android:name="@string/categories"
+            android:title="@string/categories" />
+
         <item
-            android:id="@+id/menu_other"
+            android:id="@+id/menu_fridge"
             android:enabled="true"
-            android:icon="@android:drawable/ic_dialog_info"
-            android:title="other" />
+            android:icon="@drawable/ic_fridge"
+            android:name="other"
+            android:title="@string/fridge" />
+
+        <item
+            android:id="@+id/menu_my_recipe"
+            android:enabled="true"
+            android:icon="@drawable/ic_book_open_variant"
+            android:name="other"
+            android:title="@string/my_recipes" />
     </group>
 </menu>

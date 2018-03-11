@@ -1,4 +1,4 @@
-package com.sfedu.recipes.adapter;
+package com.hotger.recipes.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View pager adapter
+ */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**

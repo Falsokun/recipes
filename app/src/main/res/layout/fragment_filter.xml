@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/filter_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDarkOpaque"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_dimen">
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/cuisine_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/no_cuisine_filter"
+            app:ms_arrow_tint="@color/colorPrimaryLight"
+            app:ms_background_color="#000000ff"
+            app:ms_background_selector="@color/colorPrimaryDarkOpaque"
+            app:ms_dropdown_height="300dp"
+            app:ms_text_color="@color/colorPrimaryLight" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/course_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cuisine_sp"
+            android:layout_marginTop="@dimen/padding_dimen"
+            android:hint="@string/no_course_filter"
+            app:ms_arrow_tint="@color/colorPrimaryLight"
+            app:ms_background_color="#000000ff"
+            app:ms_background_selector="@color/colorPrimaryDarkOpaque"
+            app:ms_dropdown_height="300dp"
+            app:ms_text_color="@color/colorPrimaryLight" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/diet_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/course_sp"
+            android:layout_marginTop="@dimen/padding_dimen"
+            android:hint="@string/no_diet_filter"
+            app:ms_arrow_tint="@color/colorPrimaryLight"
+            app:ms_background_color="#000000ff"
+            app:ms_background_selector="@color/colorPrimaryDarkOpaque"
+            app:ms_dropdown_height="300dp"
+            app:ms_text_color="@color/colorPrimaryLight" />
+
+        <TextView
+            android:id="@+id/cooking_time"
+            android:text="@string/cooking_time"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/padding_dimen"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diet_sp"/>
+        <TextView
+            android:id="@+id/result"
+            android:text="@string/cooking_time"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/padding_dimen"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diet_sp"/>
+
+        <com.appyvet.materialrangebar.RangeBar
+            android:id="@+id/rangebar"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_below="@id/diet_sp"
+            android:layout_marginTop="@dimen/padding_dimen"
+            app:mrb_connectingLineColor="@color/colorPrimaryLight"
+            app:mrb_pinColor="@color/colorPrimaryLight"
+            app:mrb_rangeBar="false"
+            app:mrb_rangeBarColor="@color/colorPrimaryLight"
+            app:mrb_selectorColor="@color/colorPrimaryLight"
+            app:mrb_tickEnd="60"
+            app:mrb_tickInterval="5"
+            app:mrb_tickStart="5" />
+
+        <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/flow_lo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rangebar" />
+
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_below="@id/flow_lo"
+            android:drawableRight="@drawable/ic_search"
+            android:text="start searching"/>
+    </RelativeLayout>
+</layout>

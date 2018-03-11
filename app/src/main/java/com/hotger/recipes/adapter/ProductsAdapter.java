@@ -1,4 +1,4 @@
-package com.sfedu.recipes.adapter;
+package com.hotger.recipes.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -12,15 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sfedu.recipes.R;
-import com.sfedu.recipes.databinding.ItemProductLineBinding;
-import com.sfedu.recipes.utils.Product;
-import com.sfedu.recipes.utils.Utils;
+import com.hotger.recipes.R;
+import com.hotger.recipes.databinding.ItemProductLineBinding;
+import com.hotger.recipes.utils.model.Product;
+import com.hotger.recipes.utils.Utils;
+
+import java.util.ArrayList;
 
 import io.realm.RealmList;
 
 /**
  * Adapter for handling entering products and its quanitity
+ *
+ * Адаптер для обработки ингридиентов внутри редактора рецептов
  */
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
 
@@ -31,15 +35,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private boolean isEditable;
 
+    private boolean isDetailed;
+
     /**
      * All selected products
      */
-    private RealmList<Product> data; //TODO записывать сразу в текущий рецепт
+    private ArrayList<Product> data; //TODO записывать сразу в текущий рецепт
 
-    public ProductsAdapter(Context context, RealmList<Product> data, boolean isEditable) {
+    public ProductsAdapter(Context context, ArrayList<Product> data, boolean isEditable,
+                           boolean isDetailed) {
         this.context = context;
         this.data = data;
         this.isEditable = isEditable;
+        this.isDetailed = isDetailed;
     }
 
     @Override
@@ -88,6 +96,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 break;
             case Utils.Measure.GRAMM:
             case Utils.Measure.KG:
+            case Utils.Measure.OUNCE:
             default:
                 drawable = context.getResources().getDrawable(R.drawable.ic_gram);
                 break;
@@ -122,11 +131,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     //region Getters and Setters
-    public RealmList<Product> getData() {
+    public ArrayList<Product> getData() {
         return data;
     }
 
-    public void setData(RealmList<Product> shots) {
+    public void setData(ArrayList<Product> shots) {
         data = shots;
     }
 
@@ -142,6 +151,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             super(itemView);
 
             binding = DataBindingUtil.bind(itemView);
+            binding.setIsDetailed(isDetailed);
             if (isEditable) {
                 View.OnClickListener listener = view -> {
                     double temp = Double.parseDouble(binding.finalAmount.getText().toString());
@@ -196,6 +206,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                     (dialog, which) -> changeMeasure(which));
             builder.show();
         }
+
         /**
          * Changes measure of the product
          *

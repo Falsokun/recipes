@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorCategoryBinding;
-import com.hotger.recipes.utils.RealmString;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 //TODO База данных
-public class CategoryFragment extends Fragment {
+public class CategoryRedactorFragment extends Fragment {
 
     /**
      * Data binding variable
@@ -49,6 +48,7 @@ public class CategoryFragment extends Fragment {
     }
 
     //TODO База данных
+
     /**
      * Get Categories and tags within it
      */

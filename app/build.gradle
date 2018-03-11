@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "com.hotger.recipes"
         minSdkVersion 21
@@ -29,6 +29,10 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    lintOptions {
+        disable 'RestrictedApi'
+    }
 }
 
 dependencies {
@@ -36,11 +40,18 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:appcompat-v7:27.0.2'
     testCompile 'junit:junit:4.12'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'io.realm:android-adapters:2.1.0'
+    compile 'com.android.support:design:27.0.2'
     compile 'com.nex3z:flow-layout:1.0.0'
     compile 'com.shawnlin:number-picker:2.4.4'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    compile 'com.jaredrummler:material-spinner:1.2.4'
+    compile 'com.appyvet:materialrangebar:1.4.1'
 }

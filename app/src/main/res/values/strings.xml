@@ -24,8 +24,22 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="edit">Edit</string>
+    <string name="error">Any error</string>
+    <string name="cuisine">Cuisine</string>
+    <string name="holiday">Holiday</string>
+    <string name="time">Time</string>
+    <string name="category">Category</string>
+    <string name="description_hint">1000+ recipes</string>
+    <string name="categories">Categories</string>
+    <string name="search">Search</string>
+    <string name="fridge">Fridge</string>
+    <string name="no_filter_selected">No filter selected</string>
+    <string name="no_cuisine_filter">No cuisine filter selected</string>
+    <string name="no_course_filter">No course filter selected</string>
+    <string name="no_diet_filter">No diet filter selected</string>
 
     <string-array name="measures_array">
+        <item></item>
         <item>lt</item>
         <item>kg</item>
         <item>gr</item>

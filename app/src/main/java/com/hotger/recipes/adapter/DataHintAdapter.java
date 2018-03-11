@@ -1,4 +1,4 @@
-package com.sfedu.recipes.adapter;
+package com.hotger.recipes.adapter;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.sfedu.recipes.R;
+import com.hotger.recipes.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +16,8 @@ import java.util.Arrays;
 //TODO загружать данные о продуктах из бд (бд как-то первоначально надо инифиализировать)
 /**
  * Adapter to show hint while typing product's name
+ *
+ * Адаптер для отображения всплывающих подсказок внутри редактора рецептов
  */
 public class DataHintAdapter extends ArrayAdapter<String> {
 

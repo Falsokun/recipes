@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="cookingTime"
+            name="totalTimeInSeconds"
             type="Integer" />
 
         <variable
@@ -28,7 +28,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:max="60"
-            android:progress="@{cookingTime}"
+            android:progress="@{totalTimeInSeconds}"
             android:progressDrawable="@drawable/circular_progress" />
 
         <TextView

@@ -16,7 +16,8 @@
         android:clickable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@color/colorBackground">
 
         <EditText
             android:id="@+id/name"
@@ -26,7 +27,7 @@
             android:hint="@string/write_name"
             android:inputType="text"
             android:maxLines="1"
-            android:text="@={model.currentRecipe.title}"
+            android:text="@={model.currentRecipe.name}"
             android:textColor="@color/colorText"
             android:textColorHint="@color/colorHint" />
 
