@@ -59,7 +59,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
 
                                  RecipeFragment fragment = new RecipeFragment();
                                  Bundle bundle = new Bundle();
-                                 recipe.setFromAPI(true);
+//                                 recipe.setFromAPI(true);
                                  recipe.prepareDataForShowing();
                                  bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
                                  fragment.setArguments(bundle);

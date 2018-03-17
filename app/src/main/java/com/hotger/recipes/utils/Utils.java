@@ -1,10 +1,14 @@
 package com.hotger.recipes.utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.util.SparseIntArray;
+import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.InputMethodSubtype;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.utils.model.Product;
@@ -18,6 +22,7 @@ public class Utils {
 
     public static final SparseIntArray bottomNavigationTabs = new SparseIntArray();
     public static final String EXTRA_NAVIGATION_ID = "extra.NAVIGATION_ID";
+    public static final String ENGLISH = "en";
 
     static {
         bottomNavigationTabs.put(R.id.menu_home, 0);
@@ -34,12 +39,6 @@ public class Utils {
         }
 
         return String.valueOf(number);
-    }
-
-    public static InputProductsViewModel getInputProductsModel(MainActivity activity) {
-        //download from realm | room
-        ArrayList<Product> products = new ArrayList<>();
-        return new InputProductsViewModel(activity, products, true, false);
     }
 
     /**
@@ -86,5 +85,19 @@ public class Utils {
         } catch (IllegalAccessException e) {
             Log.e("BNVHelper", "Unable to change value of shift mode", e);
         }
+    }
+
+    public static String getKeyboardLanguage(Context context) {
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        InputMethodSubtype ims = imm.getCurrentInputMethodSubtype();
+
+        String locale = ims.getLocale();
+
+        return locale;
+    }
+
+    private String toUpperCase(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

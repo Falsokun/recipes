@@ -39,8 +39,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         Category category = getItem(position);
         final ItemCategoryBinding holderBinding = holder.mBinding;
         holderBinding.title.setText(category.getTitle());
-        holderBinding.description.setText(category.getDescription());
-        Glide.with(activity).load(category.getImageURL()).into(holderBinding.bgImage);
+        holderBinding.type.setText(category.getType());
+        Glide.with(activity).load(category.getUrl()).into(holderBinding.bgImage);
         holderBinding.bgImage.setOnClickListener(v -> changeCategory(category.getSearchValue()));
     }
 

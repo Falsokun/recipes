@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     bind:totalTimeInSeconds="@{model.currentRecipe.totalTimeInSeconds}"
-                    bind:description="@{@string/preparations}"
+                    bind:type="@{@string/preparations}"
                     bind:stringTime="@{model.currentRecipe.getStringTime(model.currentRecipe.totalTimeInSeconds)}" />
 
                 <include
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/preparations"
                     bind:totalTimeInSeconds="@{30}"
-                    bind:description="@{@string/cooking_time}"
+                    bind:type="@{@string/cooking_time}"
                     bind:stringTime="@{model.currentRecipe.getStringTime(30)}" />
 
                 <include
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/cooking"
                     bind:totalTimeInSeconds="@{model.currentRecipe.totalTimeInSeconds}"
-                    bind:description="@{@string/baking}"
+                    bind:type="@{@string/baking}"
                     bind:stringTime="@{model.currentRecipe.getStringTime(model.currentRecipe.totalTimeInSeconds)}" />
             </RelativeLayout>
 

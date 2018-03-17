@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.hotger.recipes.utils.MessageModel"/>
+
+        <import type="android.view.View" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ingredients"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/msg_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:paddingBottom="@dimen/padding_dimen"
+                android:textColor="@color/colorText"
+                android:paddingTop="@dimen/padding_dimen"
+                android:text="@{model.msg}"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/msg_tv"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_action_add"
+                android:visibility="@{model.additionalBtnVisible ? View.VISIBLE : View.GONE}"
+                android:tint="@android:color/white"
+                app:rippleColor="@android:color/white"
+                android:clickable="true"/>
+        </RelativeLayout>
+    </FrameLayout>
+</layout>

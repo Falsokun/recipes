@@ -1,18 +1,23 @@
 package com.hotger.recipes.view.redactor;
 
+import android.arch.persistence.room.Room;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityRedactorBinding;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.Utils;
+import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
 
-public class RedactorActivity extends AppCompatActivity {
+public class RedactorActivity extends ControllableActivity {
 
     /**
      * Binding variable
@@ -127,5 +132,26 @@ public class RedactorActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public Fragment getCurrentFragment() {
+        return null;
+    }
+
+    @Override
+    public AppDatabase getDatabase() {
+        return Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "populus-database").allowMainThreadQueries().build();
+    }
+
+    @Override
+    public ImageView getToolbarImageView() {
+        return null;
+    }
+
+    @Override
+    public AppBarLayout getAppBar() {
+        return null;
     }
 }

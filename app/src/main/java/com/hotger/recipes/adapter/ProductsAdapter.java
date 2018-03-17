@@ -16,10 +16,9 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
 import com.hotger.recipes.utils.model.Product;
 import com.hotger.recipes.utils.Utils;
+import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
-
-import io.realm.RealmList;
 
 /**
  * Adapter for handling entering products and its quanitity
@@ -31,7 +30,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     /**
      * Context variable
      */
-    private Context context;
+    private ControllableActivity activity;
 
     private boolean isEditable;
 
@@ -42,9 +41,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
      */
     private ArrayList<Product> data; //TODO записывать сразу в текущий рецепт
 
-    public ProductsAdapter(Context context, ArrayList<Product> data, boolean isEditable,
+    public ProductsAdapter(ControllableActivity context, ArrayList<Product> data, boolean isEditable,
                            boolean isDetailed) {
-        this.context = context;
+        this.activity = context;
         this.data = data;
         this.isEditable = isEditable;
         this.isDetailed = isDetailed;
@@ -52,16 +51,16 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(activity);
         return new ViewHolder(ItemProductLineBinding.inflate(inflater, parent, false).getRoot(), isEditable);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Product productLine = data.get(position);
-        holder.binding.productName.setText(productLine.getProductName());
-        Drawable drawable = getAmountDrawable(productLine.getMeasure(), context);
-        holder.binding.amountIcon.setText(context.getResources().getStringArray(R.array.measures_array)[productLine.getMeasure()]);
+        holder.binding.productName.setText(productLine.getIngredientById());
+        Drawable drawable = getAmountDrawable(productLine.getMeasure(), activity);
+        holder.binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[productLine.getMeasure()]);
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         if (!isEditable) {
             holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()));
@@ -77,7 +76,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
      * Returns drawable depending on {@param quantity} of the product
      *
      * @param quantity - quanitity of the product
-     * @param context  - context
+     * @param context  - activity
      * @return drawable received from the resource
      */
     private Drawable getAmountDrawable(int quantity, Context context) {
@@ -123,7 +122,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
      */
     public boolean isAlreadyInSet(String productName) {
         for (Product line : data) {
-            if (line.getProductName().equals(productName))
+            if (line.getIngredientId().equals(productName))
                 return true;
         }
 
@@ -165,10 +164,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 };
                 binding.btnAdd.setOnClickListener(listener);
                 binding.btnSub.setOnClickListener(listener);
-                binding.deleteProduct.setOnClickListener(view -> {
-                    data.remove(getAdapterPosition());
-                    notifyDataSetChanged();
-                });
                 binding.finalAmount.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -194,15 +189,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             } else {
                 binding.btnSub.setVisibility(View.GONE);
                 binding.btnAdd.setVisibility(View.GONE);
-                binding.deleteProduct.setVisibility(View.GONE);
                 binding.finalAmount.setEnabled(false);
             }
         }
 
         private void showDialog() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppDialog));
-            builder.setTitle(context.getResources().getString(R.string.choose_measure));
-            builder.setItems(context.getResources().getStringArray(R.array.measures_array),
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.AppDialog));
+            builder.setTitle(activity.getResources().getString(R.string.choose_measure));
+            builder.setItems(activity.getResources().getStringArray(R.array.measures_array),
                     (dialog, which) -> changeMeasure(which));
             builder.show();
         }
@@ -214,9 +208,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
          */
         private void changeMeasure(int measurePosition) {
             data.get(getAdapterPosition()).setMeasure(measurePosition);
-            Drawable drawable = getAmountDrawable(measurePosition, context);
+            Drawable drawable = getAmountDrawable(measurePosition, activity);
             binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            binding.amountIcon.setText(context.getResources().getStringArray(R.array.measures_array)[measurePosition]);
+            binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[measurePosition]);
         }
     }
 }

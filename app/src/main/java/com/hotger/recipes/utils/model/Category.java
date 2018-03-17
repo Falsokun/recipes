@@ -1,6 +1,7 @@
 package com.hotger.recipes.utils.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -11,30 +12,33 @@ import com.hotger.recipes.BR;
 @Entity
 public class Category extends BaseObservable {
 
-    private String imageURL;
+    private String url;
 
     private String title;
 
-    private String description;
+    private String type;
 
     @PrimaryKey
     @NonNull
     private String searchValue;
 
-    public Category(String title, String description, String imageURL, String searchValue) {
+    @Ignore
+    public Category() {}
+
+    public Category(String title, String type, String url, String searchValue) {
         this.title = title;
-        this.description = description;
-        this.imageURL = imageURL;
+        this.type = type;
+        this.url = url;
         this.searchValue = searchValue;
     }
 
     //region Getters and Setters
-    public String getImageURL() {
-        return imageURL;
+    public String getUrl() {
+        return url;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Bindable
@@ -47,12 +51,12 @@ public class Category extends BaseObservable {
         notifyPropertyChanged(BR.title);
     }
 
-    public String getDescription() {
-        return description;
+    public String getType() {
+        return type;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getSearchValue() {

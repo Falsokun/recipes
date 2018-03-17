@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "232944616776",
+    "firebase_url": "https://falsorecipes.firebaseio.com",
+    "project_id": "falsorecipes",
+    "storage_bucket": "falsorecipes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232944616776:android:cacacea4e304c5d3",
+        "android_client_info": {
+          "package_name": "com.falso.recipes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232944616776-hvcvf3uefek2n07vtb078hch2t4stebf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClt87Uifz391tOTYMqfGOjglRR0DRkqZw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

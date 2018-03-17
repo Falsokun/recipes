@@ -1,20 +1,19 @@
 package com.hotger.recipes.viewmodel;
 
-import android.app.Activity;
 import android.support.v4.view.ViewPager;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.utils.model.Recipe;
-import com.hotger.recipes.view.MainActivity;
+import com.hotger.recipes.view.ControllableActivity;
 import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
 
-public class RedactorViewModel extends ViewModel {
+public class RedactorViewModel extends MViewModel {
 
-    private Activity activity;
+    private ControllableActivity activity;
 
     public Recipe currentRecipe;
 
@@ -22,7 +21,7 @@ public class RedactorViewModel extends ViewModel {
 
     private InputProductsViewModel inputProductsViewModel;
 
-    public RedactorViewModel(Activity activity) {
+    public RedactorViewModel(ControllableActivity activity) {
         this.activity = activity;
         currentRecipe = new Recipe();
         isEdited = false;

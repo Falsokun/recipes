@@ -2,6 +2,8 @@ package com.hotger.recipes.utils.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -11,18 +13,11 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * RealmObject to store the recipe
  */
-@Entity(
-        foreignKeys = @ForeignKey(entity = Recipe.ImageURL.class,
-                parentColumns = "id",
-                childColumns = "recipeId",
-                onDelete = ForeignKey.CASCADE),
-        primaryKeys = {"recipeId"})
+@Entity
 public class Recipe implements Serializable {
 
     @NonNull
@@ -52,8 +47,6 @@ public class Recipe implements Serializable {
     private ArrayList<ImageURL> images;
 
     private ArrayList<String> categories;
-
-    private boolean isFromAPI = true;
 
     public Recipe() {
         products = new ArrayList<>();
@@ -106,7 +99,7 @@ public class Recipe implements Serializable {
     }
 
     public int getTotalTimeInSeconds() {
-        return totalTimeInSeconds;
+        return totalTimeInSeconds / 60;
     }
 
     public String getStringTime(int time) {
@@ -142,14 +135,6 @@ public class Recipe implements Serializable {
     public void setIngredientLines(ArrayList<String> ingredientLines) {
         this.ingredientLines = ingredientLines;
     }
-
-    public boolean isFromAPI() {
-        return isFromAPI;
-    }
-
-    public void setFromAPI(boolean fromAPI) {
-        isFromAPI = fromAPI;
-    }
     //endregion
 
     public void log() {
@@ -164,11 +149,8 @@ public class Recipe implements Serializable {
     }
 
     public void prepareDataForShowing() {
-        if (isFromAPI) {
-            totalTimeInSeconds /= 60;
-            for (String ingredientLine : ingredientLines) {
-                products.add(Product.getProductByLine(ingredientLine));
-            }
+        for (String ingredientLine : ingredientLines) {
+            products.add(Product.getProductByLine(ingredientLine));
         }
     }
 
@@ -200,7 +182,7 @@ public class Recipe implements Serializable {
         @NonNull
         private String recipeId;
 
-        public ImageURL(String recipeId){
+        public ImageURL(String recipeId) {
             this.recipeId = recipeId;
         }
 

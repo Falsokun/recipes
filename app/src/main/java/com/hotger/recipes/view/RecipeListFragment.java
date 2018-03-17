@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.databinding.FragmentRecipesListBinding;
+import com.hotger.recipes.utils.MessageModel;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
@@ -57,6 +58,7 @@ public class RecipeListFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipes_list, container, false);
         mBinding.setData(cardAdapter);
+        mBinding.setMessageModel(new MessageModel(getString(R.string.favorite_hint), 0, true));
         mBinding.listRv.setAdapter(cardAdapter);
         mBinding.listRv.setLayoutManager(new GridLayoutManager(getContext(), CardAdapter.COLUMNS_COUNT, GridLayoutManager.VERTICAL, false));
         return mBinding.getRoot();

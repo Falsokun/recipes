@@ -1,8 +1,9 @@
 package com.hotger.recipes.viewmodel;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.databinding.Bindable;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,22 +19,23 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.DataHintAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.utils.model.Product;
+import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
 
-public class InputProductsViewModel extends ViewModel {
+public class InputProductsViewModel extends MViewModel {
 
     private ProductsAdapter productsAdapter;
     private DataHintAdapter dataHintAdapter;
     private ArrayList<Product> products;
-    private Activity activity;
+    private ControllableActivity activity;
     private String productName;
 
-    public InputProductsViewModel(Activity activity, ArrayList<Product> products, boolean isEditable, boolean isDetailed) {
+    public InputProductsViewModel(ControllableActivity activity, ArrayList<Product> products, boolean isEditable, boolean isDetailed) {
         this.products = products;
         this.activity = activity;
         productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed);
-        dataHintAdapter = new DataHintAdapter(activity, R.layout.item_list);
+        dataHintAdapter = new DataHintAdapter(activity, R.layout.item_list, activity.getDatabase(), "en");
     }
 
     @Override
@@ -51,7 +53,7 @@ public class InputProductsViewModel extends ViewModel {
         TextView childView = view.findViewById(R.id.product_name);
         String productName = childView.getText().toString();
         if (!productsAdapter.isAlreadyInSet(productName)) {
-            productsAdapter.addData(new Product(productName));
+            products.add(new Product(productName));
         } else {
             Toast.makeText(activity, "Already in list", Toast.LENGTH_LONG).show();
         }
@@ -135,5 +137,27 @@ public class InputProductsViewModel extends ViewModel {
         this.productName = productName;
         notifyPropertyChanged(BR.productName);
     }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public ItemTouchHelper getItemTouchListener() {
+        ItemTouchHelper.SimpleCallback callback =  new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                productsAdapter.getData().remove(viewHolder.getAdapterPosition());
+                productsAdapter.notifyDataSetChanged();
+            }
+        };
+
+        return new ItemTouchHelper(callback);
+    }
+
     //endregion
 }

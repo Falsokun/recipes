@@ -1,23 +1,26 @@
 package com.hotger.recipes.utils.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.support.annotation.NonNull;
+
 import com.hotger.recipes.utils.Utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.realm.RealmObject;
+@Entity(primaryKeys = {"recipeId", "ingredientId"})
+public class Product {
 
-//TODO: МНОГО ЧЕГО СДЕЛАТЬ
-public class Product extends RealmObject {
-
+    @NonNull
+    private String recipeId;
     /**
      * Product name
      */
-    @SerializedName("searchValue")
-    @Expose
-    private String productName;
+//    @SerializedName("searchValue")
+//    @Expose
+    @NonNull
+    private String ingredientId;
 
     /**
      * Amount of product
@@ -29,26 +32,37 @@ public class Product extends RealmObject {
      */
     private int measure;
 
+    @Ignore
     public Product() {
     }
 
-    public Product(String productName) {
-        this.productName = productName;
-        measure = findMeasureByName(productName);
+    @Ignore
+    public Product(String ingredientId) {
+        this.ingredientId = ingredientId;
+        measure = findMeasureByName(ingredientId);
         amount = 0;
     }
 
-    public Product(String productName, int amount) {
-        this.productName = productName;
-        measure = findMeasureByName(productName);
+    @Ignore
+    public Product(String ingredientId, int amount) {
+        this.ingredientId = ingredientId;
+        measure = findMeasureByName(ingredientId);
         this.amount = amount;
     }
 
-    public Product(String productName, int amount, String measure) {
-        this.productName = productName;
+    @Ignore
+    public Product(String ingredientId, int amount, String measure) {
+        this.ingredientId = ingredientId;
 //        this.measure = measure;
         this.measure = findMeasureByName(measure);
         this.amount = amount;
+    }
+
+    public Product(String recipeId, String ingredientId, double amount, int measure) {
+        this.recipeId = recipeId;
+        this.ingredientId = ingredientId;
+        this.amount = amount;
+        this.measure = measure;
     }
 
     //TODO реализовать
@@ -87,12 +101,12 @@ public class Product extends RealmObject {
     }
 
     //region Getters and Setters
-    public String getProductName() {
-        return productName;
+    public String getIngredientId() {
+        return ingredientId;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setIngredientId(String ingredientId) {
+        this.ingredientId = ingredientId;
     }
 
     public double getAmount() {
@@ -110,8 +124,18 @@ public class Product extends RealmObject {
     public int getMeasure() {
         return measure;
     }
+
+    public String getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(String recipeId) {
+        this.recipeId = recipeId;
+    }
+
     //endregion
 
+    //TODO NOW
     public static Product getProductByLine(String productLine) {
         String line = productLine.replaceAll("\\(((\\w+\\s?)+)\\)(\\s|,)?","");
         line = line.toLowerCase();
@@ -124,5 +148,9 @@ public class Product extends RealmObject {
 
         String productName = m.group(3).substring(0, 1).toUpperCase() + m.group(3).substring(1);
         return new Product(productName, Integer.parseInt(m.group(1)), m.group(2));
+    }
+
+    public String getIngredientById() {
+        return ingredientId;
     }
 }

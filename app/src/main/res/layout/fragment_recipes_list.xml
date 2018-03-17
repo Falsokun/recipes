@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="data"
             type="com.hotger.recipes.adapter.CardAdapter" />
+
+        <variable
+            name="messageModel"
+            type="com.hotger.recipes.utils.MessageModel"/>
 
         <import type="android.view.View" />
     </data>
@@ -20,12 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
+        <!--<include-->
             <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
             <!--android:layout_centerInParent="true"-->
-            <!--android:text="NO RESULTS"-->
-            <!--android:textColor="@color/colorText"-->
-            <!--android:visibility="@{data.empty ? View.VISIBLE : View.GONE}"/>-->
+            <!--android:id="@+id/message"-->
+            <!--layout="@layout/fragment_no_fill"-->
+            <!--bind:model="@{messageModel}"-->
+            <!--android:visibility="visible"/>-->
+
     </RelativeLayout>
 </layout>

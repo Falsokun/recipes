@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorProductsBinding;
+import com.hotger.recipes.utils.MessageModel;
 import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 public class ProductsRedactorFragment extends Fragment {
@@ -18,6 +19,8 @@ public class ProductsRedactorFragment extends Fragment {
     private InputProductsViewModel inputModel;
 
     private FragmentRedactorProductsBinding mBinding;
+
+    private MessageModel messageModel;
 
     @Nullable
     @Override
@@ -28,6 +31,8 @@ public class ProductsRedactorFragment extends Fragment {
         mBinding.productsLineRv.setAdapter(inputModel.getProductsAdapter());
         mBinding.productsLineRv.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        messageModel = new MessageModel(getString(R.string.add_products_hint), 0, false);
+        mBinding.setMessageModel(messageModel);
         initListeners();
         return mBinding.getRoot();
     }

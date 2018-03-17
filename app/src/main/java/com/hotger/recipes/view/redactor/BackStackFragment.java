@@ -51,13 +51,13 @@ public class BackStackFragment extends Fragment {
                 break;
             case R.id.menu_fridge:
                 rootFragment = new FridgeFragment();
-                ((FridgeFragment) rootFragment)
-                        .setInputModel(Utils.getInputProductsModel((MainActivity) getActivity()));
                 break;
             case RecipeListFragment.ID:
                 rootFragment = new RecipeListFragment();
                 rootFragment.setArguments(getArguments());
                 break;
+            case R.id.menu_my_recipe:
+                rootFragment = new RecipeListFragment();
             default:
                 break;
         }

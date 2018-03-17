@@ -37,6 +37,8 @@
     <string name="no_cuisine_filter">No cuisine filter selected</string>
     <string name="no_course_filter">No course filter selected</string>
     <string name="no_diet_filter">No diet filter selected</string>
+    <string name="add_products_hint">To add products use text view above</string>
+    <string name="favorite_hint">Search for recipes and add them to your favorite. Start now!</string>
 
     <string-array name="measures_array">
         <item></item>

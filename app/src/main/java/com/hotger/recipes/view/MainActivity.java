@@ -14,10 +14,16 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
+import com.hotger.recipes.utils.model.Ingredient;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
@@ -168,38 +174,6 @@ public class MainActivity extends ControllableActivity {
 
     public void updateTitle(String name) {
         mBinding.toolbar.setTitle(name);
-    }
-
-    public void searchForRecipeWithIngridients(List<Product> products) {
-        String[] ingredients = {"honey", "sugar"};
-        StringBuilder builder = new StringBuilder();
-        builder.append(YummlyAPI.SEARCH);
-        for (String ingredient : ingredients) {
-            builder.append("&allowedIngredient[]=");
-            builder.append(ingredient);
-        }
-
-        builder.append("&maxResult=" + YummlyAPI.MAX_RESULT);
-
-        App.getApi()
-                .search(builder.toString())
-                .enqueue(new Callback<ResponseRecipeAPI>() {
-                             @Override
-                             public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
-                                 Fragment fragment = new BackStackFragment();
-                                 Bundle bundle = new Bundle();
-                                 bundle.putSerializable(Utils.RECIPE_OBJ, response.body());
-                                 bundle.putInt(Utils.EXTRA_NAVIGATION_ID, RecipeListFragment.ID);
-                                 fragment.setArguments(bundle);
-                                 setCurrentFragment(fragment, true, fragment.getTag());
-                             }
-
-                             @Override
-                             public void onFailure(Call<ResponseRecipeAPI> call, Throwable t) {
-                                 Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
-                             }
-                         }
-                );
     }
 
     @Override

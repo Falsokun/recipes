@@ -14,7 +14,7 @@ import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
 
-public class RecipeViewModel extends ViewModel {
+public class RecipeViewModel extends MViewModel {
 
     private Recipe mCurrentRecipe;
     private ControllableActivity activity;
