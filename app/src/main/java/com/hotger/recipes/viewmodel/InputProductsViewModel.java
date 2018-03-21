@@ -18,20 +18,20 @@ import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.DataHintAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
-import com.hotger.recipes.utils.model.Product;
+import com.hotger.recipes.model.Product;
 import com.hotger.recipes.view.ControllableActivity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class InputProductsViewModel extends MViewModel {
 
     private ProductsAdapter productsAdapter;
     private DataHintAdapter dataHintAdapter;
-    private ArrayList<Product> products;
+    private List<Product> products;
     private ControllableActivity activity;
     private String productName;
 
-    public InputProductsViewModel(ControllableActivity activity, ArrayList<Product> products, boolean isEditable, boolean isDetailed) {
+    public InputProductsViewModel(ControllableActivity activity, List<Product> products, boolean isEditable, boolean isDetailed) {
         this.products = products;
         this.activity = activity;
         productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed);
@@ -53,12 +53,19 @@ public class InputProductsViewModel extends MViewModel {
         TextView childView = view.findViewById(R.id.product_name);
         String productName = childView.getText().toString();
         if (!productsAdapter.isAlreadyInSet(productName)) {
-            products.add(new Product(productName));
+            products.add(new Product(productName, activity));
+            productsAdapter.notifyDataSetChanged();
+            notifyPropertyChanged(BR.emptyData);
         } else {
             Toast.makeText(activity, "Already in list", Toast.LENGTH_LONG).show();
         }
     }
     //endregion
+
+    @Bindable
+    public boolean isEmptyData() {
+        return products.isEmpty();
+    }
 
     //region Listeners
     public TextView.OnEditorActionListener getOnEditorActionListener(int count) {
@@ -138,7 +145,7 @@ public class InputProductsViewModel extends MViewModel {
         notifyPropertyChanged(BR.productName);
     }
 
-    public ArrayList<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 

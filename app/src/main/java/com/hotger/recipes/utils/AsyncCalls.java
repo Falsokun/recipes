@@ -1,20 +1,11 @@
 package com.hotger.recipes.utils;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.hotger.recipes.App;
-import com.hotger.recipes.utils.model.RecipePrev;
+import com.hotger.recipes.model.RecipePrev;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 
 import retrofit2.Call;

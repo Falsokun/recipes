@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
@@ -17,9 +15,10 @@ import com.hotger.recipes.databinding.FragmentFridgeBinding;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
-import com.hotger.recipes.utils.model.Product;
-import com.hotger.recipes.viewmodel.InputProductsViewModel;
+import com.hotger.recipes.model.Product;
+import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.view.redactor.BackStackFragment;
+import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,11 +74,18 @@ public class FridgeFragment extends BackStackFragment {
 
     public void saveFridgeData() {
         ((ControllableActivity)getActivity()).getDatabase().getProductDao().removeWhereId(FridgeFragment.ID);
-        ArrayList<Product> products = inputModel.getProducts();
+        if (inputModel.getProducts() == null || inputModel.getProducts().size() == 0) {
+            return;
+        }
+
+        List<Product> products = inputModel.getProducts();
         for(Product product : products) {
             product.setRecipeId(FridgeFragment.ID);
         }
 
+        RecipeNF recipeNF = new RecipeNF();
+        recipeNF.setId(FridgeFragment.ID);
+        ((ControllableActivity)getActivity()).getDatabase().getRecipeDao().insert(recipeNF);
         ((ControllableActivity)getActivity()).getDatabase().getProductDao().insertAll(products);
     }
 
@@ -95,7 +101,15 @@ public class FridgeFragment extends BackStackFragment {
 
     public void searchForRecipeWithIngridients(List<Product> products) {
         mBinding.progress.setVisibility(View.VISIBLE);
-        String[] ingredients = {"honey", "sugar"};
+        ArrayList<String> ingredients = new ArrayList<>();
+        for(Product product : products) {
+            ingredients.add(((ControllableActivity) getActivity())
+                    .getDatabase()
+                    .getIngredientDao()
+                    .getNameById(product.getIngredientId()));
+        }
+
+//        String[] ingredients = {"honey", "sugar"};
         StringBuilder builder = new StringBuilder();
         builder.append(YummlyAPI.SEARCH);
         for (String ingredient : ingredients) {

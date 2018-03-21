@@ -1,4 +1,4 @@
-package com.hotger.recipes.utils.model;
+package com.hotger.recipes.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.TypeConverters;
@@ -6,7 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.hotger.recipes.utils.database.ImageConverter;
+import com.hotger.recipes.database.ImageConverter;
+import com.hotger.recipes.model.GsonModel.Image;
 
 import java.io.Serializable;
 
@@ -31,6 +32,14 @@ public class RecipePrev implements Serializable {
 
     @Expose
     private String totalTimeInSeconds;
+
+    public RecipePrev(@NonNull String id, @NonNull String type, Image images, String name, String totalTimeInSeconds) {
+        this.id = id;
+        this.type = type;
+        this.images = images;
+        this.name = name;
+        this.totalTimeInSeconds = totalTimeInSeconds;
+    }
 
     public int getTime() {
         return Integer.parseInt(totalTimeInSeconds) / 60;

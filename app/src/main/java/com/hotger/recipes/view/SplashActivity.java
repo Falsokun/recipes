@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.hotger.recipes.firebase.RealtimeDB;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.AsyncCalls;
-import com.hotger.recipes.utils.model.Category;
+import com.hotger.recipes.model.Category;
 
 public class SplashActivity extends AppCompatActivity {
 

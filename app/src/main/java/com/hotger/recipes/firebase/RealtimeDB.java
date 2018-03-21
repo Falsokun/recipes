@@ -8,8 +8,8 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.hotger.recipes.Fake;
 import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.model.Ingredient;
-import com.hotger.recipes.utils.model.Category;
+import com.hotger.recipes.model.Ingredient;
+import com.hotger.recipes.model.Category;
 
 import java.util.ArrayList;
 

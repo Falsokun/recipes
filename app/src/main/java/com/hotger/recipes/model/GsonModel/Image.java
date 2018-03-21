@@ -1,7 +1,5 @@
-package com.hotger.recipes.utils.model;
+package com.hotger.recipes.model.GsonModel;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -9,12 +7,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-@Entity
+//@Entity
 public class Image implements Serializable {
-    @PrimaryKey
-    @NonNull
-    @SerializedName("90")
-    @Expose
+//    @PrimaryKey
+//    @NonNull
+@SerializedName(value="hostedLargeUrl", alternate={"90"})
+@Expose
     private String url;
 
     public Image(String url) {
@@ -28,5 +26,13 @@ public class Image implements Serializable {
 
     public void setUrl(@NonNull String url) {
         this.url = url;
+    }
+
+    public String toString() {
+        return url;
+    }
+
+    public static Image fromString(String string) {
+        return new Image(string.split(";")[0]);
     }
 }

@@ -29,7 +29,7 @@ import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
-import com.hotger.recipes.utils.model.Category;
+import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.viewmodel.SearchViewModel;
 import com.jaredrummler.materialspinner.MaterialSpinner;

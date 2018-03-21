@@ -38,19 +38,21 @@ public class RedactorActivity extends ControllableActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRedactorModel = new RedactorViewModel(this);
+        mRedactorModel.setEdited(true);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_redactor);
         mBinding.setModel(mRedactorModel);
         initAdapter();
         mBinding.recipeVp.setAdapter(mRedactorAdapter);
         mBinding.redactorProgress.setProgress(getProgress(0));
         initListeners();
+        initToolbar();
         mBinding.btnSave.setOnClickListener(view -> {
             if (mBinding.btnSave.getText()
                     .equals(getResources().getString(R.string.next))) {
                 mBinding.recipeVp.setCurrentItem(mBinding.recipeVp.getCurrentItem() + 1);
             } else {
                 mRedactorModel.onSave(mBinding.recipeVp);
-                mRedactorModel.currentRecipe.log();
+                onBackPressed();
             }
         });
 
@@ -62,6 +64,17 @@ public class RedactorActivity extends ControllableActivity {
         }*/
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    public void initToolbar() {
+        setSupportActionBar(mBinding.toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
     /**
      * Adding to viewpager all fragments of the recipe
      */
@@ -77,16 +90,13 @@ public class RedactorActivity extends ControllableActivity {
             mRedactorAdapter.addFragment(fragment1);
 
             //TODO:Что-то с этим говном не так
-//            TextRedactorFragment fragment2 = new TextRedactorFragment();
-//            fragment2.setRedactorModel(mRedactorModel);
-//            mRedactorAdapter.addFragment(fragment2);
+            TextRedactorFragment fragment2 = new TextRedactorFragment();
+            fragment2.setRedactorModel(mRedactorModel);
+            mRedactorAdapter.addFragment(fragment2);
 
-            NumberPickerFragment cookingTime = new NumberPickerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(Utils.STATE, Utils.TIME_PICKER);
-            cookingTime.setArguments(bundle);
-            cookingTime.setRedactorModel(mRedactorModel);
-            mRedactorAdapter.addFragment(cookingTime);
+            TimePickerFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.setRedactorModel(mRedactorModel);
+            mRedactorAdapter.addFragment(timePickerFragment);
 
             NumberPickerFragment portions = new NumberPickerFragment();
             Bundle bundle1 = new Bundle();

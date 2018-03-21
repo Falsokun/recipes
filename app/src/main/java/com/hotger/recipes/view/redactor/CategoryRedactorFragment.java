@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorCategoryBinding;
+import com.hotger.recipes.utils.YummlyAPI;
+import com.hotger.recipes.database.CategoryDao;
+import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -54,18 +56,22 @@ public class CategoryRedactorFragment extends Fragment {
      */
     private void initAllTags() {
         allTags = new HashMap<>();
-        String[] categories = {"Baked", "Breakfast", "Cooking Level", "Cuisine", "Desert", "Healthy"};
+        String[] categories = {
+                getResources().getString(R.string.cuisine),
+                getResources().getString(R.string.holiday),
+                getResources().getString(R.string.course),
+                getResources().getString(R.string.diet)
+        };
 
         for (String category : categories) {
             allTags.put(category, new ArrayList<>());
         }
 
-        allTags.get(categories[0]).addAll(Arrays.asList("Cookies", "Cakes", "Bread"));
-        allTags.get(categories[1]).addAll(Arrays.asList("Omelets", "Porridge", "Frittata", "Waffles"));
-        allTags.get(categories[2]).addAll(Arrays.asList("Hard", "Easy", "Middle", "Super easy"));
-        allTags.get(categories[3]).addAll(Arrays.asList("European", "Asian", "Chinese", "Mexican", "Japanese", "Indian"));
-        allTags.get(categories[4]).addAll(Arrays.asList("Pudding", "Ice cream", "Candy", "Jelly"));
-        allTags.get(categories[5]).addAll(Arrays.asList("low fat", "diabetic", "high fiber"));
+        CategoryDao dao = ((ControllableActivity)getActivity()).getDatabase().getCategoryDao();
+        allTags.get(categories[0]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.CUISINE));
+        allTags.get(categories[1]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.HOLIDAY));
+        allTags.get(categories[2]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.COURSE));
+        allTags.get(categories[3]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.DIET));
     }
 
     /**

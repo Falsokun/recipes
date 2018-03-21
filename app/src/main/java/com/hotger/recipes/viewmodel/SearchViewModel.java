@@ -4,7 +4,7 @@ import android.databinding.BaseObservable;
 
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.YummlyAPI;
-import com.hotger.recipes.utils.model.Category;
+import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.SearchActivity;
 
 import java.util.ArrayList;

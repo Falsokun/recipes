@@ -8,12 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
-import com.hotger.recipes.utils.model.Recipe;
+import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 import com.hotger.recipes.viewmodel.RecipeViewModel;
@@ -35,6 +37,8 @@ public class RecipeFragment extends Fragment {
                 model = new RecipeViewModel(recipe, (ControllableActivity) getActivity());
             }
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -44,11 +48,37 @@ public class RecipeFragment extends Fragment {
         mBinding.setModel(model);
         mBinding.products.setAdapter(model.getProductsAdapter());
         mBinding.products.setLayoutManager(new LinearLayoutManager(getContext()));
+        initWaveView();
         model.addCategories(mBinding.categoryContainer);
         ((ControllableActivity) getActivity()).updateCollapsing(((ControllableActivity)getActivity()).getAppBar(), true);
         ((ControllableActivity) getActivity()).setToolbarImage(model.getCurrentRecipe().getImageURL());
 //        ((ControllableActivity) getActivity()).updateTitle(model.getCurrentRecipe().getName());
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
+        inflater.inflate(R.menu.menu_fragment, menu);
+    }
+
+    private void initWaveView() {
+        Recipe recipe = model.getCurrentRecipe();
+        if (recipe.getTotalTimeInMinutes() == 0) {
+            mBinding.timing.setVisibility(View.GONE);
+            mBinding.divider1.setVisibility(View.GONE);
+            return;
+        }
+
+        mBinding.prepTime.setAnimDuration(3000);
+        mBinding.cookingTime.setAnimDuration(3000);
+        mBinding.totalTime.setAnimDuration(3000);
+        mBinding.prepTime.setProgressValue(recipe.getPrepTimeMinutes());
+        mBinding.cookingTime.setProgressValue(recipe.getCookingTimeInMinutes());
+        mBinding.totalTime.setProgressValue(recipe.getTotalTimeInMinutes());
+        mBinding.prepTime.setCenterTitle(model.getStringTime(recipe.getPrepTimeMinutes()));
+        mBinding.cookingTime.setCenterTitle(model.getStringTime(recipe.getCookingTimeInMinutes()));
+        mBinding.totalTime.setCenterTitle(model.getStringTime(recipe.getTotalTimeInMinutes()));
     }
 
     @Override

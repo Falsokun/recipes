@@ -2,6 +2,8 @@ package com.hotger.recipes;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.hotger.recipes.utils.YummlyAPI;
 
 import retrofit2.Retrofit;
@@ -13,9 +15,13 @@ public class App extends Application {
 
     private Retrofit retrofit;
 
+    private static FirebaseStorage storage ;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        storage = FirebaseStorage.getInstance();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(YummlyAPI.BASE_URL) //Базовая часть адреса
@@ -26,5 +32,9 @@ public class App extends Application {
 
     public static YummlyAPI getApi() {
         return yummlyService;
+    }
+
+    public static FirebaseStorage getStorage() {
+        return storage;
     }
 }

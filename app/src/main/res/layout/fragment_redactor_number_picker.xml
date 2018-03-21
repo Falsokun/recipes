@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <variable
-            name="model"
-            type="com.hotger.recipes.viewmodel.RedactorViewModel" />
-
-        <variable
-            name="isTimePicker"
-            type="android.databinding.ObservableBoolean" />
-
-        <import type="android.view.View" />
-    </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -35,38 +21,23 @@
             android:gravity="center">
 
             <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/first_number"
+                android:id="@+id/number"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layerType="hardware"
-                android:orientation="vertical"
+                android:layout_centerHorizontal="true"
                 app:np_dividerColor="@color/colorAccent"
                 app:np_min="0"
-                app:np_selectedTextColor="@color/colorAccent" />
+                app:np_selectedTextColor="@color/colorAccent"
+                android:layout_above="@+id/photo_src_btn"/>
 
-            <TextView
-                android:id="@+id/semicolon"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@id/first_number"
-                android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text=":"
-                android:textColor="@color/colorAccent"
-                android:visibility="@{isTimePicker.get() ? View.VISIBLE : View.GONE}" />
-
-            <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/second_number"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/semicolon"
-                android:layerType="hardware"
-                android:orientation="vertical"
-                android:visibility="@{isTimePicker.get() ? View.VISIBLE : View.GONE}"
-                app:np_dividerColor="@color/colorAccent"
-                app:np_min="0"
-                app:np_selectedTextColor="@color/colorAccent" />
+            <Button
+                android:id="@+id/photo_src_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_image"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"/>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

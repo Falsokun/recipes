@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemRecipeBinding;
-import com.hotger.recipes.utils.model.RecipePrev;
+import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     private ControllableActivity activity;
     private List<RecipePrev> data;
     public static int COLUMNS_COUNT = 3;
+    private boolean isFromDB = false;
 
     public CardAdapter(ControllableActivity activity, List<RecipePrev> data) {
         this.activity = activity;
@@ -41,13 +42,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holderBinding.recipeName.setText(recipe.getName());
         Glide.with(activity).load(recipe.getImageUrl()).into(holderBinding.recipeImg);
         holderBinding.listItem.setOnClickListener(v -> {
-            activity.openRecipe(recipe.getId());
+            if (!isFromDB) {
+                activity.openRecipe(recipe.getId());
+            } else {
+                activity.openRecipeFromDB(recipe.getId());
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return data.size() - data.size() % COLUMNS_COUNT;
+        return data.size();// - data.size() % COLUMNS_COUNT;
     }
 
     public boolean isEmpty() {
@@ -57,6 +62,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public void clearData() {
         data.clear();
         notifyDataSetChanged();
+    }
+
+    public void setFromDB(boolean fromDB) {
+        this.isFromDB = fromDB;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

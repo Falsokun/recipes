@@ -1,6 +1,7 @@
 package com.hotger.recipes.view;
 
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,28 +15,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
-import com.hotger.recipes.utils.model.Ingredient;
 import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
-import com.hotger.recipes.utils.YummlyAPI;
-import com.hotger.recipes.utils.model.Product;
 import com.hotger.recipes.view.redactor.BackStackFragment;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.hotger.recipes.view.redactor.RedactorActivity;
 
 //TODO: короче, наверное нужно запустить так: при запуске открывается куча потоков которые получают данные из апишки и грузят их в бд
 //TODO: а при переключении между всем просто подгружаются данные из бд
@@ -69,6 +55,8 @@ public class MainActivity extends ControllableActivity {
                 return false;
             }
 
+            Fragment nextFragment = getNavigationFragment(Utils.bottomNavigationTabs.get(item.getItemId()));
+            updateToolbar(nextFragment);
             updateTitle();
             updateCollapsing(mBinding.appbar, false);
             mBinding.viewPager.setCurrentItem(Utils.bottomNavigationTabs.get(item.getItemId()), false);
@@ -139,11 +127,14 @@ public class MainActivity extends ControllableActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_toolbar, menu);
+        menu.removeItem(R.id.menu_edit);
+        menu.removeItem(R.id.menu_delete);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -164,7 +155,12 @@ public class MainActivity extends ControllableActivity {
                 break;
 
             case R.id.menu_search:
-                Intent intent = new Intent(this, SearchActivity.class);
+                intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.menu_settings:
+                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -194,6 +190,11 @@ public class MainActivity extends ControllableActivity {
     @Override
     public Fragment getCurrentFragment() {
         return getNavigationFragment(mBinding.viewPager.getCurrentItem());
+    }
+
+    private void openRedactorFraqment(Context context) {
+        Intent intent = new Intent(context, RedactorActivity.class);
+        startActivity(intent);
     }
 }
 

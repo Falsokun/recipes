@@ -1,11 +1,11 @@
-package com.hotger.recipes.utils.database;
+package com.hotger.recipes.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.hotger.recipes.utils.model.Product;
+import com.hotger.recipes.model.Product;
 
 import java.util.List;
 

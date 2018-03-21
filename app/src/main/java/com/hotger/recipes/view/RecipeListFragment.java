@@ -32,20 +32,43 @@ public class RecipeListFragment extends BackStackFragment {
         super.onCreate(savedInstanceState);
         cardAdapter = new CardAdapter((ControllableActivity) getActivity(), new ArrayList<>());
         if (getArguments() != null) {
-            String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
-            if (searchValue != null) {
-                showListFromDB(searchValue);
-            }
-
-            if (getArguments().getBoolean(Utils.NEED_INIT, false)) {
-                ((SearchActivity) getActivity()).setCardAdapter(cardAdapter);
-            }
-
-            ResponseRecipeAPI rra = (ResponseRecipeAPI) getArguments().getSerializable(Utils.RECIPE_OBJ);
-            if (rra != null) {
-                cardAdapter.setData(rra.getMatches());
-            }
+            checkForCategory();
+            checkForInit();
+            checkForPassingFromApi();
+            checkForFavorites();
         }
+    }
+
+    private void checkForFavorites() {
+        int navId = getArguments().getInt(Utils.EXTRA_NAVIGATION_ID, -1);
+        if (navId != -1 && navId == R.id.menu_my_recipe) {
+            findFavoritesData((ControllableActivity) getActivity());
+            cardAdapter.setFromDB(true);
+        }
+    }
+
+    private void checkForPassingFromApi() {
+        ResponseRecipeAPI rra = (ResponseRecipeAPI) getArguments().getSerializable(Utils.RECIPE_OBJ);
+        if (rra != null) {
+            cardAdapter.setData(rra.getMatches());
+        }
+    }
+
+    private void checkForInit() {
+        if (getArguments().getBoolean(Utils.NEED_INIT, false)) {
+            ((SearchActivity) getActivity()).setCardAdapter(cardAdapter);
+        }
+    }
+
+    private void checkForCategory() {
+        String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
+        if (searchValue != null) {
+            showListFromDB(searchValue);
+        }
+    }
+
+    private void findFavoritesData(ControllableActivity activity) {
+        cardAdapter.setData(activity.getDatabase().getRecipePrevDao().getRecipesByType(Utils.MY_RECIPES));
     }
 
     private void showListFromDB(String searchValue) {

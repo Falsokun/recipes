@@ -5,33 +5,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <EditText
+            android:layout_margin="@dimen/padding_dimen"
+            android:id="@+id/recipe_text"
+            android:hint="Enter url here"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorPrimaryDarkOpaque"
+            android:elevation="4dp"
+            />
+
         <Button
+            android:layout_below="@id/recipe_text"
             android:id="@+id/addReceipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
-            android:text="Add receipt"
+            android:text="@string/add_recipe"
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/showTest"
+            android:id="@+id/shopping_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/addReceipt"
             android:background="@color/colorPrimary"
-            android:text="Export"
+            android:text="@string/shopping_list"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:layout_marginTop="8dp"
-            android:id="@+id/else2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/showTest"
-            android:background="@color/colorPrimary"
-            android:text="Import"
-            android:textColor="@android:color/white" />
+        <!--<Button-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:id="@+id/else2"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/shopping_list"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:text="Import"-->
+            <!--android:textColor="@android:color/white" />-->
     </RelativeLayout>
 </layout>

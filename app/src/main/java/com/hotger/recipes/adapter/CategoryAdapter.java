@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemCategoryBinding;
 import com.hotger.recipes.utils.Utils;
-import com.hotger.recipes.utils.model.Category;
+import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.MainActivity;
 import com.hotger.recipes.view.RecipeListFragment;
 

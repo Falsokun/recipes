@@ -25,16 +25,16 @@ public class TextRedactorFragment extends Fragment {
      * Numbered list for text
      */
     private EditText numberedText;
-
-    /**
-     * Current number in the numbered list
-     */
+//
+//    /**
+//     * Current number in the numbered list
+//     */
     private int marker = 1;
-
-    /**
-     * Variable if last input change was deleting
-     */
-    private boolean keyDelete = false;
+//
+//    /**
+//     * Variable if last input change was deleting
+//     */
+//    private boolean keyDelete = false;
 
     private boolean isEditedRecipe = false;
 
@@ -42,18 +42,12 @@ public class TextRedactorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_redactor_input_text, container, false);
-        numberedText = rootView.findViewById(R.id.editable_text);
-        TextView title = rootView.findViewById(R.id.title);
-        title.setText(R.string.write_recipe);
-        if (isEditedRecipe) {
-            numberedText.setText(mRedactorModel.getCurrentRecipe().getPreparations());
-        } else {
-            addMarker();
-        }
+        numberedText = (EditText) rootView.findViewById(R.id.editable_text);
+        numberedText.setEnabled(isEditedRecipe);
         numberedText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int count) {
-                keyDelete = i1 - count == 1;
+//                keyDelete = i1 - count == 1;
             }
 
             @Override
@@ -62,19 +56,20 @@ public class TextRedactorFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!keyDelete) {
-                    addMarker();
-                } else {
-                    deleteMarker();
-                    if (editable.toString().length() == 2) {
-                        editable.append(" ");
-                    }
-
-                }
-
-                if (editable.toString().length() > 3) {
-                    mRedactorModel.currentRecipe.setPreparations(editable.toString());
-                }
+                mRedactorModel.getCurrentRecipe().setPreparations(editable.toString());
+//                if (!keyDelete) {
+//                    addMarker();
+//                } else {
+//                    deleteMarker();
+//                    if (editable.toString().length() == 2) {
+//                        editable.append(" ");
+//                    }
+//
+//                }
+//
+//                if (editable.toString().length() > 3) {
+//                    mRedactorModel.getCurrentRecipe().setPreparations(editable.toString());
+//                }
             }
         });
         return rootView;

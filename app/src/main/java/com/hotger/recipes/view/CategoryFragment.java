@@ -13,7 +13,7 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CategoryAdapter;
 import com.hotger.recipes.databinding.FragmentCategoriesBinding;
 import com.hotger.recipes.utils.YummlyAPI;
-import com.hotger.recipes.utils.model.Category;
+import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class CategoryFragment extends BackStackFragment {
     }
 
     public List<Category> getCategoryByName(String name) {
-        if (getActivity() != null) {
+        if (getActivity() != null && ((ControllableActivity) getActivity()).getDatabase() != null) {
             return ((ControllableActivity) getActivity())
                     .getDatabase()
                     .getCategoryDao()

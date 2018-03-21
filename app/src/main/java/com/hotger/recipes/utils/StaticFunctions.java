@@ -1,8 +1,6 @@
 package com.hotger.recipes.utils;
 
 
-import com.hotger.recipes.utils.model.Category;
-
 import java.util.ArrayList;
 
 //TODO: ??? Stored in cloud

@@ -14,10 +14,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
+import com.hotger.recipes.model.Category;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.DisableAppBarLayoutBehavior;
 import com.hotger.recipes.utils.Utils;
-import com.hotger.recipes.utils.model.Recipe;
+import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.model.RecipeNF;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,19 +53,19 @@ public abstract class ControllableActivity extends AppCompatActivity {
     public void openRecipe(String recipeId) {
         App.getApi()
                 .getRecipeByID(recipeId)
-                .enqueue(new Callback<Recipe>() {
+                .enqueue(new Callback<RecipeNF>() {
                              @Override
-                             public void onResponse(@NonNull Call<Recipe> call, @NonNull Response<Recipe> response) {
-                                 Recipe recipe = response.body();
-                                 if (recipe == null) {
+                             public void onResponse(@NonNull Call<RecipeNF> call, @NonNull Response<RecipeNF> response) {
+                                 if (response.body() == null) {
                                      Toast.makeText(ControllableActivity.this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                                      return;
                                  }
 
+                                 Recipe recipe = new Recipe((RecipeNF) response.body(), ControllableActivity.this);
+
                                  RecipeFragment fragment = new RecipeFragment();
                                  Bundle bundle = new Bundle();
-//                                 recipe.setFromAPI(true);
-                                 recipe.prepareDataForShowing();
+                                 recipe.prepareDataForShowing(ControllableActivity.this);
                                  bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
                                  fragment.setArguments(bundle);
 
@@ -68,12 +73,21 @@ public abstract class ControllableActivity extends AppCompatActivity {
                              }
 
                              @Override
-                             public void onFailure(@NonNull Call<Recipe> call, @NonNull Throwable t) {
+                             public void onFailure(@NonNull Call<RecipeNF> call, @NonNull Throwable t) {
 
                              }
                          }
                 );
 
+    }
+
+    public void updateToolbar(Fragment fragment) {
+        FragmentManager fm = fragment.getChildFragmentManager();
+        if (fm.getBackStackEntryCount() != 0) {
+            setUpNavigation(true);
+        } else {
+            setUpNavigation(false);
+        }
     }
 
     public void setUpNavigation(boolean value) {
@@ -97,4 +111,22 @@ public abstract class ControllableActivity extends AppCompatActivity {
     }
 
     public abstract AppBarLayout getAppBar();
+
+    public void openRecipeFromDB(String id) {
+        Recipe recipe = getDatabase().getRecipeDao().getRecipesById(id).get(0);
+        List<String> ids = getDatabase().getRelationDao().getCategoryIdsForRecipe(id);
+        ArrayList<Category> categories = new ArrayList<>();
+        for (String catId : ids) {
+            categories.add(getDatabase().getCategoryDao().getCategoryById(catId).get(0));
+        }
+
+        recipe.setCategories(categories);
+        RecipeFragment fragment = new RecipeFragment();
+        Bundle bundle = new Bundle();
+//        recipe.prepareDataForShowing(ControllableActivity.this);
+        bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
+        fragment.setArguments(bundle);
+
+        setCurrentFragment(fragment, true, fragment.getTag());
+    }
 }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -9,6 +9,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="spinnerStyle">@style/Widget.App.Spinner</item>
         <item name="android:spinnerStyle">@style/Widget.App.Spinner</item>
+        <item name="android:timePickerStyle">@style/Theme.MyTheme.TimePicker</item>
     </style>
 
     <style name="SquaredStyle" parent="Widget.AppCompat.Button.Borderless">
@@ -35,5 +36,16 @@
     <style name="Widget.App.Spinner" parent="@style/Widget.AppCompat.Spinner">
         <item name="overlapAnchor">true</item>
         <item name="android:background">@drawable/spinner_background</item>
+    </style>
+
+    <style name="Theme.MyTheme.TimePicker" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">@color/colorPrimary</item>
+        <item name="android:numbersTextColor">@android:color/white</item>
+
+        <!--<item name="android:numbersInnerTextColor">?android:attr/textColorSecondaryActivated</item>-->
+        <item name="android:numbersSelectorColor">?android:attr/colorControlActivated</item>
+        <item name="android:numbersBackgroundColor">@color/colorPrimaryDark</item>
+        <item name="android:amPmTextColor">?android:attr/textColorSecondary</item>
     </style>
 </resources>

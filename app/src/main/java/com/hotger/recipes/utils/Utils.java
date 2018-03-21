@@ -1,6 +1,5 @@
 package com.hotger.recipes.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
@@ -11,18 +10,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
 import com.hotger.recipes.R;
-import com.hotger.recipes.utils.model.Product;
-import com.hotger.recipes.view.MainActivity;
-import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 public class Utils {
 
     public static final SparseIntArray bottomNavigationTabs = new SparseIntArray();
     public static final String EXTRA_NAVIGATION_ID = "extra.NAVIGATION_ID";
     public static final String ENGLISH = "en";
+    public static final String FIREBASE_IMG_STORAGE = "recipe_image";
 
     static {
         bottomNavigationTabs.put(R.id.menu_home, 0);
@@ -56,6 +52,12 @@ public class Utils {
         public static final int OUNCE = 8;
     }
 
+    public class SharedPref {
+        public static final String TRANSLATIONS_REF = "translations_ref";
+        public static final String PUBLISH_REF = "publish_ref";
+    }
+
+    public final static String MY_RECIPES = "MY_RECIPES";
     //TODO тут наверное надо все это убрать и сделать красиво
     public static final String STATE = "State";
     public static final int NUMBER_PICKER = 0;

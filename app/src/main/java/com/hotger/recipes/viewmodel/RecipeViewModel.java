@@ -9,7 +9,7 @@ import android.widget.TableRow;
 import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ProductsAdapter;
-import com.hotger.recipes.utils.model.Recipe;
+import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class RecipeViewModel extends MViewModel {
     }
 
     public void addCategories(ViewGroup categoryContainer) {
-        ArrayList<String> categories = getCurrentRecipe().getCategories();
+        ArrayList<String> categories = getCurrentRecipe().getCategoriesTitles();
         for (int i = 0; i < categories.size(); i++) {
             TableRow row = new TableRow(activity);
             row.setId(i);
@@ -72,4 +72,15 @@ public class RecipeViewModel extends MViewModel {
             categoryContainer.addView(row);
         }
     }
+
+    public String getStringTime(int time) {
+        int hours = time / 60;
+        int min = time % 60;
+        if (hours == 0) {
+            return min + " min";
+        } else {
+            return hours + " : " + min;
+        }
+    }
+
 }

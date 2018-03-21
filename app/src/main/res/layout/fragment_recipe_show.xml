@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="model"
             type="com.hotger.recipes.viewmodel.RecipeViewModel" />
@@ -93,50 +95,74 @@
             </LinearLayout>
 
             <TextView
+                android:layout_marginTop="16dp"
                 android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/porions_container"
+                android:background="@drawable/dotted_line"/>
+
+            <LinearLayout
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/dotted_line" />
-
-            <RelativeLayout
                 android:id="@+id/timing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider1"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
                 android:gravity="center">
 
-                <include
-                    android:id="@+id/preparations"
-                    layout="@layout/progress_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    bind:totalTimeInSeconds="@{model.currentRecipe.totalTimeInSeconds}"
-                    bind:type="@{@string/preparations}"
-                    bind:stringTime="@{model.currentRecipe.getStringTime(model.currentRecipe.totalTimeInSeconds)}" />
+                <me.itangqi.waveloadingview.WaveLoadingView
+                    android:id="@+id/prep_time"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginRight="@dimen/padding_dimen"
+                    app:wlv_borderColor="@color/colorAccent"
+                    app:wlv_borderWidth="3dp"
+                    app:wlv_round_rectangle="true"
+                    app:wlv_shapeType="circle"
+                    app:wlv_titleBottom="@string/prep_time"
+                    app:wlv_titleCenterColor="@color/colorText"
+                    app:wlv_titleCenterSize="14sp"
+                    app:wlv_titleBottomSize="8sp"
+                    app:wlv_triangle_direction="north"
+                    app:wlv_waveAmplitude="70"
+                    app:wlv_waveColor="@color/colorAccent" />
 
-                <include
-                    android:id="@+id/cooking"
-                    layout="@layout/progress_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/preparations"
-                    bind:totalTimeInSeconds="@{30}"
-                    bind:type="@{@string/cooking_time}"
-                    bind:stringTime="@{model.currentRecipe.getStringTime(30)}" />
+                <me.itangqi.waveloadingview.WaveLoadingView
+                    android:id="@+id/cooking_time"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginRight="@dimen/padding_dimen"
+                    app:wlv_borderColor="@color/colorAccent"
+                    app:wlv_borderWidth="3dp"
+                    app:wlv_round_rectangle="true"
+                    app:wlv_shapeType="circle"
+                    app:wlv_titleBottom="@string/cooking_time"
+                    app:wlv_titleCenterColor="@color/colorText"
+                    app:wlv_titleCenterSize="14sp"
+                    app:wlv_titleBottomSize="8sp"
+                    app:wlv_triangle_direction="north"
+                    app:wlv_waveAmplitude="70"
+                    app:wlv_waveColor="@color/colorAccent" />
 
-                <include
-                    android:id="@+id/baking"
-                    layout="@layout/progress_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/cooking"
-                    bind:totalTimeInSeconds="@{model.currentRecipe.totalTimeInSeconds}"
-                    bind:type="@{@string/baking}"
-                    bind:stringTime="@{model.currentRecipe.getStringTime(model.currentRecipe.totalTimeInSeconds)}" />
-            </RelativeLayout>
+                <me.itangqi.waveloadingview.WaveLoadingView
+                    android:id="@+id/total_time"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    app:wlv_borderColor="@color/colorAccent"
+                    app:wlv_borderWidth="3dp"
+                    app:wlv_round_rectangle="true"
+                    app:wlv_shapeType="circle"
+                    app:wlv_titleBottom="@string/total_time"
+                    app:wlv_titleCenterColor="@color/colorText"
+                    app:wlv_titleCenterSize="14sp"
+                    app:wlv_titleBottomSize="8sp"
+                    app:wlv_triangle_direction="north"
+                    app:wlv_waveAmplitude="70"
+                    app:wlv_waveColor="@color/colorAccent" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/divider2"
@@ -144,7 +170,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/timing"
                 android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/dotted_line" />
 
             <TextView
@@ -175,9 +200,9 @@
                 android:id="@+id/category_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/divider3"
                 bind:flChildSpacing="8dp"
-                bind:flRowSpacing="8dp"
-                android:layout_below="@id/divider3" />
+                bind:flRowSpacing="8dp" />
 
             <TextView
                 android:id="@+id/divider4"
@@ -194,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider4"
                 android:text="@{model.currentRecipe.preparations}"
-                android:textColor="@color/colorText"/>
+                android:textColor="@color/colorText" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

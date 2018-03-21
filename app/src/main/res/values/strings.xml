@@ -12,7 +12,7 @@
     <string name="choose_measure">Choose measuring</string>
     <string name="choose_categories">Choose categories:</string>
     <string name="choose_cooking_time">Choose cooking time</string>
-    <string name="persons_number">Portions</string>
+    <string name="persons_number">Portions number</string>
     <string name="write_recipe">Write recipe</string>
     <string name="fill_data">Fill necessary data!</string>
     <string name="cooking_time">Cooking time</string>
@@ -39,6 +39,19 @@
     <string name="no_diet_filter">No diet filter selected</string>
     <string name="add_products_hint">To add products use text view above</string>
     <string name="favorite_hint">Search for recipes and add them to your favorite. Start now!</string>
+    <string name="course">Course</string>
+    <string name="diet">Diet</string>
+    <string name="add_recipe">Write your own recipe</string>
+    <string name="shopping_list">Shopping list</string>
+    <string name="write_your_instructions">Write your instructions</string>
+    <string name="add_image">Add image</string>
+    <string name="min">min</string>
+    <string name="hour">hr</string>
+    <string name="total_time">Total time</string>
+    <string name="prep_time">Preparations time</string>
+    <string name="delete">Delete</string>
+    <string name="turn_on_translations_to_russian">Turn on translations to russian</string>
+    <string name="publish_my_recipes">Publish my recipes</string>
 
     <string-array name="measures_array">
         <item></item>

@@ -1,11 +1,11 @@
-package com.hotger.recipes.utils.database;
+package com.hotger.recipes.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.hotger.recipes.utils.model.Ingredient;
+import com.hotger.recipes.model.Ingredient;
 
 import java.util.List;
 
@@ -39,4 +39,13 @@ public interface IngredientDao {
 
     @Query("SELECT measure FROM ingredient WHERE en like :english")
     String getMeasureOfProduct(String english);
+
+    @Query("SELECT * FROM ingredient WHERE en = :name OR ru = :name")
+    List<Ingredient> getIngredientByName(String name);
+
+    @Query("SELECT * FROM ingredient WHERE id = :id")
+    List<Ingredient> getIngredientById(String id);
+
+    @Query("SELECT en FROM ingredient WHERE id = :id")
+    String getNameById(String id);
 }

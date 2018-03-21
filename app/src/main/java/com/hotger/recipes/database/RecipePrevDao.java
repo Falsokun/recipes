@@ -1,11 +1,11 @@
-package com.hotger.recipes.utils.database;
+package com.hotger.recipes.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.hotger.recipes.utils.model.RecipePrev;
+import com.hotger.recipes.model.RecipePrev;
 
 import java.util.List;
 
@@ -25,4 +25,7 @@ public interface RecipePrevDao {
 
     @Query("SELECT * FROM recipeprev WHERE type = :type")
     List<RecipePrev> getRecipesByType(String type);
+
+    @Insert(onConflict = REPLACE)
+    void insert(RecipePrev prev);
 }

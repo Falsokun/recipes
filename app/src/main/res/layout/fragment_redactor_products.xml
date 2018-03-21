@@ -73,7 +73,7 @@
             android:id="@+id/message"
             layout="@layout/fragment_no_fill"
             bind:model="@{messageModel}"
-            android:visibility="@{model.productsAdapter.data.size() == 0 ? View.VISIBLE : View.GONE}"/>
+            android:visibility="@{model.emptyData ? View.VISIBLE : View.GONE}"/>
 
     </RelativeLayout>
 </layout>

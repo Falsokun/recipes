@@ -58,6 +58,7 @@ public class BackStackFragment extends Fragment {
                 break;
             case R.id.menu_my_recipe:
                 rootFragment = new RecipeListFragment();
+                rootFragment.setArguments(getArguments());
             default:
                 break;
         }

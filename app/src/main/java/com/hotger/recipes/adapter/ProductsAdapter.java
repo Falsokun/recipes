@@ -14,15 +14,16 @@ import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
-import com.hotger.recipes.utils.model.Product;
+import com.hotger.recipes.model.Product;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adapter for handling entering products and its quanitity
- *
+ * <p>
  * Адаптер для обработки ингридиентов внутри редактора рецептов
  */
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
@@ -39,9 +40,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     /**
      * All selected products
      */
-    private ArrayList<Product> data; //TODO записывать сразу в текущий рецепт
+    private List<Product> data; //TODO записывать сразу в текущий рецепт
 
-    public ProductsAdapter(ControllableActivity context, ArrayList<Product> data, boolean isEditable,
+    public ProductsAdapter(ControllableActivity context, List<Product> data, boolean isEditable,
                            boolean isDetailed) {
         this.activity = context;
         this.data = data;
@@ -58,19 +59,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Product productLine = data.get(position);
-        holder.binding.productName.setText(productLine.getIngredientById());
-        Drawable drawable = getAmountDrawable(productLine.getMeasure(), activity);
-        holder.binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[productLine.getMeasure()]);
+        holder.binding.productName.setText(productLine.getIngredientById(activity));
+        Drawable drawable = getAmountDrawable(productLine.getDrawableByMeasure(), activity);
+        holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        if (!isEditable) {
-            holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()));
-        }
+        holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()));
     }
 
     @Override
     public int getItemCount() {
         return data.size();
     }
+
+    //TODO все очень плохо
 
     /**
      * Returns drawable depending on {@param quantity} of the product
@@ -130,12 +131,13 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     //region Getters and Setters
-    public ArrayList<Product> getData() {
+    public List<Product> getData() {
         return data;
     }
 
     public void setData(ArrayList<Product> shots) {
         data = shots;
+        notifyDataSetChanged();
     }
 
     //endregion
@@ -162,6 +164,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                         binding.finalAmount.setText(Utils.numberToString(temp + 1));
                     }
                 };
+
                 binding.btnAdd.setOnClickListener(listener);
                 binding.btnSub.setOnClickListener(listener);
                 binding.finalAmount.addTextChangedListener(new TextWatcher() {
@@ -185,6 +188,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                         }
                     }
                 });
+
                 binding.amountIcon.setOnClickListener(view -> showDialog());
             } else {
                 binding.btnSub.setVisibility(View.GONE);
@@ -196,8 +200,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         private void showDialog() {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.AppDialog));
             builder.setTitle(activity.getResources().getString(R.string.choose_measure));
-            builder.setItems(activity.getResources().getStringArray(R.array.measures_array),
-                    (dialog, which) -> changeMeasure(which));
+            builder.setItems(activity.getResources().getStringArray(R.array.measures_array), (dialog, which) -> {
+                String[] arr = activity.getResources().getStringArray(R.array.measures_array);
+                changeMeasure(arr[which], which);
+            });
+
             builder.show();
         }
 
@@ -206,11 +213,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
          *
          * @param measurePosition - position choosed from the dialog
          */
-        private void changeMeasure(int measurePosition) {
+        private void changeMeasure(String measurePosition, int position) {
             data.get(getAdapterPosition()).setMeasure(measurePosition);
-            Drawable drawable = getAmountDrawable(measurePosition, activity);
+            Drawable drawable = getAmountDrawable(position, activity);
             binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[measurePosition]);
+            binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[position]);
         }
     }
 }

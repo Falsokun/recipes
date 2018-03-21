@@ -1,8 +1,8 @@
-package com.hotger.recipes.utils.database;
+package com.hotger.recipes.database;
 
 import android.arch.persistence.room.TypeConverter;
 
-import com.hotger.recipes.utils.model.Image;
+import com.hotger.recipes.model.GsonModel.Image;
 
 public class ImageConverter {
     @TypeConverter
