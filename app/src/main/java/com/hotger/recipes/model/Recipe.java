@@ -6,6 +6,7 @@ import android.arch.persistence.room.Relation;
 import android.databinding.BaseObservable;
 
 import com.hotger.recipes.model.GsonModel.Image;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.io.Serializable;
@@ -43,7 +44,7 @@ public class Recipe implements Serializable{
 
     private void filterCategories(ControllableActivity activity, ArrayList<String> allAttributes) {
         for(String category : allAttributes) {
-            List<Category> queryRes = activity.getDatabase().getCategoryDao().getCategoryByName(category);
+            List<Category> queryRes = AppDatabase.getDatabase(activity).getCategoryDao().getCategoryByName(category);
             if (queryRes.size() != 0) {
                 Category cat = queryRes.get(0);
                 if (cat != null) {

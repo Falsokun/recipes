@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentFridgeBinding;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
@@ -73,7 +74,7 @@ public class FridgeFragment extends BackStackFragment {
     }
 
     public void saveFridgeData() {
-        ((ControllableActivity)getActivity()).getDatabase().getProductDao().removeWhereId(FridgeFragment.ID);
+        AppDatabase.getDatabase(getActivity()).getProductDao().removeWhereId(FridgeFragment.ID);
         if (inputModel.getProducts() == null || inputModel.getProducts().size() == 0) {
             return;
         }
@@ -85,15 +86,14 @@ public class FridgeFragment extends BackStackFragment {
 
         RecipeNF recipeNF = new RecipeNF();
         recipeNF.setId(FridgeFragment.ID);
-        ((ControllableActivity)getActivity()).getDatabase().getRecipeDao().insert(recipeNF);
-        ((ControllableActivity)getActivity()).getDatabase().getProductDao().insertAll(products);
+        AppDatabase.getDatabase(getActivity()).getRecipeDao().insert(recipeNF);
+        AppDatabase.getDatabase(getActivity()).getProductDao().insertAll(products);
     }
 
     public void restoreFridgeData() {
         if (inputModel.getProducts().size() == 0) {
             inputModel.getProducts()
-                    .addAll(((ControllableActivity)getActivity())
-                            .getDatabase()
+                    .addAll(AppDatabase.getDatabase(getActivity())
                             .getProductDao()
                             .getProducts(FridgeFragment.ID));
         }
@@ -103,8 +103,8 @@ public class FridgeFragment extends BackStackFragment {
         mBinding.progress.setVisibility(View.VISIBLE);
         ArrayList<String> ingredients = new ArrayList<>();
         for(Product product : products) {
-            ingredients.add(((ControllableActivity) getActivity())
-                    .getDatabase()
+            ingredients.add(AppDatabase
+                    .getDatabase(getActivity())
                     .getIngredientDao()
                     .getNameById(product.getIngredientId()));
         }

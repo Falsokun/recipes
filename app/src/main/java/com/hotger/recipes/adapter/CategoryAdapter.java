@@ -15,11 +15,12 @@ import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.MainActivity;
 import com.hotger.recipes.view.RecipeListFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    private List<Category> categoryList;
+    private List<Category> categoryList = new ArrayList<>();
     private MainActivity activity;
 
     public CategoryAdapter(MainActivity activity, List<Category> categoryList) {
@@ -72,6 +73,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public void setData(List<Category> data) {
         this.categoryList = data;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

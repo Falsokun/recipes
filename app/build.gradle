@@ -61,6 +61,11 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:11.8.0'
     compile 'me.itangqi.waveloadingview:library:0.3.5'
     compile 'com.wdullaer:materialdatetimepicker:3.5.1'
+
+    compile "android.arch.lifecycle:extensions:1.0.0"
+    compile "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

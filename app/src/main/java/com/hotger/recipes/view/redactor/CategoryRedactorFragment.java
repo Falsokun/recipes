@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorCategoryBinding;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.database.CategoryDao;
 import com.hotger.recipes.view.ControllableActivity;
@@ -67,7 +68,7 @@ public class CategoryRedactorFragment extends Fragment {
             allTags.put(category, new ArrayList<>());
         }
 
-        CategoryDao dao = ((ControllableActivity)getActivity()).getDatabase().getCategoryDao();
+        CategoryDao dao = AppDatabase.getDatabase(getActivity()).getCategoryDao();
         allTags.get(categories[0]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.CUISINE));
         allTags.get(categories[1]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.HOLIDAY));
         allTags.get(categories[2]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.COURSE));

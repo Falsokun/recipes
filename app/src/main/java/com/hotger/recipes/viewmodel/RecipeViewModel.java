@@ -10,11 +10,12 @@ import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
 
-public class RecipeViewModel extends MViewModel {
+public class RecipeViewModel extends ViewModel {
 
     private Recipe mCurrentRecipe;
     private ControllableActivity activity;
@@ -84,9 +85,10 @@ public class RecipeViewModel extends MViewModel {
     }
 
     public void deleteRecipeFromDatabase(ControllableActivity activity, String recipeId) {
-        activity.getDatabase().getRecipeDao().deleteById(recipeId);
-        activity.getDatabase().getRelationDao().deleteAllWithId(recipeId);
-        activity.getDatabase().getRecipePrevDao().deleteAllById(recipeId);
+        AppDatabase db = AppDatabase.getDatabase(activity);
+        db.getRecipeDao().deleteById(recipeId);
+        db.getRelationDao().deleteAllWithId(recipeId);
+        db.getRecipePrevDao().deleteAllById(recipeId);
     }
 
 }

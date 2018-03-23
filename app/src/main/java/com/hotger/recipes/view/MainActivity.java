@@ -31,7 +31,6 @@ public class MainActivity extends ControllableActivity {
 
     ActivityMainBinding mBinding;
     ViewPagerAdapter adapter;
-    AppDatabase db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,8 +44,6 @@ public class MainActivity extends ControllableActivity {
         mBinding.viewPager.setOffscreenPageLimit(3); //to keep fragments in memory
         Utils.disableShiftMode(mBinding.bottomNavigation);
         updateCollapsing(mBinding.appbar, false);
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "populus-database").allowMainThreadQueries().build();
     }
 
     public void setListeners() {
@@ -169,11 +166,6 @@ public class MainActivity extends ControllableActivity {
     @Override
     public AppBarLayout getAppBar() {
         return mBinding.appbar;
-    }
-
-    @Override
-    public AppDatabase getDatabase() {
-        return db;
     }
 
     @Override

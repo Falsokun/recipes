@@ -149,12 +149,6 @@ public class RedactorActivity extends ControllableActivity {
     }
 
     @Override
-    public AppDatabase getDatabase() {
-        return Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "populus-database").allowMainThreadQueries().build();
-    }
-
-    @Override
     public ImageView getToolbarImageView() {
         return null;
     }

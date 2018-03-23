@@ -41,7 +41,7 @@
     <string name="favorite_hint">Search for recipes and add them to your favorite. Start now!</string>
     <string name="course">Course</string>
     <string name="diet">Diet</string>
-    <string name="add_recipe">Write your own recipe</string>
+    <string name="add_recipe">Add your own recipe</string>
     <string name="shopping_list">Shopping list</string>
     <string name="write_your_instructions">Write your instructions</string>
     <string name="add_image">Add image</string>
@@ -54,6 +54,7 @@
     <string name="publish_my_recipes">Publish my recipes</string>
     <string name="nothing_selected">Nothing selected</string>
     <string name="OK">OK</string>
+    <string name="enter_url_here">Enter url here</string>
 
     <string-array name="measures_array">
         <item></item>

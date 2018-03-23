@@ -3,8 +3,10 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.io.Serializable;
@@ -129,21 +131,21 @@ public class Product implements Serializable {
         return new Product(activity, productName, Integer.parseInt(amount), measure);
     }
 
-    public void findParamsInDB(ControllableActivity activity, String name) {
-        List<Ingredient> ingredients = activity.getDatabase().getIngredientDao().getIngredientByName(name);
+    public void findParamsInDB(Context activity, String name) {
+        List<Ingredient> ingredients = AppDatabase.getDatabase(activity).getIngredientDao().getIngredientByName(name);
         if (ingredients.size() == 0) {
             ingredientId = name;
             measure = "cup";
             return;
         }
 
-        Ingredient ingredient = activity.getDatabase().getIngredientDao().getIngredientByName(name).get(0);
+        Ingredient ingredient = AppDatabase.getDatabase(activity).getIngredientDao().getIngredientByName(name).get(0);
         ingredientId = ingredient.getId();
         measure = ingredient.getMeasure();
     }
 
     public String findMeasureByName(ControllableActivity activity, String name) {
-        List<Ingredient> ingredients = activity.getDatabase().getIngredientDao().getIngredientByName(name);
+        List<Ingredient> ingredients = AppDatabase.getDatabase(activity).getIngredientDao().getIngredientByName(name);
         if (ingredients.size() == 0)
             return "lt";
 
@@ -151,8 +153,8 @@ public class Product implements Serializable {
     }
 
     public String getIngredientById(ControllableActivity activity) {
-        List<Ingredient> ingredients = activity
-                .getDatabase()
+        List<Ingredient> ingredients = AppDatabase
+                .getDatabase(activity)
                 .getIngredientDao()
                 .getIngredientById(ingredientId);
 

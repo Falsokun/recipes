@@ -10,6 +10,7 @@ import com.hotger.recipes.Fake;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Category;
+import com.hotger.recipes.utils.AsyncCalls;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class RealtimeDB {
 
     public static final String CATEGORY = "categories";
 
-    public static void saveIngredientsToDatabase(AppDatabase db) {
+    public static void saveCategoriesToDatabase(AppDatabase db) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("ingredients");
 
@@ -49,7 +50,7 @@ public class RealtimeDB {
         });
     }
 
-    public static void saveIngredientsToDatabase(AppDatabase db, String reference) {
+    public static void saveCategoriesToDatabase(AppDatabase db, String reference) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(reference);
 
@@ -60,6 +61,7 @@ public class RealtimeDB {
                 GenericTypeIndicator<ArrayList<Category>> t = new GenericTypeIndicator<ArrayList<Category>>() {};
                 ArrayList<Category> categories = dataSnapshot.getValue(t);
                 db.getCategoryDao().insertAll(categories);
+                saveToDatabase(db);
             }
 
             @Override
@@ -67,6 +69,12 @@ public class RealtimeDB {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+    }
+
+    private static void saveToDatabase(AppDatabase db) {
+        for (Category category : db.getCategoryDao().getAllCategories()) {
+            AsyncCalls.saveCategoryToDB(db, category.getSearchValue());
+        }
     }
 
     //---------------------------------------

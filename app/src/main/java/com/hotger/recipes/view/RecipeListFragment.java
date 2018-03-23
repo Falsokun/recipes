@@ -1,5 +1,6 @@
 package com.hotger.recipes.view;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
+import com.hotger.recipes.database.RecipePrevViewModel;
 import com.hotger.recipes.adapter.CardAdapter;
+import com.hotger.recipes.database.RecipePrevDao;
 import com.hotger.recipes.databinding.FragmentRecipesListBinding;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.MessageModel;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
@@ -24,25 +28,36 @@ public class RecipeListFragment extends BackStackFragment {
 
     private CardAdapter cardAdapter;
 
+    private String type;
+
     public static String TAG = "RecipeListFragment";
     public static final int ID = 123456;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        RecipePrevDao dao = AppDatabase.getDatabase(getActivity()).getRecipePrevDao();
         cardAdapter = new CardAdapter((ControllableActivity) getActivity(), new ArrayList<>());
+
         if (getArguments() != null) {
             checkForCategory();
             checkForInit();
             checkForPassingFromApi();
             checkForFavorites();
         }
+
+        if (type != null)
+        ViewModelProviders.of(getActivity())
+                .get(RecipePrevViewModel.class)
+                .getAllPrevs(dao, type)
+                .observe(getActivity(), recipePrevs -> cardAdapter.setData(recipePrevs));
     }
 
     private void checkForFavorites() {
         int navId = getArguments().getInt(Utils.EXTRA_NAVIGATION_ID, -1);
         if (navId != -1 && navId == R.id.menu_my_recipe) {
-            findFavoritesData((ControllableActivity) getActivity());
+            type = Utils.MY_RECIPES;
             cardAdapter.setFromDB(true);
         }
     }
@@ -63,17 +78,8 @@ public class RecipeListFragment extends BackStackFragment {
     private void checkForCategory() {
         String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
         if (searchValue != null) {
-            showListFromDB(searchValue);
+            type = searchValue;
         }
-    }
-
-    private void findFavoritesData(ControllableActivity activity) {
-        cardAdapter.setData(activity.getDatabase().getRecipePrevDao().getRecipesByType(Utils.MY_RECIPES));
-    }
-
-    private void showListFromDB(String searchValue) {
-        cardAdapter = new CardAdapter((ControllableActivity) getActivity(),
-                ((ControllableActivity) getActivity()).getDatabase().getRecipePrevDao().getRecipesByType(searchValue));
     }
 
     @Nullable

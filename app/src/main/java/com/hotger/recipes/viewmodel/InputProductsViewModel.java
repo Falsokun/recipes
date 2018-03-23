@@ -19,11 +19,12 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.DataHintAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.model.Product;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.List;
 
-public class InputProductsViewModel extends MViewModel {
+public class InputProductsViewModel extends ViewModel {
 
     private ProductsAdapter productsAdapter;
     private DataHintAdapter dataHintAdapter;
@@ -35,7 +36,7 @@ public class InputProductsViewModel extends MViewModel {
         this.products = products;
         this.activity = activity;
         productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed);
-        dataHintAdapter = new DataHintAdapter(activity, R.layout.item_list, activity.getDatabase(), "en");
+        dataHintAdapter = new DataHintAdapter(activity, R.layout.item_list, AppDatabase.getDatabase(activity), "en");
     }
 
     @Override

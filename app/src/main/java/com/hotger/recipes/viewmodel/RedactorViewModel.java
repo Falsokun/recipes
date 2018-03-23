@@ -25,10 +25,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-public class RedactorViewModel extends MViewModel {
+public class RedactorViewModel extends ViewModel {
 
     private ControllableActivity activity;
 
@@ -123,23 +122,24 @@ public class RedactorViewModel extends MViewModel {
     }
 
     public void saveToDatabase(ControllableActivity activity) {
+        AppDatabase db = AppDatabase.getDatabase(activity);
         saveImageToCloudFirebase(currentRecipe.getRecipe().getImageUrl());
         if (currentRecipe.getId() == null) {
             currentRecipe.setId(currentRecipe.getName() + UUID.randomUUID().toString());
         }
 
-        activity.getDatabase().getRecipeDao().insert(currentRecipe.getRecipe());
+        db.getRecipeDao().insert(currentRecipe.getRecipe());
         for(Product product : currentRecipe.getProducts()) {
             product.setRecipeId(currentRecipe.getId());
         }
 
-        createRelationTable(activity.getDatabase());
-        activity.getDatabase().getProductDao().insert(currentRecipe.getProducts());
+        createRelationTable(db);
+        db.getProductDao().insert(currentRecipe.getProducts());
         RecipePrev prev = new RecipePrev(currentRecipe.getId(), Utils.MY_RECIPES,
                 new Image(currentRecipe.getRecipe().getImageUrl()),
                 currentRecipe.getName(),
                 String.valueOf(currentRecipe.getRecipe().getTotalTimeInSeconds()));
-        activity.getDatabase().getRecipePrevDao().insert(prev);
+        db.getRecipePrevDao().insert(prev);
     }
 
     private void createRelationTable(AppDatabase db) {

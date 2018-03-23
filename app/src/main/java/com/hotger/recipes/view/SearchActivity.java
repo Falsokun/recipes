@@ -239,11 +239,6 @@ public class SearchActivity extends ControllableActivity {
         return (getSupportFragmentManager().findFragmentByTag(RecipeListFragment.TAG));
     }
 
-    @Override
-    public AppDatabase getDatabase() {
-        return db;
-    }
-
     public CardAdapter getCardAdapter() {
         return cardAdapter;
     }

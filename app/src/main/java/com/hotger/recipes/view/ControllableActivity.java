@@ -32,8 +32,6 @@ public abstract class ControllableActivity extends AppCompatActivity {
 
     public abstract Fragment getCurrentFragment();
 
-    public abstract AppDatabase getDatabase();
-
     public abstract ImageView getToolbarImageView();
 
     public void setCurrentFragment(Fragment fragment, boolean addToBackStack, String name) {
@@ -124,11 +122,11 @@ public abstract class ControllableActivity extends AppCompatActivity {
     }
 
     public Recipe getRecipeFromDBByID(String id) {
-        Recipe recipe = getDatabase().getRecipeDao().getRecipesById(id).get(0);
-        List<String> ids = getDatabase().getRelationDao().getCategoryIdsForRecipe(id);
+        Recipe recipe = AppDatabase.getDatabase(this).getRecipeDao().getRecipesById(id).get(0);
+        List<String> ids = AppDatabase.getDatabase(this).getRelationDao().getCategoryIdsForRecipe(id);
         ArrayList<Category> categories = new ArrayList<>();
         for (String catId : ids) {
-            categories.add(getDatabase().getCategoryDao().getCategoryById(catId).get(0));
+            categories.add(AppDatabase.getDatabase(this).getCategoryDao().getCategoryById(catId).get(0));
         }
 
         recipe.setCategories(categories);

@@ -1,6 +1,7 @@
 package com.hotger.recipes.view;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +12,11 @@ import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CategoryAdapter;
+import com.hotger.recipes.database.CategoryDao;
+import com.hotger.recipes.database.CategoryViewModel;
+import com.hotger.recipes.database.RecipePrevViewModel;
 import com.hotger.recipes.databinding.FragmentCategoriesBinding;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.redactor.BackStackFragment;
@@ -30,6 +35,13 @@ public class CategoryFragment extends BackStackFragment {
         super.onCreate(savedInstanceState);
         List<Category> categoryList = getCategoryByName(YummlyAPI.Description.CUISINE);
         categoryAdapter = new CategoryAdapter((MainActivity) getActivity(), categoryList);
+
+//        CategoryDao dao = AppDatabase.getDatabase(getContext()).getCategoryDao();
+//        if (getActivity() != null)
+//            ViewModelProviders.of(getActivity())
+//                    .get(CategoryViewModel.class)
+//                    .getAllPrevs(dao, YummlyAPI.Description.CUISINE)
+//                    .observe(getActivity(), recipePrevs -> categoryAdapter.setData(recipePrevs));
     }
 
     @Nullable
@@ -44,10 +56,10 @@ public class CategoryFragment extends BackStackFragment {
 
     private void setSpinnerAdapter() {
         ArrayList<String> categories = new ArrayList<>();
-        categories.add(YummlyAPI.Description.CUISINE);
-        categories.add(YummlyAPI.Description.HOLIDAY);
-        categories.add(YummlyAPI.Description.COURSE);
-        categories.add(YummlyAPI.Description.DIET);
+        categories.add(getString(R.string.cuisine));
+        categories.add(getString(R.string.holiday));
+        categories.add(getString(R.string.course));
+        categories.add(getString(R.string.diet));
         mBinding.spinnerCategories.setItems(categories);
         mBinding.spinnerCategories.setOnItemSelectedListener((view, position, id, item) -> {
             switch (position) {
@@ -69,15 +81,12 @@ public class CategoryFragment extends BackStackFragment {
 
             categoryAdapter.notifyDataSetChanged();
         });
-
-        mBinding.spinnerCategories.setSelectedIndex(0);
     }
 
     public List<Category> getCategoryByName(String name) {
-        if (getActivity() != null && ((ControllableActivity) getActivity()).getDatabase() != null) {
-            return ((ControllableActivity) getActivity())
-                    .getDatabase()
-                    .getCategoryDao()
+        AppDatabase db = AppDatabase.getDatabase(getActivity());
+        if (getActivity() != null && db != null) {
+            return db.getCategoryDao()
                     .getAllCategoriesWithDescription(name);
         }
 
