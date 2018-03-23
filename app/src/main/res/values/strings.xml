@@ -52,6 +52,8 @@
     <string name="delete">Delete</string>
     <string name="turn_on_translations_to_russian">Turn on translations to russian</string>
     <string name="publish_my_recipes">Publish my recipes</string>
+    <string name="nothing_selected">Nothing selected</string>
+    <string name="OK">OK</string>
 
     <string-array name="measures_array">
         <item></item>

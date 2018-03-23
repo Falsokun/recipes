@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/prep_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_dimen">
+
+            <TextView
+                android:id="@+id/prep_time_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/prep_time"
+                android:text="@string/prep_time"
+                android:textColor="@color/colorText" />
+
+            <Button
+                android:id="@+id/prep_time"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:width="200dp"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/colorText" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cooking_time_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/prep_container"
+            android:padding="@dimen/padding_dimen">
+
+            <TextView
+                android:id="@+id/cooking_time_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/cooking_time"
+                android:text="@string/cooking_time"
+                android:textColor="@color/colorText" />
+
+            <Button
+                android:id="@+id/cooking_time"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:width="200dp"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/colorText" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/photo_src_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cooking_time_container"
+            android:background="@color/colorPrimary"
+            android:text="@string/add_image" />
+
+    </RelativeLayout>
+</layout>

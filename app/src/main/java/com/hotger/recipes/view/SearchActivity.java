@@ -130,11 +130,15 @@ public class SearchActivity extends ControllableActivity {
 //        categories.add(getResources().getString(R.string.no_filter_selected));
         List<Category> course = db.getCategoryDao().getAllCategoriesWithDescription(type);
         ArrayList<String> categories = new ArrayList<>();
+        categories.add(getString(R.string.nothing_selected));
         for (Category category : course) {
             categories.add(category.getTitle());
         }
         spinner.setItems(categories);
         spinner.setOnItemSelectedListener((view, position, id, item) -> {
+            List<String> items = spinner.getItems();
+            items.remove(getString(R.string.nothing_selected));
+            spinner.setItems(items);
             addCategory(categories.get(position), selected);
         });
     }

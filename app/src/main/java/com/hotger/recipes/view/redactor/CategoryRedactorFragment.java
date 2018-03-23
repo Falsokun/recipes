@@ -108,10 +108,12 @@ public class CategoryRedactorFragment extends Fragment {
             checkBox.setId(i);
             checkBox.setText(tags.get(i));
             if (model.isEdited() && model.getCurrentRecipe().hasCategory(tags.get(i))) {
-                checkBox.setSelected(true);
+                checkBox.setChecked(true);
+                checkBox.setBackground(getResources()
+                        .getDrawable(R.drawable.chekox_shape_colored));
+            } else {
+                checkBox.setBackground(getResources().getDrawable(R.drawable.chekox_shape));
             }
-
-            checkBox.setBackground(getResources().getDrawable(R.drawable.chekox_shape));
             checkBox.setPadding(30, 0, 30, 0);
             checkBox.setButtonDrawable(null);
             checkBox.setTag(tags.get(i));

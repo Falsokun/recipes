@@ -35,7 +35,7 @@ public class RecipeNF implements Serializable {
     @Ignore
     private ArrayList<String> ingredientLines;
 
-    private String preparations;
+    private String preparations = "";
 
     @Expose
     private int cookTimeInSeconds = 0;

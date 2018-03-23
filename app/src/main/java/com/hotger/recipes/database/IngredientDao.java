@@ -12,16 +12,7 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface IngredientDao {
-    @Insert(onConflict = REPLACE)
-    void insertAll(List<Ingredient> categories);
-
-    @Insert(onConflict = REPLACE)
-    void insert(List<Ingredient> categories);
-
-    @Delete
-    void delete(Ingredient ingredient);
-
+public interface IngredientDao extends BaseDao<Ingredient> {
     @Query("SELECT * FROM ingredient")
     List<Ingredient> getAllIngredients();
 

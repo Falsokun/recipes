@@ -1,5 +1,6 @@
 package com.hotger.recipes.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -12,20 +13,12 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface RecipePrevDao {
-
-    @Insert(onConflict = REPLACE)
-    void insertAll(List<RecipePrev> prevs);
-
-    @Delete
-    void delete(RecipePrev prev);
-
-    @Query("SELECT * FROM recipeprev")
-    List<RecipePrev> getAllPrevs();
+public interface RecipePrevDao extends BaseDao<RecipePrev> {
 
     @Query("SELECT * FROM recipeprev WHERE type = :type")
-    List<RecipePrev> getRecipesByType(String type);
+    LiveData<List<RecipePrev>> getRecipesByType(String type);
 
-    @Insert(onConflict = REPLACE)
-    void insert(RecipePrev prev);
+
+    @Query("DELETE FROM recipeprev WHERE id = :recipeId")
+    void deleteAllById(String recipeId);
 }

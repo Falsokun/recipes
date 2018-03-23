@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.hotger.recipes.view.ControllableActivity;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
                 childColumns = "recipeId",
                 onDelete = ForeignKey.CASCADE),
         primaryKeys = {"recipeId", "ingredientId"})
-public class Product {
+public class Product implements Serializable {
 
     @NonNull
     private String recipeId;

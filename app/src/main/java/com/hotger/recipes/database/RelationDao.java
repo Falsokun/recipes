@@ -12,20 +12,14 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface RelationDao {
-
-    @Insert(onConflict = REPLACE)
-    void insertAll(List<RelationTable> prevs);
-
-    @Delete
-    void delete(RecipePrev prev);
+public interface RelationDao extends BaseDao<RelationTable> {
 
     @Query("SELECT * FROM relationtable")
     List<RelationTable> getAllPrevs();
 
-    @Insert(onConflict = REPLACE)
-    void insert(RelationTable prev);
-
     @Query("SELECT categoryId FROM relationtable WHERE recipeId = :recipeId")
     List<String> getCategoryIdsForRecipe(String recipeId);
+
+    @Query("DELETE FROM relationtable WHERE recipeId = :recipeId")
+    void deleteAllWithId(String recipeId);
 }

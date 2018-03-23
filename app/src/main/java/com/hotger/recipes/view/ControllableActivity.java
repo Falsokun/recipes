@@ -113,6 +113,17 @@ public abstract class ControllableActivity extends AppCompatActivity {
     public abstract AppBarLayout getAppBar();
 
     public void openRecipeFromDB(String id) {
+        Recipe recipe = getRecipeFromDBByID(id);
+        RecipeFragment fragment = new RecipeFragment();
+        Bundle bundle = new Bundle();
+//        recipe.prepareDataForShowing(ControllableActivity.this);
+        bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
+        fragment.setArguments(bundle);
+
+        setCurrentFragment(fragment, true, fragment.getTag());
+    }
+
+    public Recipe getRecipeFromDBByID(String id) {
         Recipe recipe = getDatabase().getRecipeDao().getRecipesById(id).get(0);
         List<String> ids = getDatabase().getRelationDao().getCategoryIdsForRecipe(id);
         ArrayList<Category> categories = new ArrayList<>();
@@ -121,12 +132,6 @@ public abstract class ControllableActivity extends AppCompatActivity {
         }
 
         recipe.setCategories(categories);
-        RecipeFragment fragment = new RecipeFragment();
-        Bundle bundle = new Bundle();
-//        recipe.prepareDataForShowing(ControllableActivity.this);
-        bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
-        fragment.setArguments(bundle);
-
-        setCurrentFragment(fragment, true, fragment.getTag());
+        return recipe;
     }
 }

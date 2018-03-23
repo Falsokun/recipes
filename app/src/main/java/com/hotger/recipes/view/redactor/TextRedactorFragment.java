@@ -42,8 +42,11 @@ public class TextRedactorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_redactor_input_text, container, false);
-        numberedText = (EditText) rootView.findViewById(R.id.editable_text);
+        numberedText = rootView.findViewById(R.id.editable_text);
         numberedText.setEnabled(isEditedRecipe);
+        if (mRedactorModel.getCurrentRecipe() != null) {
+            numberedText.setText(mRedactorModel.getCurrentRecipe().getPreparations());
+        }
         numberedText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int count) {

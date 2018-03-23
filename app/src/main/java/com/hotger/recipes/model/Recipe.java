@@ -3,6 +3,7 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
+import android.databinding.BaseObservable;
 
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.view.ControllableActivity;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe implements Serializable {
+public class Recipe implements Serializable{
 
     @Embedded
     public RecipeNF recipe;
@@ -177,7 +178,7 @@ public class Recipe implements Serializable {
     }
 
     public boolean hasCategory(String category) {
-        return categories.contains(category);
+        return getCategoriesTitles().contains(category);
     }
 
 //    private JSONObject toJSON() {

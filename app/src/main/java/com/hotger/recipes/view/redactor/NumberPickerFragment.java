@@ -55,43 +55,8 @@ public class NumberPickerFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_redactor_number_picker, container, false);
         mBinding.number.setOnValueChangedListener(mRedactorModel.getPickerChangedListener());
         mBinding.number.setValue(mRedactorModel.getCurrentRecipe().getNumberOfServings());
-        mBinding.photoSrcBtn.setOnClickListener(v -> chooseImage());
         initNumberPickerValues();
         return mBinding.getRoot();
-    }
-
-    private void chooseImage() {
-        ArrayList<Image> images = new ArrayList<>();
-        ImagePicker.with(this)                         //  Initialize ImagePicker with activity or fragment context
-                .setToolbarColor("#212121")         //  Toolbar color
-                .setStatusBarColor("#000000")       //  StatusBar color (works with SDK >= 21  )
-                .setToolbarTextColor("#FFFFFF")     //  Toolbar text color (Title and Done button)
-                .setToolbarIconColor("#FFFFFF")     //  Toolbar icon color (Back and Camera button)
-                .setProgressBarColor("#4CAF50")     //  ProgressBar color
-                .setBackgroundColor("#212121")      //  Background color
-                .setCameraOnly(false)               //  Camera mode
-                .setMultipleMode(true)              //  Select multiple images or single image
-                .setFolderMode(true)                //  Folder mode
-                .setShowCamera(true)                //  Show camera button
-                .setFolderTitle("Albums")           //  Folder title (works with FolderMode = true)
-                .setImageTitle("Galleries")         //  Image title (works with FolderMode = false)
-                .setDoneTitle("Done")               //  Done button title
-                .setLimitMessage("You have reached selection limit")    // Selection limit message
-                .setMaxSize(1)                     //  Max images can be selected
-                .setSavePath("ImagePicker")         //  Image capture folder name
-                .setSelectedImages(images)          //  Selected images
-                .setKeepScreenOn(true)              //  Keep screen on when selecting images
-                .start();                           //  Start ImagePicker
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
-            ArrayList<Image> images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
-            String path = images.get(0).getPath();
-            mRedactorModel.getCurrentRecipe().setImageURL(path);
-        }
-        super.onActivityResult(requestCode, resultCode, data);  // THIS METHOD SHOULD BE HERE so that ImagePicker works with fragment
     }
 
     private void initNumberPickerValues() {

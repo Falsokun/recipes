@@ -139,20 +139,6 @@ public class MainActivity extends ControllableActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
-            case R.id.menu_edit:
-                Fragment rootFragment = getNavigationFragment(1);
-                if (rootFragment != null) {
-                    RecipeFragment recipeFragment = (RecipeFragment) rootFragment
-                            .getChildFragmentManager()
-                            .findFragmentByTag(RecipeFragment.class.getName());
-
-                    if (recipeFragment != null) {
-                        recipeFragment.editRecipe();
-                    }
-                }
-
-                Toast.makeText(this, "edit2", Toast.LENGTH_SHORT).show();
-                break;
 
             case R.id.menu_search:
                 intent = new Intent(this, SearchActivity.class);
@@ -162,6 +148,9 @@ public class MainActivity extends ControllableActivity {
             case R.id.menu_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+                break;
+
+            default:
                 break;
         }
 

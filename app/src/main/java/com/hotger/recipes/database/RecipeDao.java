@@ -14,21 +14,11 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface RecipeDao {
-
-    @Insert(onConflict = REPLACE)
-    void insert(RecipeNF recipe);
-
-    @Delete
-    void delete(RecipeNF recipe);
-
-    @Transaction @Query("SELECT * FROM recipenf")
-    List<Recipe> getAllRecipes();
+public interface RecipeDao extends BaseDao<RecipeNF> {
 
     @Transaction @Query("SELECT * FROM recipenf WHERE id = :dialogId")
     List<Recipe> getRecipesById(String dialogId);
 
-//    @Transaction @Query("SELECT * FROM recipenf WHERE total LIKE :time")
-//    List<Recipe> getAllRecipesWithTimeLess(String time);
-
+    @Query("DELETE FROM recipenf WHERE id = :recipeId")
+    void deleteById(String recipeId);
 }

@@ -47,6 +47,16 @@ public class RedactorViewModel extends MViewModel {
         inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true);
     }
 
+    public RedactorViewModel(ControllableActivity activity, String id) {
+        this.activity = activity;
+        currentRecipe = activity.getRecipeFromDBByID(id);
+        isEdited = false;
+        inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true);
+        for(Category category : currentRecipe.getCategories()) {
+            categoryTitles.add(category.getTitle());
+        }
+    }
+
     //region listeners
     public CompoundButton.OnCheckedChangeListener getCheckedListener() {
         return (compoundButton, b) -> {
@@ -114,7 +124,10 @@ public class RedactorViewModel extends MViewModel {
 
     public void saveToDatabase(ControllableActivity activity) {
         saveImageToCloudFirebase(currentRecipe.getRecipe().getImageUrl());
-        currentRecipe.setId(UUID.randomUUID().toString());
+        if (currentRecipe.getId() == null) {
+            currentRecipe.setId(currentRecipe.getName() + UUID.randomUUID().toString());
+        }
+
         activity.getDatabase().getRecipeDao().insert(currentRecipe.getRecipe());
         for(Product product : currentRecipe.getProducts()) {
             product.setRecipeId(currentRecipe.getId());
@@ -130,7 +143,7 @@ public class RedactorViewModel extends MViewModel {
     }
 
     private void createRelationTable(AppDatabase db) {
-        List<RelationTable> table = new ArrayList<>();
+        db.getRelationDao().deleteAllWithId(currentRecipe.getId());
         for (String category : categoryTitles) {
             String catId = db.getCategoryDao().getCategoryByName(category).get(0).getSearchValue();
             db.getRelationDao().insert(new RelationTable(currentRecipe.getId(), catId));

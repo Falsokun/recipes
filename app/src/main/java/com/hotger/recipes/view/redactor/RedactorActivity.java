@@ -37,7 +37,13 @@ public class RedactorActivity extends ControllableActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRedactorModel = new RedactorViewModel(this);
+        if (getIntent().getStringExtra(Utils.RECIPE_ID) != null) {
+            mRedactorModel = new RedactorViewModel(this,
+                    getIntent().getStringExtra(Utils.RECIPE_ID));
+        } else {
+            mRedactorModel = new RedactorViewModel(this);
+        }
+
         mRedactorModel.setEdited(true);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_redactor);
         mBinding.setModel(mRedactorModel);
@@ -55,13 +61,6 @@ public class RedactorActivity extends ControllableActivity {
                 onBackPressed();
             }
         });
-
-        /*int id = getArguments().getInt(Utils.RECIPE_ID, -1);
-        if (id != -1) {
-            mRedactorModel = new RedactorViewModel(this, id);
-        } else {
-            mRedactorModel = new RedactorViewModel((MainActivity) getActivity());
-        }*/
     }
 
     @Override
@@ -94,7 +93,7 @@ public class RedactorActivity extends ControllableActivity {
             fragment2.setRedactorModel(mRedactorModel);
             mRedactorAdapter.addFragment(fragment2);
 
-            TimePickerFragment timePickerFragment = new TimePickerFragment();
+            PickerFragment timePickerFragment = new PickerFragment();
             timePickerFragment.setRedactorModel(mRedactorModel);
             mRedactorAdapter.addFragment(timePickerFragment);
 

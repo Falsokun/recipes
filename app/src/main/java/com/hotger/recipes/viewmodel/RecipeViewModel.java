@@ -83,4 +83,10 @@ public class RecipeViewModel extends MViewModel {
         }
     }
 
+    public void deleteRecipeFromDatabase(ControllableActivity activity, String recipeId) {
+        activity.getDatabase().getRecipeDao().deleteById(recipeId);
+        activity.getDatabase().getRelationDao().deleteAllWithId(recipeId);
+        activity.getDatabase().getRecipePrevDao().deleteAllById(recipeId);
+    }
+
 }

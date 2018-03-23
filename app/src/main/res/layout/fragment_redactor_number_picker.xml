@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,30 +15,17 @@
             android:paddingTop="16dp"
             android:textColor="@color/colorPrimaryDark" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+
+        <com.shawnlin.numberpicker.NumberPicker
             android:layout_below="@id/name"
-            android:gravity="center">
-
-            <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/number"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layerType="hardware"
-                android:layout_centerHorizontal="true"
-                app:np_dividerColor="@color/colorAccent"
-                app:np_min="0"
-                app:np_selectedTextColor="@color/colorAccent"
-                android:layout_above="@+id/photo_src_btn"/>
-
-            <Button
-                android:id="@+id/photo_src_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add_image"
-                android:layout_alignParentBottom="true"
-                android:background="@color/colorPrimary"/>
-        </RelativeLayout>
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layerType="hardware"
+            app:np_dividerColor="@color/colorAccent"
+            app:np_min="0"
+            app:np_selectedTextColor="@color/colorAccent" />
     </RelativeLayout>
 </layout>

@@ -1,9 +1,10 @@
 package com.hotger.recipes.model.GsonModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Attributes {
+public class Attributes implements Serializable {
 
     private ArrayList<String> course;
 

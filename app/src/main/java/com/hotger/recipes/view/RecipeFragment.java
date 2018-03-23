@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
@@ -59,7 +61,25 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu,inflater);
-        inflater.inflate(R.menu.menu_fragment, menu);
+        if (getArguments() != null
+                && getArguments().getSerializable(Utils.RECIPE_OBJ) != null) {
+            inflater.inflate(R.menu.menu_fragment, menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_edit) {
+            Intent intent = new Intent(getActivity(), RedactorActivity.class);
+            intent.putExtra(Utils.RECIPE_ID, model.getCurrentRecipe().getId());
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.menu_delete) {
+            model.deleteRecipeFromDatabase((ControllableActivity) getActivity(),
+                    model.getCurrentRecipe().getId());
+            getActivity().onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initWaveView() {
@@ -85,13 +105,5 @@ public class RecipeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         model.OnResume();
-    }
-
-    public void editRecipe() {
-        //TODO АРГУМЕНТЫ ДЛЯ АЙДИ
-//        Bundle bundle = new Bundle();
-//        bundle.putInt(Utils.RECIPE_ID, (int) model.getCurrentRecipe().getId());
-        Intent intent = new Intent(getContext(), RedactorActivity.class);
-        startActivity(intent);
     }
 }

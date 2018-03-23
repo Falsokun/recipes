@@ -9,8 +9,10 @@ import android.support.annotation.NonNull;
 
 import com.hotger.recipes.BR;
 
+import java.io.Serializable;
+
 @Entity
-public class Category extends BaseObservable {
+public class Category extends BaseObservable implements Serializable {
 
     private String url;
 

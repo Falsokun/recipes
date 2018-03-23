@@ -24,14 +24,15 @@
             android:visibility="gone"/>
 
         <android.support.design.widget.FloatingActionButton
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/padding_dimen"
             android:id="@+id/search_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="21dp"
+            android:layout_marginEnd="16dp"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/ic_search" />
 
         <include
             android:id="@+id/fragment_redactor"
