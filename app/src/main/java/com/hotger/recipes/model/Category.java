@@ -10,27 +10,32 @@ import android.support.annotation.NonNull;
 import com.hotger.recipes.BR;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 @Entity
 public class Category extends BaseObservable implements Serializable {
-
-    private String url;
-
-    private String title;
-
-    private String type;
 
     @PrimaryKey
     @NonNull
     private String searchValue;
 
-    @Ignore
-    public Category() {}
+    private String url;
 
-    public Category(String title, String type, String url, String searchValue) {
-        this.title = title;
-        this.type = type;
+    private String enTitle;
+
+    private String ruTitle;
+
+    private String type;
+
+    @Ignore
+    public Category() {
+    }
+
+    public Category(String url, String enTitle, String ruTitle, String type, @NonNull String searchValue) {
         this.url = url;
+        this.enTitle = enTitle;
+        this.ruTitle = ruTitle;
+        this.type = type;
         this.searchValue = searchValue;
     }
 
@@ -43,13 +48,21 @@ public class Category extends BaseObservable implements Serializable {
         this.url = url;
     }
 
-    @Bindable
-    public String getTitle() {
-        return title;
+    public String getEnTitle() {
+        return enTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setEnTitle(String enTitle) {
+        this.enTitle = enTitle;
+        notifyPropertyChanged(BR.title);
+    }
+
+    public String getRuTitle() {
+        return ruTitle;
+    }
+
+    public void setRuTitle(String ruTitle) {
+        this.ruTitle = ruTitle;
         notifyPropertyChanged(BR.title);
     }
 
@@ -69,4 +82,13 @@ public class Category extends BaseObservable implements Serializable {
         this.searchValue = searchValue;
     }
     //endregion
+
+    @Bindable
+    public String getTitle() {
+        if (Locale.getDefault().toString().contains("ru")) {
+            return ruTitle;
+        } else {
+            return enTitle;
+        }
+    }
 }

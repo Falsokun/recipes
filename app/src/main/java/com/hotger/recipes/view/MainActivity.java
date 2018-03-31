@@ -23,6 +23,9 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 //TODO: короче, наверное нужно запустить так: при запуске открывается куча потоков которые получают данные из апишки и грузят их в бд
 //TODO: а при переключении между всем просто подгружаются данные из бд
 //TODO: сейчас доделываю просто работу с апишкой, получая все данные, которые нужны (раз такие пироги)
@@ -85,7 +88,7 @@ public class MainActivity extends ControllableActivity {
 
             Fragment recipeFragment = new BackStackFragment();
             Bundle recipesBundle = new Bundle();
-            recipesBundle.putInt(Utils.EXTRA_NAVIGATION_ID, R.id.menu_my_recipe);
+            recipesBundle.putInt(Utils.EXTRA_NAVIGATION_ID, R.id.menu_profile);
             recipeFragment.setArguments(recipesBundle);
             adapter.addFragment(recipeFragment);
         }

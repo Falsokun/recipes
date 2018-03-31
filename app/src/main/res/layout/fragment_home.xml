@@ -6,20 +6,19 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:layout_margin="@dimen/padding_dimen"
             android:id="@+id/recipe_text"
-            android:hint="@string/enter_url_here"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/colorPrimaryDarkOpaque"
+            android:layout_margin="@dimen/padding_dimen"
             android:elevation="4dp"
-            />
+            android:hint="@string/enter_url_here"
+            android:textColorHint="@color/colorPrimaryDarkOpaque" />
 
         <Button
-            android:layout_below="@id/recipe_text"
             android:id="@+id/addReceipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/recipe_text"
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
             android:text="@string/add_recipe"
@@ -30,19 +29,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/addReceipt"
+            android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
             android:text="@string/shopping_list"
-            android:layout_marginTop="8dp"
             android:textColor="@android:color/white" />
 
-        <!--<Button-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:id="@+id/else2"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/shopping_list"-->
-            <!--android:background="@color/colorPrimary"-->
-            <!--android:text="Import"-->
-            <!--android:textColor="@android:color/white" />-->
+        <Button
+            android:id="@+id/random_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shopping_list"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/random_recipe"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 </layout>

@@ -15,12 +15,13 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorCategoryBinding;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.YummlyAPI;
-import com.hotger.recipes.database.CategoryDao;
-import com.hotger.recipes.view.ControllableActivity;
+import com.hotger.recipes.database.dao.CategoryDao;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 //TODO База данных
@@ -69,10 +70,19 @@ public class CategoryRedactorFragment extends Fragment {
         }
 
         CategoryDao dao = AppDatabase.getDatabase(getActivity()).getCategoryDao();
-        allTags.get(categories[0]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.CUISINE));
-        allTags.get(categories[1]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.HOLIDAY));
-        allTags.get(categories[2]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.COURSE));
-        allTags.get(categories[3]).addAll(dao.getStringCategoriesWithDescription(YummlyAPI.Description.DIET));
+        allTags.get(categories[0]).addAll(getTitlesWithType(dao, YummlyAPI.Description.CUISINE));
+        allTags.get(categories[1]).addAll(getTitlesWithType(dao, YummlyAPI.Description.HOLIDAY));
+        allTags.get(categories[2]).addAll(getTitlesWithType(dao, YummlyAPI.Description.COURSE));
+        allTags.get(categories[3]).addAll(getTitlesWithType(dao, YummlyAPI.Description.DIET));
+    }
+
+    private List<String> getTitlesWithType(CategoryDao dao, String type) {
+        String lang = Locale.getDefault().toString();
+        if(lang.contains("ru")) {
+            return dao.geRuCategoriesWithDescription(type);
+        } else {
+            return dao.getEnCategoriesWithDescription(type);
+        }
     }
 
     /**

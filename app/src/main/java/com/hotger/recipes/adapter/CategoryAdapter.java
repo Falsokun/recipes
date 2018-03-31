@@ -1,6 +1,8 @@
 package com.hotger.recipes.adapter;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemCategoryBinding;
 import com.hotger.recipes.utils.Utils;
@@ -31,8 +35,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new CategoryAdapter.ViewHolder(inflater.inflate(R.layout.item_category, parent, false));
+//        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = View.inflate(activity, R.layout.item_category, null);
+        return new CategoryAdapter.ViewHolder(view);
     }
 
     @Override
@@ -42,6 +47,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holderBinding.title.setText(category.getTitle());
         holderBinding.type.setText(category.getType());
         Glide.with(activity).load(category.getUrl()).into(holderBinding.bgImage);
+        holderBinding.bgImage.setImageURI(Uri.parse(category.getUrl()));
         holderBinding.bgImage.setOnClickListener(v -> changeCategory(category.getSearchValue()));
     }
 

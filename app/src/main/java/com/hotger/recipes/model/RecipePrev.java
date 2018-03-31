@@ -1,6 +1,7 @@
 package com.hotger.recipes.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
@@ -11,15 +12,13 @@ import com.hotger.recipes.model.GsonModel.Image;
 
 import java.io.Serializable;
 
-@Entity(primaryKeys = {"id", "type"})
+@Entity
 public class RecipePrev implements Serializable {
 
     @NonNull
     @Expose
+    @PrimaryKey
     private String id;
-
-    @NonNull
-    private String type;
 
     @SerializedName("imageUrlsBySize")
     @Expose
@@ -33,9 +32,8 @@ public class RecipePrev implements Serializable {
     @Expose
     private String totalTimeInSeconds;
 
-    public RecipePrev(@NonNull String id, @NonNull String type, Image images, String name, String totalTimeInSeconds) {
+    public RecipePrev(@NonNull String id, Image images, String name, String totalTimeInSeconds) {
         this.id = id;
-        this.type = type;
         this.images = images;
         this.name = name;
         this.totalTimeInSeconds = totalTimeInSeconds;
@@ -80,14 +78,6 @@ public class RecipePrev implements Serializable {
 
     public void setId(@NonNull String id) {
         this.id = id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
     }
 
     //endregion

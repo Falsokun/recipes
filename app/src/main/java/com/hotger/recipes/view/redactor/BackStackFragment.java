@@ -14,6 +14,7 @@ import com.hotger.recipes.view.CategoryFragment;
 import com.hotger.recipes.view.FridgeFragment;
 import com.hotger.recipes.view.HomeFragment;
 import com.hotger.recipes.view.MainActivity;
+import com.hotger.recipes.view.ProfileFragment;
 import com.hotger.recipes.view.RecipeListFragment;
 
 public class BackStackFragment extends Fragment {
@@ -56,7 +57,10 @@ public class BackStackFragment extends Fragment {
                 rootFragment = new RecipeListFragment();
                 rootFragment.setArguments(getArguments());
                 break;
-            case R.id.menu_my_recipe:
+            case R.id.menu_profile:
+                rootFragment = new ProfileFragment();
+                break;
+            case ProfileFragment.MENU_MY_RECIPE_ID:
                 rootFragment = new RecipeListFragment();
                 rootFragment.setArguments(getArguments());
             default:

@@ -41,7 +41,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:27.0.2'
     testCompile 'junit:junit:4.12'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.android.support:design:27.0.2'
     compile 'com.nex3z:flow-layout:1.0.0'
     compile 'com.shawnlin:number-picker:2.4.4'
@@ -66,6 +66,7 @@ dependencies {
     compile "android.arch.persistence.room:runtime:1.0.0"
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    compile ('com.airbnb.android:lottie:2.5.1'){ exclude group: 'com.android.support' }
 }
 
 apply plugin: 'com.google.gms.google-services'

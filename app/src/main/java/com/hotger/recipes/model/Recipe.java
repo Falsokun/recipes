@@ -3,7 +3,6 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
-import android.databinding.BaseObservable;
 
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.utils.AppDatabase;
@@ -13,7 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe implements Serializable{
+public class Recipe implements Serializable {
 
     @Embedded
     public RecipeNF recipe;
@@ -23,6 +22,8 @@ public class Recipe implements Serializable{
 
     @Ignore
     private List<Category> categories = new ArrayList<>();
+
+//    private int calories;
 
     public void add(Product line) {
         products.add(line);
@@ -43,7 +44,7 @@ public class Recipe implements Serializable{
     }
 
     private void filterCategories(ControllableActivity activity, ArrayList<String> allAttributes) {
-        for(String category : allAttributes) {
+        for (String category : allAttributes) {
             List<Category> queryRes = AppDatabase.getDatabase(activity).getCategoryDao().getCategoryByName(category);
             if (queryRes.size() != 0) {
                 Category cat = queryRes.get(0);
@@ -99,7 +100,7 @@ public class Recipe implements Serializable{
 
     public ArrayList<String> getCategoriesTitles() {
         ArrayList<String> titles = new ArrayList<>();
-        for(Category category : categories) {
+        for (Category category : categories) {
             titles.add(category.getTitle());
         }
 
@@ -165,6 +166,14 @@ public class Recipe implements Serializable{
     public void setIngredientLines(ArrayList<String> ingredientLines) {
         recipe.setIngredientLines(ingredientLines);
     }
+
+    public void setLang(String lang) {
+        recipe.setLang(lang);
+    }
+
+    public String getLang() {
+        return recipe.getLang();
+    }
     //endregion
 
     public void setImageURL(String url) {
@@ -175,6 +184,10 @@ public class Recipe implements Serializable{
     }
 
     public String getImageURL() {
+        if (recipe.getImages().size() == 0) {
+            return null;
+        }
+
         return recipe.getImages().get(0).getUrl();
     }
 
@@ -182,7 +195,7 @@ public class Recipe implements Serializable{
         return getCategoriesTitles().contains(category);
     }
 
-//    private JSONObject toJSON() {
+    //    private JSONObject toJSON() {
 //
 //    }
 }

@@ -55,6 +55,12 @@
     <string name="nothing_selected">Nothing selected</string>
     <string name="OK">OK</string>
     <string name="enter_url_here">Enter url here</string>
+    <string name="number_of_calories">Number of calories</string>
+    <string name="select_image">Select image</string>
+    <string name="no_image_added">no image added</string>
+    <string name="start_searching">start searching</string>
+    <string name="random_recipe">Show random recipe</string>
+    <string name="my_favs">My favorites</string>
 
     <string-array name="measures_array">
         <item></item>

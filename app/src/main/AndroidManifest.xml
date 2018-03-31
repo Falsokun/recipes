@@ -24,7 +24,8 @@
 
         <activity android:name=".view.redactor.RedactorActivity"/>
 
-        <activity android:name=".view.SearchActivity"/>
+        <activity android:name=".view.SearchActivity"
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".view.SplashActivity"

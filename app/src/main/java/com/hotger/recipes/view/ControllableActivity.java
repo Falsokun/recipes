@@ -63,7 +63,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
 
                                  RecipeFragment fragment = new RecipeFragment();
                                  Bundle bundle = new Bundle();
-                                 recipe.prepareDataForShowing(ControllableActivity.this);
+                                 //recipe.prepareDataForShowing(ControllableActivity.this);
                                  bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
                                  fragment.setArguments(bundle);
 
@@ -123,7 +123,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
 
     public Recipe getRecipeFromDBByID(String id) {
         Recipe recipe = AppDatabase.getDatabase(this).getRecipeDao().getRecipesById(id).get(0);
-        List<String> ids = AppDatabase.getDatabase(this).getRelationDao().getCategoryIdsForRecipe(id);
+        List<String> ids = AppDatabase.getDatabase(this).getRelationCategoryRecipeDao().getCategoryIdsForRecipe(id);
         ArrayList<Category> categories = new ArrayList<>();
         for (String catId : ids) {
             categories.add(AppDatabase.getDatabase(this).getCategoryDao().getCategoryById(catId).get(0));

@@ -5,6 +5,8 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.Locale;
+
 @Entity
 public class Ingredient {
     @PrimaryKey
@@ -60,6 +62,13 @@ public class Ingredient {
 
     public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        if (Locale.getDefault().toString().contains("ru"))
+            return ru;
+        else
+            return en;
     }
 
     //endregion

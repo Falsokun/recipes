@@ -159,7 +159,7 @@ public class Product implements Serializable {
                 .getIngredientById(ingredientId);
 
         if (ingredients.size() != 0) {
-            return ingredients.get(0).getEn();
+            return ingredients.get(0).getTitle();
         }
 
         return ingredientId;

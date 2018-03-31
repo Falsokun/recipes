@@ -1,7 +1,6 @@
 package com.hotger.recipes.view;
 
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,9 +11,6 @@ import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CategoryAdapter;
-import com.hotger.recipes.database.CategoryDao;
-import com.hotger.recipes.database.CategoryViewModel;
-import com.hotger.recipes.database.RecipePrevViewModel;
 import com.hotger.recipes.databinding.FragmentCategoriesBinding;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.YummlyAPI;

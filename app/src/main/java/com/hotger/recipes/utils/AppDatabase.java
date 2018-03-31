@@ -5,20 +5,26 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.hotger.recipes.database.CategoryDao;
-import com.hotger.recipes.database.IngredientDao;
-import com.hotger.recipes.database.ProductDao;
-import com.hotger.recipes.database.RecipeDao;
-import com.hotger.recipes.database.RecipePrevDao;
-import com.hotger.recipes.database.RelationDao;
-import com.hotger.recipes.database.RelationTable;
+import com.hotger.recipes.database.RelationCategoryRecipe;
+import com.hotger.recipes.database.RelationObj;
+import com.hotger.recipes.database.RelationRecipeType;
+import com.hotger.recipes.database.dao.CategoryDao;
+import com.hotger.recipes.database.dao.FavoritesDao;
+import com.hotger.recipes.database.dao.IngredientDao;
+import com.hotger.recipes.database.dao.ProductDao;
+import com.hotger.recipes.database.dao.RecipeDao;
+import com.hotger.recipes.database.dao.RecipePrevDao;
+import com.hotger.recipes.database.dao.RelationCategoryRecipeDao;
+import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.model.RecipePrev;
 
-@Database(entities = { Category.class, RecipePrev.class, Ingredient.class, Product.class, RecipeNF.class, RelationTable.class}, version = 1)
+@Database(entities = { Category.class, RecipePrev.class, Ingredient.class,
+        Product.class, RecipeNF.class, RelationCategoryRecipe.class, RelationObj.class,
+        RelationRecipeType.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
@@ -33,7 +39,11 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract RecipeDao getRecipeDao();
 
-    public abstract RelationDao getRelationDao();
+    public abstract RelationCategoryRecipeDao getRelationCategoryRecipeDao();
+
+    public abstract RelationRecipeTypeDao getRelationRecipeTypeDao();
+
+    public abstract FavoritesDao getFavoritesDao();
 
     public static AppDatabase getDatabase(Context context) {
         if (INSTANCE == null) {

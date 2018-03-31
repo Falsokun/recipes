@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodSubtype;
 import com.hotger.recipes.R;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 public class Utils {
 
@@ -19,12 +20,13 @@ public class Utils {
     public static final String EXTRA_NAVIGATION_ID = "extra.NAVIGATION_ID";
     public static final String ENGLISH = "en";
     public static final String FIREBASE_IMG_STORAGE = "recipe_image";
+    public static final String EXTRA_TYPE = "type";
 
     static {
         bottomNavigationTabs.put(R.id.menu_home, 0);
         bottomNavigationTabs.put(R.id.menu_categories, 1);
         bottomNavigationTabs.put(R.id.menu_fridge, 2);
-        bottomNavigationTabs.put(R.id.menu_my_recipe, 3);
+        bottomNavigationTabs.put(R.id.menu_profile, 3);
         bottomNavigationTabs.put(R.id.menu_search, 4);
     }
 
@@ -35,6 +37,10 @@ public class Utils {
         }
 
         return String.valueOf(number);
+    }
+
+    public static boolean isRussian() {
+        return Locale.getDefault().toString().contains("ru");
     }
 
     /**
@@ -57,7 +63,6 @@ public class Utils {
         public static final String PUBLISH_REF = "publish_ref";
     }
 
-    public final static String MY_RECIPES = "MY_RECIPES";
     //TODO тут наверное надо все это убрать и сделать красиво
     public static final String STATE = "State";
     public static final int NUMBER_PICKER = 0;
@@ -101,5 +106,10 @@ public class Utils {
 
     private String toUpperCase(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    public static class TYPE {
+        public static String TYPE_MY_RECIPES = "MY_RECIPES";
+        public static String TYPE_MY_FAVS = "MY_FAVS";
     }
 }

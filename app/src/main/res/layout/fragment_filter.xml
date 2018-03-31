@@ -90,6 +90,6 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_below="@id/flow_lo"
             android:drawableRight="@drawable/ic_search"
-            android:text="start searching"/>
+            android:text="@string/start_searching"/>
     </RelativeLayout>
 </layout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,8 +10,7 @@
             android:id="@+id/bg_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/colorPrimaryDark"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,21 +26,22 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:background="#00ffffff"
+                android:gravity="center"
                 android:hint="@string/category"
                 android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"/>
+                android:textColor="@android:color/white" />
+
             <TextView
                 android:id="@+id/type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:paddingTop="@dimen/low_padding"
-                android:hint="@string/description_hint"
+                android:layout_centerHorizontal="true"
                 android:gravity="center"
-                android:layout_centerHorizontal="true"/>
+                android:hint="@string/description_hint"
+                android:paddingTop="@dimen/low_padding" />
         </RelativeLayout>
     </FrameLayout>
 </layout>

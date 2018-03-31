@@ -35,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/name"
-                android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -44,23 +43,20 @@
                     style="@style/SquaredStyle"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:drawableTop="@drawable/ic_info" />
+                    android:drawableTop="@drawable/ic_info"
+                    android:drawableTint="@color/drawableTint"/>
 
-                <Button
+                <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/favorite"
-                    style="@style/SquaredStyle"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:drawableTint="@color/colorAccent"
-                    android:drawableTop="@drawable/ic_fav" />
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:lottie_rawRes="@raw/animation_fav" />
 
-                <Button
-                    style="@style/SquaredStyle"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:drawableTint="@android:color/black"
-                    android:drawableTop="@drawable/ic_save" />
-
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/bookmark"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:lottie_rawRes="@raw/bookmark_animation" />
             </LinearLayout>
 
             <TextView
@@ -69,7 +65,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/hotkeys"
                 android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/dotted_line" />
 
             <LinearLayout

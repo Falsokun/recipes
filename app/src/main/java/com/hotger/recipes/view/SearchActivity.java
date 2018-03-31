@@ -1,18 +1,23 @@
 package com.hotger.recipes.view;
 
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
+import android.util.AttributeSet;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
@@ -67,11 +72,10 @@ public class SearchActivity extends ControllableActivity {
     }
 
     public void setSearchAttr() {
-        mBinding.searchView.setOnClickListener(v -> mBinding.searchView.setIconified(false));
         mBinding.filterBtn.setOnClickListener(v -> slideAnimation(mBinding.filter.filterContainer));
+        mBinding.searchView.setIconified(true);
         mBinding.searchView.onActionViewExpanded();
-        mBinding.searchView.setIconified(false);
-        mBinding.searchView.setIconifiedByDefault(false);
+        new Handler().postDelayed(() -> mBinding.searchView.clearFocus(), 300);
         mBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -127,13 +131,13 @@ public class SearchActivity extends ControllableActivity {
     }
 
     private void setSpinnerAdapter(MaterialSpinner spinner, ArrayList<String> selected, String type) {
-//        categories.add(getResources().getString(R.string.no_filter_selected));
         List<Category> course = db.getCategoryDao().getAllCategoriesWithDescription(type);
         ArrayList<String> categories = new ArrayList<>();
         categories.add(getString(R.string.nothing_selected));
         for (Category category : course) {
             categories.add(category.getTitle());
         }
+
         spinner.setItems(categories);
         spinner.setOnItemSelectedListener((view, position, id, item) -> {
             List<String> items = spinner.getItems();
@@ -178,7 +182,7 @@ public class SearchActivity extends ControllableActivity {
     public void prepareSearchingAndStart() {
         cardAdapter.clearData();
         mBinding.progress.setVisibility(View.VISIBLE);
-        mBinding.searchView.clearFocus();
+//        mBinding.searchView.clearFocus();
         searchRecipe("");
         if (mBinding.filter.filterContainer.getVisibility() == View.VISIBLE) {
             slideAnimation(mBinding.filter.filterContainer);

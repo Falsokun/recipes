@@ -60,14 +60,12 @@
                         android:layout_height="match_parent"
                         android:text="@string/app_name"
                         android:textSize="18dp">
-
                         <android.support.v7.widget.SearchView
                             android:id="@+id/search_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toStartOf="@+id/filter_btn"
-                            android:iconifiedByDefault="false"
                             app:defaultQueryHint="@string/search"
                             app:queryHint="@string/search"
                             app:searchIcon="@null" />

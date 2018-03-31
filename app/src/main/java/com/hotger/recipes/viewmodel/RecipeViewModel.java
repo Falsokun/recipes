@@ -87,7 +87,7 @@ public class RecipeViewModel extends ViewModel {
     public void deleteRecipeFromDatabase(ControllableActivity activity, String recipeId) {
         AppDatabase db = AppDatabase.getDatabase(activity);
         db.getRecipeDao().deleteById(recipeId);
-        db.getRelationDao().deleteAllWithId(recipeId);
+        db.getRelationCategoryRecipeDao().deleteAllWithId(recipeId);
         db.getRecipePrevDao().deleteAllById(recipeId);
     }
 

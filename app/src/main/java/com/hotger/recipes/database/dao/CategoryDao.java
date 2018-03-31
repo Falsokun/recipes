@@ -1,6 +1,5 @@
-package com.hotger.recipes.database;
+package com.hotger.recipes.database.dao;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -30,10 +29,13 @@ public interface CategoryDao {
     @Query("SELECT * FROM category WHERE type LIKE :description")
     List<Category> getAllCategoriesWithDescription(String description);
 
-    @Query("SELECT title FROM category WHERE type LIKE :description")
-    List<String> getStringCategoriesWithDescription(String description);
+    @Query("SELECT enTitle FROM category WHERE type LIKE :description")
+    List<String> getEnCategoriesWithDescription(String description);
 
-    @Query("SELECT * FROM category WHERE title LIKE :title")
+    @Query("SELECT ruTitle FROM category WHERE type LIKE :description")
+    List<String> geRuCategoriesWithDescription(String description);
+
+    @Query("SELECT * FROM category WHERE enTitle = :title OR ruTitle = :title")
     List<Category> getCategoryByName(String title);
 
     @Query("SELECT * FROM category WHERE searchValue LIKE :id")

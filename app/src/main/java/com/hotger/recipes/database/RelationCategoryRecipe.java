@@ -2,35 +2,27 @@ package com.hotger.recipes.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
-@Entity
-public class RelationTable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+@Entity(primaryKeys = {"recipeId", "categoryId"})
+public class RelationCategoryRecipe {
+    @NonNull
+    private String recipeId;
 
-    public RelationTable(String recipeId, String categoryId) {
+    @NonNull
+    private String categoryId;
+
+    public RelationCategoryRecipe(@NonNull String recipeId, @NonNull String categoryId) {
         this.recipeId = recipeId;
         this.categoryId = categoryId;
     }
 
-    private String recipeId;
-
-    private String categoryId;
-
     //region getters and setters
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public String getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(String recipeId) {
+    public void setRecipeId(@NonNull String recipeId) {
         this.recipeId = recipeId;
     }
 
@@ -38,7 +30,7 @@ public class RelationTable {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(@NonNull String categoryId) {
         this.categoryId = categoryId;
     }
     //endregion

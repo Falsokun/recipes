@@ -1,0 +1,22 @@
+package com.hotger.recipes.database.dao;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
+
+import com.hotger.recipes.database.RelationRecipeType;
+
+import java.util.List;
+
+@Dao
+public interface RelationRecipeTypeDao extends BaseDao<RelationRecipeType> {
+
+    @Query("SELECT recipeId FROM relationrecipetype WHERE type = :searchValue")
+    List<String> getRecipesByType(String searchValue);
+
+    @Query("SELECT recipeId FROM relationrecipetype WHERE type = :searchValue")
+    LiveData<List<String>> getLiveRecipesByType(String searchValue);
+
+    @Query("SELECT recipeId FROM relationrecipetype WHERE type = :type")
+    LiveData<List<String>> getFavorites(String type);
+}

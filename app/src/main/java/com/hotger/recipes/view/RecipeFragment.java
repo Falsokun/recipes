@@ -1,5 +1,6 @@
 package com.hotger.recipes.view;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,11 +14,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
+import com.hotger.recipes.database.RelationObj;
+import com.hotger.recipes.database.RelationRecipeType;
+import com.hotger.recipes.database.dao.FavoritesDao;
+import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
 import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 import com.hotger.recipes.viewmodel.RecipeViewModel;
@@ -51,8 +57,9 @@ public class RecipeFragment extends Fragment {
         mBinding.products.setAdapter(model.getProductsAdapter());
         mBinding.products.setLayoutManager(new LinearLayoutManager(getContext()));
         initWaveView();
+        initHotButtons();
         model.addCategories(mBinding.categoryContainer);
-        ((ControllableActivity) getActivity()).updateCollapsing(((ControllableActivity)getActivity()).getAppBar(), true);
+        ((ControllableActivity) getActivity()).updateCollapsing(((ControllableActivity) getActivity()).getAppBar(), true);
         ((ControllableActivity) getActivity()).setToolbarImage(model.getCurrentRecipe().getImageURL());
 //        ((ControllableActivity) getActivity()).updateTitle(model.getCurrentRecipe().getName());
         return mBinding.getRoot();
@@ -60,7 +67,7 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
         if (getArguments() != null
                 && getArguments().getSerializable(Utils.RECIPE_OBJ) != null) {
             inflater.inflate(R.menu.menu_fragment, menu);
@@ -99,6 +106,35 @@ public class RecipeFragment extends Fragment {
         mBinding.prepTime.setCenterTitle(model.getStringTime(recipe.getPrepTimeMinutes()));
         mBinding.cookingTime.setCenterTitle(model.getStringTime(recipe.getCookingTimeInMinutes()));
         mBinding.totalTime.setCenterTitle(model.getStringTime(recipe.getTotalTimeInMinutes()));
+    }
+
+    private void initHotButtons() {
+        mBinding.favorite.setOnClickListener(view -> {
+            startCheckAnimation(mBinding.favorite);
+            checkFavorites(!(mBinding.favorite.getProgress() == 0f), model.getCurrentRecipe().getId());
+        });
+
+        mBinding.bookmark.setOnClickListener(view -> startCheckAnimation(mBinding.bookmark));
+    }
+
+    private void checkFavorites(boolean isAlreadyInset, String id) {
+        RelationRecipeTypeDao dao = AppDatabase.getDatabase(getContext()).getRelationRecipeTypeDao();
+        if (!isAlreadyInset) {
+            dao.insert(new RelationRecipeType(id, Utils.TYPE.TYPE_MY_FAVS));
+        } else {
+            dao.delete(new RelationRecipeType(id, Utils.TYPE.TYPE_MY_FAVS));
+        }
+    }
+
+    private void startCheckAnimation(LottieAnimationView animationView) {
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000);
+        animator.addUpdateListener(valueAnimator -> animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
+
+        if (animationView.getProgress() == 0f) {
+            animator.start();
+        } else {
+            animationView.setProgress(0f);
+        }
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.hotger.recipes.utils;
 
-import android.app.Activity;
-import android.widget.Toast;
-
 import com.hotger.recipes.App;
+import com.hotger.recipes.database.RelationRecipeType;
 import com.hotger.recipes.model.RecipePrev;
 
 import java.util.ArrayList;
@@ -41,14 +39,11 @@ public class AsyncCalls {
             @Override
             public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
                 if (response.body() == null) {
-                    //видимо слишком перегружаю
                     return;
                 }
 
                 ArrayList<RecipePrev> prevs = response.body().getMatches();
-                for (RecipePrev prev : prevs) {
-                    prev.setType(searchValue);
-                }
+                saveTypesToDB(prevs, searchValue, appDatabase);
 
                 appDatabase.getRecipePrevDao()
                         .insertAll(prevs);
@@ -58,5 +53,14 @@ public class AsyncCalls {
             public void onFailure(Call<ResponseRecipeAPI> call, Throwable t) {
             }
         };
+    }
+
+    private static void saveTypesToDB(ArrayList<RecipePrev> prevs, String type, AppDatabase database) {
+        ArrayList<RelationRecipeType> relations = new ArrayList<>();
+        for (RecipePrev prev : prevs) {
+            relations.add(new RelationRecipeType(prev.getId(), type));
+        }
+
+        database.getRelationRecipeTypeDao().insertAll(relations);
     }
 }

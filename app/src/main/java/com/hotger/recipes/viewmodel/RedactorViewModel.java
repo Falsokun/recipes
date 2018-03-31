@@ -9,7 +9,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
-import com.hotger.recipes.database.RelationTable;
+import com.hotger.recipes.database.RelationCategoryRecipe;
+import com.hotger.recipes.database.RelationRecipeType;
+import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.model.Product;
@@ -97,8 +99,6 @@ public class RedactorViewModel extends ViewModel {
             errorType = 1;
         } else if (currentRecipe.getTotalTimeInMinutes() == 0) {
             errorType = 4;
-        } else if (currentRecipe.getImageURL() == null) {
-            errorType = 5;
         }
 
         if (errorType > -1) {
@@ -122,6 +122,10 @@ public class RedactorViewModel extends ViewModel {
     }
 
     public void saveToDatabase(ControllableActivity activity) {
+        if (currentRecipe.getImageURL() == null) {
+            currentRecipe.setImageURL(FirebaseUtils.NO_IMAGE_URL);
+        }
+
         AppDatabase db = AppDatabase.getDatabase(activity);
         saveImageToCloudFirebase(currentRecipe.getRecipe().getImageUrl());
         if (currentRecipe.getId() == null) {
@@ -133,9 +137,14 @@ public class RedactorViewModel extends ViewModel {
             product.setRecipeId(currentRecipe.getId());
         }
 
+        if (Utils.isRussian()) {
+            currentRecipe.setLang("ru");
+        }
+
+        db.getRelationRecipeTypeDao().insert(new RelationRecipeType(currentRecipe.getId(), Utils.TYPE.TYPE_MY_RECIPES));
         createRelationTable(db);
         db.getProductDao().insert(currentRecipe.getProducts());
-        RecipePrev prev = new RecipePrev(currentRecipe.getId(), Utils.MY_RECIPES,
+        RecipePrev prev = new RecipePrev(currentRecipe.getId(),
                 new Image(currentRecipe.getRecipe().getImageUrl()),
                 currentRecipe.getName(),
                 String.valueOf(currentRecipe.getRecipe().getTotalTimeInSeconds()));
@@ -143,10 +152,10 @@ public class RedactorViewModel extends ViewModel {
     }
 
     private void createRelationTable(AppDatabase db) {
-        db.getRelationDao().deleteAllWithId(currentRecipe.getId());
+        db.getRelationCategoryRecipeDao().deleteAllWithId(currentRecipe.getId());
         for (String category : categoryTitles) {
             String catId = db.getCategoryDao().getCategoryByName(category).get(0).getSearchValue();
-            db.getRelationDao().insert(new RelationTable(currentRecipe.getId(), catId));
+            db.getRelationCategoryRecipeDao().insert(new RelationCategoryRecipe(currentRecipe.getId(), catId));
         }
     }
 

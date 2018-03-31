@@ -8,6 +8,7 @@
     <color name="colorHint">#467b7c</color>
     <color name="colorPrimaryDarkOpaque">#df263238</color>
     <color name="grey">#90A4AE90</color>
+    <color name="drawableTint">#74798e</color>
 
     <!--<color name="colorPrimary">#6bb5b6</color>-->
     <!--<color name="colorPrimaryDark">#467b7c</color>-->

@@ -10,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
-import com.hotger.recipes.database.RecipePrevViewModel;
 import com.hotger.recipes.adapter.CardAdapter;
-import com.hotger.recipes.database.RecipePrevDao;
+import com.hotger.recipes.database.RelationRecipeTypeViewModel;
+import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipesListBinding;
+import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.MessageModel;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
@@ -21,14 +22,13 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeListFragment extends BackStackFragment {
 
     private FragmentRecipesListBinding mBinding;
 
     private CardAdapter cardAdapter;
-
-    private String type;
 
     public static String TAG = "RecipeListFragment";
     public static final int ID = 123456;
@@ -37,7 +37,6 @@ public class RecipeListFragment extends BackStackFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RecipePrevDao dao = AppDatabase.getDatabase(getActivity()).getRecipePrevDao();
         cardAdapter = new CardAdapter((ControllableActivity) getActivity(), new ArrayList<>());
 
         if (getArguments() != null) {
@@ -46,20 +45,36 @@ public class RecipeListFragment extends BackStackFragment {
             checkForPassingFromApi();
             checkForFavorites();
         }
+    }
 
-        if (type != null)
-        ViewModelProviders.of(getActivity())
-                .get(RecipePrevViewModel.class)
-                .getAllPrevs(dao, type)
-                .observe(getActivity(), recipePrevs -> cardAdapter.setData(recipePrevs));
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void checkForFavorites() {
-        int navId = getArguments().getInt(Utils.EXTRA_NAVIGATION_ID, -1);
-        if (navId != -1 && navId == R.id.menu_my_recipe) {
-            type = Utils.MY_RECIPES;
+        String navId = getArguments().getString(Utils.EXTRA_TYPE);
+        if (navId == null)
+            return;
+
+        if (navId.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
+            RelationRecipeTypeDao dao = AppDatabase.getDatabase(getActivity()).getRelationRecipeTypeDao();
             cardAdapter.setFromDB(true);
+            ViewModelProviders.of(getActivity())
+                    .get(RelationRecipeTypeViewModel.class)
+                    .getAllPrevs(dao)
+                    .observe(getActivity(), recipePrevs -> cardAdapter.setData(findFavoritePrevs(recipePrevs)));
+        } else {
+            RelationRecipeTypeDao dao = AppDatabase.getDatabase(getActivity()).getRelationRecipeTypeDao();
+            ViewModelProviders.of(getActivity())
+                    .get(RelationRecipeTypeViewModel.class)
+                    .getAllFavs(dao)
+                    .observe(getActivity(), favoritePrevs -> cardAdapter.setData(findFavoritePrevs(favoritePrevs)));
         }
+    }
+
+    private List<RecipePrev> findFavoritePrevs(List<String> favIds) {
+        return AppDatabase.getDatabase(getContext()).getRecipePrevDao().findPrevsFromList(favIds);
     }
 
     private void checkForPassingFromApi() {
@@ -78,7 +93,8 @@ public class RecipeListFragment extends BackStackFragment {
     private void checkForCategory() {
         String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
         if (searchValue != null) {
-            type = searchValue;
+            List<String> ids = AppDatabase.getDatabase(getContext()).getRelationRecipeTypeDao().getRecipesByType(searchValue);
+            cardAdapter.setData(AppDatabase.getDatabase(getActivity()).getRecipePrevDao().findPrevsFromList(ids));
         }
     }
 

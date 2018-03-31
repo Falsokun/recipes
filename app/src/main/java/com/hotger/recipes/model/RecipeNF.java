@@ -56,6 +56,8 @@ public class RecipeNF implements Serializable {
     @Ignore
     private Source source;
 
+    private String lang = "en";
+
     public RecipeNF() {
     }
 
@@ -131,6 +133,14 @@ public class RecipeNF implements Serializable {
     public void setImages(List<Image> images) {
         this.images = images;
     }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
     //endregion
 
     public int getCookTimeInMinutes() {
@@ -151,10 +161,14 @@ public class RecipeNF implements Serializable {
 
     public ArrayList<String> getAllAttributes() {
         ArrayList<String> out = new ArrayList<>();
+        if (attributes == null) {
+            return out;
+        }
+
         if (attributes.getCourse() != null)
             out.addAll(attributes.getCourse());
 
-        if (attributes.getCourse() != null)
+        if (attributes.getCuisine() != null)
             out.addAll(attributes.getCuisine());
 
         if (attributes.getHoliday() != null)

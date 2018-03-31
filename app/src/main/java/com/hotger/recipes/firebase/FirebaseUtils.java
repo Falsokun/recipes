@@ -18,11 +18,12 @@ import java.util.ArrayList;
  * Firebase realtime DB
  */
 //TODO: пора подключать liveData видимо
-public class RealtimeDB {
+public class FirebaseUtils {
 
     public static final String CATEGORY = "categories";
+    public static final String NO_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/falsorecipes.appspot.com/o/storage%2Fno_img.png?alt=media&token=ec61e886-86f7-43d8-a4f4-a609477dd509";
 
-    public static void saveCategoriesToDatabase(AppDatabase db) {
+    public static void saveIngredientsToDatabase(AppDatabase db) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("ingredients");
 
@@ -50,7 +51,7 @@ public class RealtimeDB {
         });
     }
 
-    public static void saveCategoriesToDatabase(AppDatabase db, String reference) {
+    public static void saveCategoryToDatabase(AppDatabase db, String reference) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(reference);
 

@@ -1,4 +1,4 @@
-package com.hotger.recipes.database;
+package com.hotger.recipes.database.dao;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
