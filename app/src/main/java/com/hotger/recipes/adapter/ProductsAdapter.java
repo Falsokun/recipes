@@ -135,7 +135,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         return data;
     }
 
-    public void setData(ArrayList<Product> shots) {
+    public void setData(List<Product> shots) {
         data = shots;
         notifyDataSetChanged();
     }

@@ -18,6 +18,6 @@ public interface RecipeDao extends BaseDao<RecipeNF> {
     @Query("DELETE FROM recipenf WHERE id = :recipeId")
     void deleteById(String recipeId);
 
-    @Query("SELECT * FROM recipenf")
+    @Transaction @Query("SELECT * FROM recipenf")
     List<Recipe> getAll();
 }

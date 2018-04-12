@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hotger.recipes.App;
@@ -27,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class RedactorViewModel extends ViewModel {
@@ -142,21 +144,31 @@ public class RedactorViewModel extends ViewModel {
         }
 
         db.getRelationRecipeTypeDao().insert(new RelationRecipeType(currentRecipe.getId(), Utils.TYPE.TYPE_MY_RECIPES));
-        createRelationTable(db);
+        List<RelationCategoryRecipe> relations = createRelationTable(db);
         db.getProductDao().insert(currentRecipe.getProducts());
         RecipePrev prev = new RecipePrev(currentRecipe.getId(),
                 new Image(currentRecipe.getRecipe().getImageUrl()),
                 currentRecipe.getName(),
-                String.valueOf(currentRecipe.getRecipe().getTotalTimeInSeconds()));
+                currentRecipe.getRecipe().getTotalTimeInSeconds(),
+                false);
         db.getRecipePrevDao().insert(prev);
+
+        if (true) {
+            FirebaseUtils.saveRecipeToFirebase(currentRecipe, relations, prev);
+        }
     }
 
-    private void createRelationTable(AppDatabase db) {
+    private List<RelationCategoryRecipe> createRelationTable(AppDatabase db) {
+        List<RelationCategoryRecipe> categoryRelations = new ArrayList<>();
         db.getRelationCategoryRecipeDao().deleteAllWithId(currentRecipe.getId());
         for (String category : categoryTitles) {
             String catId = db.getCategoryDao().getCategoryByName(category).get(0).getSearchValue();
-            db.getRelationCategoryRecipeDao().insert(new RelationCategoryRecipe(currentRecipe.getId(), catId));
+            RelationCategoryRecipe relation = new RelationCategoryRecipe(currentRecipe.getId(), catId);
+            db.getRelationCategoryRecipeDao().insert(relation);
+            categoryRelations.add(relation);
         }
+
+        return categoryRelations;
     }
 
     private void saveImageToCloudFirebase(String path) {

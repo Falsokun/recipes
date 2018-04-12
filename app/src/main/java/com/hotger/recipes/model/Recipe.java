@@ -4,6 +4,8 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
@@ -59,7 +61,7 @@ public class Recipe implements Serializable {
         return products;
     }
 
-    public void setProducts(ArrayList<Product> data) {
+    public void setProducts(List<Product> data) {
         this.products = data;
     }
 
@@ -107,7 +109,7 @@ public class Recipe implements Serializable {
         return titles;
     }
 
-    public void setCategories(ArrayList<Category> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 
@@ -125,14 +127,6 @@ public class Recipe implements Serializable {
 
     public int getPrepTimeMinutes() {
         return recipe.getPrepTimeInMinutes();
-    }
-
-    public void setCookTimeInSeconds(int cookTimeInSeconds) {
-        recipe.setCookTimeInSeconds(cookTimeInSeconds);
-    }
-
-    public void setPrepTimeInSeconds(int prepTimeInSeconds) {
-        recipe.setPrepTimeInSeconds(prepTimeInSeconds);
     }
 
     public void setCookTimeInMinutes(int cookTimeInMin) {

@@ -28,8 +28,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".view.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".view.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

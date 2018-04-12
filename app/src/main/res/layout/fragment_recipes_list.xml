@@ -3,13 +3,14 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="data"
             type="com.hotger.recipes.adapter.CardAdapter" />
 
         <variable
             name="messageModel"
-            type="com.hotger.recipes.utils.MessageModel"/>
+            type="com.hotger.recipes.utils.MessageModel" />
 
         <import type="android.view.View" />
     </data>
@@ -19,19 +20,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_rv"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
 
-        <!--<include-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:id="@+id/message"-->
-            <!--layout="@layout/fragment_no_fill"-->
-            <!--bind:model="@{messageModel}"-->
-            <!--android:visibility="visible"/>-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/message"
+                layout="@layout/fragment_no_fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                bind:model="@{messageModel}" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </RelativeLayout>
 </layout>

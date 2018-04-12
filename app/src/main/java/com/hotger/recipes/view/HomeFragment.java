@@ -41,7 +41,7 @@ public class HomeFragment extends BackStackFragment {
         call.enqueue(new Callback<TranslateResponse>() {
             @Override
             public void onResponse(Call<TranslateResponse> call, Response<TranslateResponse> response) {
-                Toast.makeText(mBinding.getRoot().getContext(), response.body().text.get(0), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mBinding.getRoot().getContext(), response.body().text.get(0), Toast.LENGTH_SHORT).show();
             }
 
             @Override

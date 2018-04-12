@@ -8,6 +8,8 @@
         <variable
             name="model"
             type="com.hotger.recipes.viewmodel.RecipeViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -15,207 +17,219 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp">
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{model.currentRecipe.name}"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title_size" />
+                android:layout_gravity="center"/>
 
-            <LinearLayout
-                android:id="@+id/hotkeys"
+            <RelativeLayout
+                android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/name"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/recipe_info"
-                    style="@style/SquaredStyle"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:drawableTop="@drawable/ic_info"
-                    android:drawableTint="@color/drawableTint"/>
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/favorite"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:lottie_rawRes="@raw/animation_fav" />
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/bookmark"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:lottie_rawRes="@raw/bookmark_animation" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/divider0"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/hotkeys"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/dotted_line" />
-
-            <LinearLayout
-                android:id="@+id/porions_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider0">
-
-                <Button
-                    android:layout_width="64dp"
-                    android:layout_height="32dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/button_border"
-                    android:text="@{model.currentRecipe.stringPortions}"
-                    android:textColor="@color/colorText" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/portions_number"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/persons_number"
+                    android:gravity="center"
+                    android:text="@{model.currentRecipe.name}"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title_size" />
+
+                <LinearLayout
+                    android:id="@+id/hotkeys"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/recipe_info"
+                        style="@style/SquaredStyle"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:drawableTint="@color/drawableTint"
+                        android:drawableTop="@drawable/ic_info" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/favorite"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:lottie_rawRes="@raw/animation_fav" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/bookmark"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_rawRes="@raw/bookmark_animation" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/divider0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/hotkeys"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/dotted_line" />
+
+                <LinearLayout
+                    android:id="@+id/porions_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider0">
+
+                    <Button
+                        android:layout_width="64dp"
+                        android:layout_height="32dp"
+                        android:layout_marginRight="16dp"
+                        android:background="@drawable/button_border"
+                        android:text="@{model.currentRecipe.stringPortions}"
+                        android:textColor="@color/colorText" />
+
+                    <TextView
+                        android:id="@+id/portions_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/persons_number"
+                        android:textColor="@color/colorText" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/porions_container"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/dotted_line" />
+
+                <LinearLayout
+                    android:id="@+id/timing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider1"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp">
+
+                    <me.itangqi.waveloadingview.WaveLoadingView
+                        android:id="@+id/prep_time"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_marginRight="@dimen/padding_dimen"
+                        app:wlv_borderColor="@color/colorAccent"
+                        app:wlv_borderWidth="3dp"
+                        app:wlv_round_rectangle="true"
+                        app:wlv_shapeType="circle"
+                        app:wlv_titleBottom="@string/prep_time"
+                        app:wlv_titleBottomSize="8sp"
+                        app:wlv_titleCenterColor="@color/colorText"
+                        app:wlv_titleCenterSize="14sp"
+                        app:wlv_triangle_direction="north"
+                        app:wlv_waveAmplitude="70"
+                        app:wlv_waveColor="@color/colorAccent" />
+
+                    <me.itangqi.waveloadingview.WaveLoadingView
+                        android:id="@+id/cooking_time"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_marginRight="@dimen/padding_dimen"
+                        app:wlv_borderColor="@color/colorAccent"
+                        app:wlv_borderWidth="3dp"
+                        app:wlv_round_rectangle="true"
+                        app:wlv_shapeType="circle"
+                        app:wlv_titleBottom="@string/cooking_time"
+                        app:wlv_titleBottomSize="8sp"
+                        app:wlv_titleCenterColor="@color/colorText"
+                        app:wlv_titleCenterSize="14sp"
+                        app:wlv_triangle_direction="north"
+                        app:wlv_waveAmplitude="70"
+                        app:wlv_waveColor="@color/colorAccent" />
+
+                    <me.itangqi.waveloadingview.WaveLoadingView
+                        android:id="@+id/total_time"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        app:wlv_borderColor="@color/colorAccent"
+                        app:wlv_borderWidth="3dp"
+                        app:wlv_round_rectangle="true"
+                        app:wlv_shapeType="circle"
+                        app:wlv_titleBottom="@string/total_time"
+                        app:wlv_titleBottomSize="8sp"
+                        app:wlv_titleCenterColor="@color/colorText"
+                        app:wlv_titleCenterSize="14sp"
+                        app:wlv_triangle_direction="north"
+                        app:wlv_waveAmplitude="70"
+                        app:wlv_waveColor="@color/colorAccent" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/timing"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/dotted_line" />
+
+                <TextView
+                    android:id="@+id/ingredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider2"
+                    android:text="@string/ingredients"
                     android:textColor="@color/colorText" />
-            </LinearLayout>
 
-            <TextView
-                android:layout_marginTop="16dp"
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/porions_container"
-                android:background="@drawable/dotted_line"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/products"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ingredients"
+                    android:nestedScrollingEnabled="false" />
 
-            <LinearLayout
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:id="@+id/timing"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider1"
-                android:paddingRight="8dp"
-                android:paddingLeft="8dp"
-                android:gravity="center">
+                <TextView
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/products"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/dotted_line" />
 
-                <me.itangqi.waveloadingview.WaveLoadingView
-                    android:id="@+id/prep_time"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginRight="@dimen/padding_dimen"
-                    app:wlv_borderColor="@color/colorAccent"
-                    app:wlv_borderWidth="3dp"
-                    app:wlv_round_rectangle="true"
-                    app:wlv_shapeType="circle"
-                    app:wlv_titleBottom="@string/prep_time"
-                    app:wlv_titleCenterColor="@color/colorText"
-                    app:wlv_titleCenterSize="14sp"
-                    app:wlv_titleBottomSize="8sp"
-                    app:wlv_triangle_direction="north"
-                    app:wlv_waveAmplitude="70"
-                    app:wlv_waveColor="@color/colorAccent" />
+                <com.nex3z.flowlayout.FlowLayout
+                    android:id="@+id/category_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider3"
+                    bind:flChildSpacing="8dp"
+                    bind:flRowSpacing="8dp" />
 
-                <me.itangqi.waveloadingview.WaveLoadingView
-                    android:id="@+id/cooking_time"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginRight="@dimen/padding_dimen"
-                    app:wlv_borderColor="@color/colorAccent"
-                    app:wlv_borderWidth="3dp"
-                    app:wlv_round_rectangle="true"
-                    app:wlv_shapeType="circle"
-                    app:wlv_titleBottom="@string/cooking_time"
-                    app:wlv_titleCenterColor="@color/colorText"
-                    app:wlv_titleCenterSize="14sp"
-                    app:wlv_titleBottomSize="8sp"
-                    app:wlv_triangle_direction="north"
-                    app:wlv_waveAmplitude="70"
-                    app:wlv_waveColor="@color/colorAccent" />
+                <TextView
+                    android:id="@+id/divider4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/category_container"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/dotted_line" />
 
-                <me.itangqi.waveloadingview.WaveLoadingView
-                    android:id="@+id/total_time"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    app:wlv_borderColor="@color/colorAccent"
-                    app:wlv_borderWidth="3dp"
-                    app:wlv_round_rectangle="true"
-                    app:wlv_shapeType="circle"
-                    app:wlv_titleBottom="@string/total_time"
-                    app:wlv_titleCenterColor="@color/colorText"
-                    app:wlv_titleCenterSize="14sp"
-                    app:wlv_titleBottomSize="8sp"
-                    app:wlv_triangle_direction="north"
-                    app:wlv_waveAmplitude="70"
-                    app:wlv_waveColor="@color/colorAccent" />
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/recipe_steps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/divider4"
+                    android:text="@{model.currentRecipe.preparations}"
+                    android:textColor="@color/colorText" />
 
-            <TextView
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/timing"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/dotted_line" />
-
-            <TextView
-                android:id="@+id/ingredients"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider2"
-                android:text="@string/ingredients"
-                android:textColor="@color/colorText" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/products"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ingredients"
-                android:nestedScrollingEnabled="false" />
-
-            <TextView
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/products"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/dotted_line" />
-
-            <com.nex3z.flowlayout.FlowLayout
-                android:id="@+id/category_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider3"
-                bind:flChildSpacing="8dp"
-                bind:flRowSpacing="8dp" />
-
-            <TextView
-                android:id="@+id/divider4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/category_container"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/dotted_line" />
-
-            <TextView
-                android:id="@+id/recipe_steps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider4"
-                android:text="@{model.currentRecipe.preparations}"
-                android:textColor="@color/colorText" />
-
-        </RelativeLayout>
+            </RelativeLayout>
+        </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

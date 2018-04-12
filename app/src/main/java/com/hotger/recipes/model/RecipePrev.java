@@ -1,10 +1,12 @@
 package com.hotger.recipes.model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.hotger.recipes.database.ImageConverter;
@@ -30,20 +32,37 @@ public class RecipePrev implements Serializable {
     private String name;
 
     @Expose
-    private String totalTimeInSeconds;
+    private int totalTimeInSeconds;
 
-    public RecipePrev(@NonNull String id, Image images, String name, String totalTimeInSeconds) {
+    private boolean isFromYummly = true;
+
+    @Ignore
+    public RecipePrev() {
+    }
+
+    @Ignore
+    public RecipePrev(@NonNull String id, Image images, String name, int totalTimeInSeconds) {
         this.id = id;
         this.images = images;
         this.name = name;
         this.totalTimeInSeconds = totalTimeInSeconds;
     }
 
+    public RecipePrev(@NonNull String id, Image images, String name, int totalTimeInSeconds, boolean isFromYummly) {
+        this.id = id;
+        this.images = images;
+        this.name = name;
+        this.totalTimeInSeconds = totalTimeInSeconds;
+        this.isFromYummly = isFromYummly;
+    }
+
+    @Exclude
     public int getTime() {
-        return Integer.parseInt(totalTimeInSeconds) / 60;
+        return totalTimeInSeconds / 60;
     }
 
     // region Getters and setters
+    @Exclude
     public String getImageUrl() {
         return images.getUrl();
     }
@@ -56,7 +75,7 @@ public class RecipePrev implements Serializable {
         return name;
     }
 
-    public String getTotalTimeInSeconds() {
+    public int getTotalTimeInSeconds() {
         return totalTimeInSeconds;
     }
 
@@ -72,12 +91,20 @@ public class RecipePrev implements Serializable {
         this.name = name;
     }
 
-    public void setTotalTimeInSeconds(String totalTimeInSeconds) {
+    public void setTotalTimeInSeconds(int totalTimeInSeconds) {
         this.totalTimeInSeconds = totalTimeInSeconds;
     }
 
     public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    public boolean isFromYummly() {
+        return isFromYummly;
+    }
+
+    public void setFromYummly(boolean fromYummly) {
+        isFromYummly = fromYummly;
     }
 
     //endregion

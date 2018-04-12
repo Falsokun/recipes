@@ -1,6 +1,11 @@
 package com.hotger.recipes.utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
 import com.hotger.recipes.App;
+import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.RelationRecipeType;
 import com.hotger.recipes.model.RecipePrev;
 
@@ -13,7 +18,7 @@ import retrofit2.Response;
 public class AsyncCalls {
 
     //category = allowedCuisine[]
-    public static void saveCategoryToDB(AppDatabase appDatabase, String searchValue) {
+    public static void saveCategoryToDB(Context context, String searchValue, boolean sendMessage) {
         Call<ResponseRecipeAPI> call;
         YummlyAPI api = App.getApi();
         String category = searchValue.split("\\^")[0];
@@ -31,10 +36,10 @@ public class AsyncCalls {
                 call = api.getDietList(searchValue, YummlyAPI.MAX_RESULT);
         }
 
-        call.enqueue(getCallback(appDatabase, searchValue));
+        call.enqueue(getCallback(context, searchValue, sendMessage));
     }
 
-    public static Callback<ResponseRecipeAPI> getCallback(AppDatabase appDatabase, String searchValue) {
+    public static Callback<ResponseRecipeAPI> getCallback(Context context, String searchValue, boolean shouldSendMessage) {
         return new Callback<ResponseRecipeAPI>() {
             @Override
             public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
@@ -42,11 +47,17 @@ public class AsyncCalls {
                     return;
                 }
 
+                AppDatabase appDatabase = AppDatabase.getDatabase(context);
                 ArrayList<RecipePrev> prevs = response.body().getMatches();
                 saveTypesToDB(prevs, searchValue, appDatabase);
 
                 appDatabase.getRecipePrevDao()
                         .insertAll(prevs);
+
+                if (shouldSendMessage) {
+                    Intent intent = new Intent(Utils.NEED_INIT);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
             }
 
             @Override

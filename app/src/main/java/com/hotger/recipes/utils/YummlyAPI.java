@@ -11,8 +11,8 @@ import retrofit2.http.Url;
 public interface YummlyAPI {
 
     String SEARCH = YummlyAPI.BASE_URL + YummlyAPI.RECIPES_PATH + "&" + YummlyAPI.BASE + "&"; //YummlyAPI.MAX_RESULT +
-    String APP_ID = "42e79ceb";
-    String APP_KEY = "12d332fad2bb304db75ae40ec0ab6a32";
+    String APP_ID = "42e79ceb"; //"42e79ceb";
+    String APP_KEY = "12d332fad2bb304db75ae40ec0ab6a32";//"12d332fad2bb304db75ae40ec0ab6a32";
     String BASE_URL = "http://api.yummly.com/";
     String RECIPES_PATH = "v1/api/recipes?";
     String BASE = "_app_id=" + APP_ID + "&_app_key=" + APP_KEY;

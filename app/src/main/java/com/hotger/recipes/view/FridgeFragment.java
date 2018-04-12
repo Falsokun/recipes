@@ -103,10 +103,7 @@ public class FridgeFragment extends BackStackFragment {
         mBinding.progress.setVisibility(View.VISIBLE);
         ArrayList<String> ingredients = new ArrayList<>();
         for(Product product : products) {
-            ingredients.add(AppDatabase
-                    .getDatabase(getActivity())
-                    .getIngredientDao()
-                    .getNameById(product.getIngredientId()));
+            ingredients.add(product.getIngredientId());
         }
 
 //        String[] ingredients = {"honey", "sugar"};

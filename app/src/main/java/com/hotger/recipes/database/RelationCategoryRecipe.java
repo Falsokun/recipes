@@ -1,6 +1,7 @@
 package com.hotger.recipes.database;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -11,6 +12,9 @@ public class RelationCategoryRecipe {
 
     @NonNull
     private String categoryId;
+
+    @Ignore
+    public RelationCategoryRecipe() {}
 
     public RelationCategoryRecipe(@NonNull String recipeId, @NonNull String categoryId) {
         this.recipeId = recipeId;

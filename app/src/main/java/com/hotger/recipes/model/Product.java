@@ -140,7 +140,7 @@ public class Product implements Serializable {
         }
 
         Ingredient ingredient = AppDatabase.getDatabase(activity).getIngredientDao().getIngredientByName(name).get(0);
-        ingredientId = ingredient.getId();
+        ingredientId = ingredient.getEn();
         measure = ingredient.getMeasure();
     }
 
@@ -156,7 +156,7 @@ public class Product implements Serializable {
         List<Ingredient> ingredients = AppDatabase
                 .getDatabase(activity)
                 .getIngredientDao()
-                .getIngredientById(ingredientId);
+                .getIngredientByName(ingredientId);
 
         if (ingredients.size() != 0) {
             return ingredients.get(0).getTitle();

@@ -22,7 +22,7 @@ public class SearchViewModel extends BaseObservable {
     private ArrayList<String> cuisines = new ArrayList<>();
     private ArrayList<String> course = new ArrayList<>();
     private ArrayList<String> diets = new ArrayList<>();
-    private int time;
+    private int timeInMinutes = 0;
 
     public SearchViewModel(SearchActivity activity, AppDatabase db) {
         this.activity = activity;
@@ -35,6 +35,9 @@ public class SearchViewModel extends BaseObservable {
         stringBuilder.append(getCategoryString(YummlyAPI.ALLOWED_CUISINE_PARAM, cuisines, YummlyAPI.Description.CUISINE));
         stringBuilder.append(getCategoryString(YummlyAPI.ALLOWED_DIET_PARAM, diets, YummlyAPI.Description.DIET));
         stringBuilder.append("&maxResult=" + YummlyAPI.MAX_RESULT);
+        if (timeInMinutes != 0) {
+            stringBuilder.append("&maxTotalTimeInSeconds" + timeInMinutes * 60);
+        }
         stringBuilder.replace(0, 1, "");
         return stringBuilder.toString();
     }
@@ -81,5 +84,24 @@ public class SearchViewModel extends BaseObservable {
 
     public void setDiets(ArrayList<String> diets) {
         this.diets = diets;
+    }
+
+    public ArrayList<String> getCategories() {
+        List<String> titles = new ArrayList<>();
+        titles.addAll(course);
+        titles.addAll(cuisines);
+        titles.addAll(diets);
+
+        List<Category> course = db.getCategoryDao().getAllCategories();
+        ArrayList<String> searchValues = new ArrayList<>();
+        for(String title : titles) {
+            searchValues.add(getCategoryName(title, course));
+        }
+
+        return searchValues;
+    }
+
+    public void setTimeInMinutes(String timeInMinutes) {
+        this.timeInMinutes = Integer.parseInt(timeInMinutes);
     }
 }

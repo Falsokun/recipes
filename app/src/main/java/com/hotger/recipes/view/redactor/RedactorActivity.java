@@ -99,7 +99,6 @@ public class RedactorActivity extends ControllableActivity {
 
             NumberPickerFragment portions = new NumberPickerFragment();
             Bundle bundle1 = new Bundle();
-            bundle1.putInt(Utils.STATE, Utils.NUMBER_PICKER);
             portions.setArguments(bundle1);
             portions.setRedactorModel(mRedactorModel);
             mRedactorAdapter.addFragment(portions);

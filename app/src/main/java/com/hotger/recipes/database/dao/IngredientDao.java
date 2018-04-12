@@ -30,9 +30,6 @@ public interface IngredientDao extends BaseDao<Ingredient> {
     @Query("SELECT * FROM ingredient WHERE en = :name OR ru = :name")
     List<Ingredient> getIngredientByName(String name);
 
-    @Query("SELECT * FROM ingredient WHERE id = :id")
+    @Query("SELECT * FROM ingredient WHERE en = :id")
     List<Ingredient> getIngredientById(String id);
-
-    @Query("SELECT en FROM ingredient WHERE id = :id")
-    String getNameById(String id);
 }

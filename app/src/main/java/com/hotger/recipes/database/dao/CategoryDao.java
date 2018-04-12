@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 
 import com.hotger.recipes.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
@@ -40,4 +41,7 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM category WHERE searchValue LIKE :id")
     List<Category> getCategoryById(String id);
+
+    @Query("SELECT * FROM category WHERE searchValue IN(:ids)")
+    List<Category> getCategoriesWithIds(List<String> ids);
 }

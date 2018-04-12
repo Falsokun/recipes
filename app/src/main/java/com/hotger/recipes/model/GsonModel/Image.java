@@ -15,6 +15,8 @@ public class Image implements Serializable {
 @Expose
     private String url;
 
+    public Image() {}
+
     public Image(String url) {
         this.url = url;
     }

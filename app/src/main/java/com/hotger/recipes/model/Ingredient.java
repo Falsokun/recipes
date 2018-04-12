@@ -5,13 +5,15 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.Locale;
 
 @Entity
+@IgnoreExtraProperties
 public class Ingredient {
     @PrimaryKey
     @NonNull
-    private String id;
     private String en;
     private String ru;
     private String measure;
@@ -23,8 +25,7 @@ public class Ingredient {
         measure = "";
     }
 
-    public Ingredient(@NonNull String id, String en, String ru, String measure) {
-        this.id = id;
+    public Ingredient(@NonNull String en, String ru, String measure) {
         this.en = en;
         this.ru = ru;
         this.measure = measure;
@@ -55,21 +56,12 @@ public class Ingredient {
         this.measure = measure;
     }
 
-    @NonNull
-    public String getId() {
-        return id;
-    }
-
-    public void setId(@NonNull String id) {
-        this.id = id;
-    }
-
+    @Ignore
     public String getTitle() {
         if (Locale.getDefault().toString().contains("ru"))
             return ru;
         else
             return en;
     }
-
     //endregion
 }

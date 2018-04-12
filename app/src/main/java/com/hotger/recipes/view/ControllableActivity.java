@@ -1,5 +1,6 @@
 package com.hotger.recipes.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -7,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -49,6 +51,9 @@ public abstract class ControllableActivity extends AppCompatActivity {
     }
 
     public void openRecipe(String recipeId) {
+        RecipeFragment fragment = new RecipeFragment();
+        setCurrentFragment(fragment, true, fragment.getTag());
+
         App.getApi()
                 .getRecipeByID(recipeId)
                 .enqueue(new Callback<RecipeNF>() {
@@ -60,14 +65,9 @@ public abstract class ControllableActivity extends AppCompatActivity {
                                  }
 
                                  Recipe recipe = new Recipe((RecipeNF) response.body(), ControllableActivity.this);
-
-                                 RecipeFragment fragment = new RecipeFragment();
-                                 Bundle bundle = new Bundle();
-                                 //recipe.prepareDataForShowing(ControllableActivity.this);
-                                 bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
-                                 fragment.setArguments(bundle);
-
-                                 setCurrentFragment(fragment, true, fragment.getTag());
+                                 Intent intent = new Intent(Utils.RECIPE_OBJ);
+                                 intent.putExtra(Utils.RECIPE_OBJ, recipe);
+                                 LocalBroadcastManager.getInstance(ControllableActivity.this).sendBroadcast(intent);
                              }
 
                              @Override

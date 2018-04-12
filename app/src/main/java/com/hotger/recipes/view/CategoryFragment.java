@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CategoryAdapter;
 import com.hotger.recipes.databinding.FragmentCategoriesBinding;
+import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.redactor.BackStackFragment;
@@ -30,7 +32,7 @@ public class CategoryFragment extends BackStackFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         List<Category> categoryList = getCategoryByName(YummlyAPI.Description.CUISINE);
-        categoryAdapter = new CategoryAdapter((MainActivity) getActivity(), categoryList);
+        categoryAdapter = new CategoryAdapter((MainActivity) getActivity(), categoryList, YummlyAPI.Description.CUISINE);
 
 //        CategoryDao dao = AppDatabase.getDatabase(getContext()).getCategoryDao();
 //        if (getActivity() != null)
@@ -61,15 +63,19 @@ public class CategoryFragment extends BackStackFragment {
             switch (position) {
                 case 0:
                     categoryAdapter.setData(getCategoryByName(YummlyAPI.Description.CUISINE));
+                    categoryAdapter.setType(YummlyAPI.Description.CUISINE);
                     break;
                 case 1:
                     categoryAdapter.setData(getCategoryByName(YummlyAPI.Description.HOLIDAY));
+                    categoryAdapter.setType(YummlyAPI.Description.HOLIDAY);
                     break;
                 case 2:
                     categoryAdapter.setData(getCategoryByName(YummlyAPI.Description.COURSE));
+                    categoryAdapter.setType(YummlyAPI.Description.COURSE);
                     break;
                 case 3:
                     categoryAdapter.setData(getCategoryByName(YummlyAPI.Description.DIET));
+                    categoryAdapter.setType(YummlyAPI.Description.DIET);
                     break;
                 default:
                     break;
@@ -81,11 +87,13 @@ public class CategoryFragment extends BackStackFragment {
 
     public List<Category> getCategoryByName(String name) {
         AppDatabase db = AppDatabase.getDatabase(getActivity());
+        List<Category> categories = new ArrayList<>();
+        FirebaseUtils.addUserCategoryIfNeed(name, categories);
         if (getActivity() != null && db != null) {
-            return db.getCategoryDao()
-                    .getAllCategoriesWithDescription(name);
+            categories.addAll(db.getCategoryDao()
+                    .getAllCategoriesWithDescription(name));
         }
 
-        return new ArrayList<>();
+        return categories;
     }
 }

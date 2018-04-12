@@ -37,6 +37,8 @@
                 android:layout_centerInParent="true"
                 android:paddingBottom="@dimen/padding_dimen"
                 android:textColor="@color/colorText"
+                android:paddingLeft="@dimen/padding_dimen"
+                android:paddingRight="@dimen/padding_dimen"
                 android:paddingTop="@dimen/padding_dimen"
                 android:text="@{model.msg}"/>
 

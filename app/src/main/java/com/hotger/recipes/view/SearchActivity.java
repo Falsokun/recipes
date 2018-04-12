@@ -26,10 +26,12 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.appyvet.materialrangebar.RangeBar;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.databinding.ActivitySearchBinding;
+import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
@@ -73,6 +75,9 @@ public class SearchActivity extends ControllableActivity {
 
     public void setSearchAttr() {
         mBinding.filterBtn.setOnClickListener(v -> slideAnimation(mBinding.filter.filterContainer));
+        mBinding.filter.rangebar.setOnRangeBarChangeListener((rangeBar, leftPinIndex, rightPinIndex, leftPinValue, rightPinValue) -> {
+            model.setTimeInMinutes(rightPinValue);
+        });
         mBinding.searchView.setIconified(true);
         mBinding.searchView.onActionViewExpanded();
         new Handler().postDelayed(() -> mBinding.searchView.clearFocus(), 300);
@@ -196,6 +201,7 @@ public class SearchActivity extends ControllableActivity {
                 .enqueue(new Callback<ResponseRecipeAPI>() {
                              @Override
                              public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
+                                 FirebaseUtils.searchRecipes(model.getCategories(), cardAdapter);
                                  cardAdapter.setData(response.body().getMatches());
                                  mBinding.progress.setVisibility(View.GONE);
                              }

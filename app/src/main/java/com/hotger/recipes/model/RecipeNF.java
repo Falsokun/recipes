@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
 import com.google.gson.annotations.Expose;
 import com.hotger.recipes.database.ListConverter;
 import com.hotger.recipes.model.GsonModel.Attributes;
@@ -126,6 +127,7 @@ public class RecipeNF implements Serializable {
         this.ingredientLines = ingredientLines;
     }
 
+    @Exclude
     public List<Image> getImages() {
         return images;
     }
@@ -176,8 +178,7 @@ public class RecipeNF implements Serializable {
         return out;
     }
 
-
-//    @Override
+    //    @Override
 //    public Object clone() throws CloneNotSupportedException {
 //        RecipeNF r = new RecipeNF();
 //        r.setCategories(categories);

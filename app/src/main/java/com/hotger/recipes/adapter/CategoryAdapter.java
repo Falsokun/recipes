@@ -1,36 +1,36 @@
 package com.hotger.recipes.adapter;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemCategoryBinding;
-import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.model.Category;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.MainActivity;
 import com.hotger.recipes.view.RecipeListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
     private List<Category> categoryList = new ArrayList<>();
     private MainActivity activity;
+    private String type;
 
-    public CategoryAdapter(MainActivity activity, List<Category> categoryList) {
+    public CategoryAdapter(MainActivity activity, List<Category> categoryList, String type) {
         super();
         this.categoryList = categoryList;
         this.activity = activity;
+        this.type = type;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final ItemCategoryBinding holderBinding = holder.mBinding;
         holderBinding.title.setText(category.getTitle());
         holderBinding.type.setText(category.getType());
-        Glide.with(activity).load(category.getUrl()).into(holderBinding.bgImage);
+        Glide.with(activity).load(category.getUrl()).transition(withCrossFade()).into(holderBinding.bgImage);
         holderBinding.bgImage.setImageURI(Uri.parse(category.getUrl()));
         holderBinding.bgImage.setOnClickListener(v -> changeCategory(category.getSearchValue()));
     }
@@ -55,6 +55,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         RecipeListFragment fragment = new RecipeListFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(Utils.RECIPE_CATEGORY, searchValue);
+        bundle.putSerializable(Utils.RECIPE_TYPE, type);
         fragment.setArguments(bundle);
         activity.setCurrentFragment(fragment, true, fragment.getTag());
     }
@@ -80,6 +81,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void setData(List<Category> data) {
         this.categoryList = data;
         notifyDataSetChanged();
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

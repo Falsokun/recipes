@@ -64,12 +64,10 @@ public class Utils {
     }
 
     //TODO тут наверное надо все это убрать и сделать красиво
-    public static final String STATE = "State";
-    public static final int NUMBER_PICKER = 0;
-    public static final int TIME_PICKER = 1;
     public static final String RECIPE_ID = "RECIPE_ID";
     public static final String RECIPE_OBJ = "RECIPE_OBJ";
     public static final String RECIPE_CATEGORY = "RECIPE_CATEGORY";
+    public static final String RECIPE_TYPE = "RECIPE_TYPE";
     public static final String NEED_INIT = "NEED_INIT";
 
     public static void disableShiftMode(BottomNavigationView view) {

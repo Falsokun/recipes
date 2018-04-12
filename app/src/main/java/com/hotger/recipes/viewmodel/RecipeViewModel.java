@@ -21,15 +21,9 @@ public class RecipeViewModel extends ViewModel {
     private ControllableActivity activity;
     private ProductsAdapter productsAdapter;
 
-    public RecipeViewModel(int recipeId, ControllableActivity activity) {
+    public RecipeViewModel(ControllableActivity activity) {
         this.activity = activity;
-        productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false, true);
-    }
-
-    public RecipeViewModel(Recipe recipe, ControllableActivity activity) {
-        this.activity = activity;
-        mCurrentRecipe = recipe;
-        productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false, true);
+        mCurrentRecipe = null;
     }
 
     @Bindable
@@ -39,6 +33,7 @@ public class RecipeViewModel extends ViewModel {
 
     public void setCurrentRecipe(Recipe mCurrentRecipe) {
         this.mCurrentRecipe = mCurrentRecipe;
+        productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false, true);
         notifyPropertyChanged(BR.currentRecipe);
     }
 
@@ -90,5 +85,4 @@ public class RecipeViewModel extends ViewModel {
         db.getRelationCategoryRecipeDao().deleteAllWithId(recipeId);
         db.getRecipePrevDao().deleteAllById(recipeId);
     }
-
 }

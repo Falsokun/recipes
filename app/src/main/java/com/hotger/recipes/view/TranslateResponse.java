@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public class TranslateResponse {
     @Expose
-    ArrayList<String> text;
+    public ArrayList<String> text;
 }

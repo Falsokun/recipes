@@ -61,6 +61,7 @@
     <string name="start_searching">start searching</string>
     <string name="random_recipe">Show random recipe</string>
     <string name="my_favs">My favorites</string>
+    <string name="user_recipe">User recipes</string>
 
     <string-array name="measures_array">
         <item></item>

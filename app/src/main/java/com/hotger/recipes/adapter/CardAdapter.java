@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemRecipeBinding;
+import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.view.ControllableActivity;
-
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import java.util.List;
 
 /**
@@ -22,7 +23,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     private ControllableActivity activity;
     private List<RecipePrev> data;
     public static int COLUMNS_COUNT = 3;
-    private boolean isFromDB = false;
 
     public CardAdapter(ControllableActivity activity, List<RecipePrev> data) {
         this.activity = activity;
@@ -40,12 +40,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         RecipePrev recipe = data.get(position);
         final ItemRecipeBinding holderBinding = holder.mBinding;
         holderBinding.recipeName.setText(recipe.getName());
-        Glide.with(activity).load(recipe.getImageUrl()).into(holderBinding.recipeImg);
+        Glide.with(activity).load(recipe.getImageUrl()).transition(withCrossFade()).into(holderBinding.recipeImg);
         holderBinding.listItem.setOnClickListener(v -> {
-            if (!isFromDB) {
+            if (recipe.isFromYummly()) {
                 activity.openRecipe(recipe.getId());
             } else {
-                activity.openRecipeFromDB(recipe.getId());
+                if (false) {
+                    activity.openRecipeFromDB(recipe.getId());
+                } else {
+                    FirebaseUtils.getRecipeFromFirebase(recipe.getId(), activity);
+                }
             }
         });
     }
@@ -64,8 +68,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void setFromDB(boolean fromDB) {
-        this.isFromDB = fromDB;
+    public void addData(List<RecipePrev> data) {
+        this.data.addAll(0, data);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

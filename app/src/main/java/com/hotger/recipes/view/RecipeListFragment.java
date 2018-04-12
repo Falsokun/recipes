@@ -1,21 +1,31 @@
 package com.hotger.recipes.view;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.RelationRecipeTypeViewModel;
 import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipesListBinding;
+import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.AsyncCalls;
 import com.hotger.recipes.utils.MessageModel;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;
@@ -23,6 +33,10 @@ import com.hotger.recipes.view.redactor.BackStackFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecipeListFragment extends BackStackFragment {
 
@@ -33,23 +47,56 @@ public class RecipeListFragment extends BackStackFragment {
     public static String TAG = "RecipeListFragment";
     public static final int ID = 123456;
 
+    private MessageModel model;
+    private BroadcastReceiver mMessageReceiver;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         cardAdapter = new CardAdapter((ControllableActivity) getActivity(), new ArrayList<>());
-
+        model = new MessageModel(getString(R.string.favorite_hint), 0, true);
+        mMessageReceiver = getRefreshReceiver();
         if (getArguments() != null) {
-            checkForCategory();
-            checkForInit();
-            checkForPassingFromApi();
-            checkForFavorites();
+            setData();
         }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipes_list, container, false);
+        mBinding.setData(cardAdapter);
+        mBinding.setMessageModel(model);
+        mBinding.listRv.setAdapter(cardAdapter);
+        mBinding.listRv.setLayoutManager(new GridLayoutManager(getContext(), CardAdapter.COLUMNS_COUNT, GridLayoutManager.VERTICAL, false));
+
+        //may be another way
+        if (getArguments() != null && getArguments().getString(Utils.RECIPE_CATEGORY) != null) {
+            mBinding.swipeRefresh.setOnRefreshListener(getOnRefreshListener());
+            mBinding.swipeRefresh.setEnabled(true);
+        } else {
+            mBinding.swipeRefresh.setEnabled(false);
+        }
+        return mBinding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        IntentFilter filter = new IntentFilter(Utils.NEED_INIT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                filter);
+    }
+
+    public BroadcastReceiver getRefreshReceiver() {
+        return new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                setData();
+                mBinding.swipeRefresh.setRefreshing(false);
+            }
+        };
     }
 
     private void checkForFavorites() {
@@ -59,7 +106,6 @@ public class RecipeListFragment extends BackStackFragment {
 
         if (navId.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
             RelationRecipeTypeDao dao = AppDatabase.getDatabase(getActivity()).getRelationRecipeTypeDao();
-            cardAdapter.setFromDB(true);
             ViewModelProviders.of(getActivity())
                     .get(RelationRecipeTypeViewModel.class)
                     .getAllPrevs(dao)
@@ -71,6 +117,13 @@ public class RecipeListFragment extends BackStackFragment {
                     .getAllFavs(dao)
                     .observe(getActivity(), favoritePrevs -> cardAdapter.setData(findFavoritePrevs(favoritePrevs)));
         }
+    }
+
+    private void setData() {
+        checkForCategory();
+        checkForInit();
+        checkForPassingFromApi();
+        checkForFavorites();
     }
 
     private List<RecipePrev> findFavoritePrevs(List<String> favIds) {
@@ -91,21 +144,34 @@ public class RecipeListFragment extends BackStackFragment {
     }
 
     private void checkForCategory() {
+        if (getArguments() == null || getArguments().getString(Utils.RECIPE_CATEGORY) == null)
+            return;
+
         String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
-        if (searchValue != null) {
+        String type = getArguments().getString(Utils.RECIPE_TYPE);
+        if (!searchValue.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
             List<String> ids = AppDatabase.getDatabase(getContext()).getRelationRecipeTypeDao().getRecipesByType(searchValue);
+            FirebaseUtils.getRecipesByType(searchValue, cardAdapter);
             cardAdapter.setData(AppDatabase.getDatabase(getActivity()).getRecipePrevDao().findPrevsFromList(ids));
+        } else {
+            FirebaseUtils.getAllRecipesInCategory(type, cardAdapter);
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipes_list, container, false);
-        mBinding.setData(cardAdapter);
-        mBinding.setMessageModel(new MessageModel(getString(R.string.favorite_hint), 0, true));
-        mBinding.listRv.setAdapter(cardAdapter);
-        mBinding.listRv.setLayoutManager(new GridLayoutManager(getContext(), CardAdapter.COLUMNS_COUNT, GridLayoutManager.VERTICAL, false));
-        return mBinding.getRoot();
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mMessageReceiver);
+    }
+
+    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return () -> {
+            //if category
+            if (getArguments() != null && getArguments().getString(Utils.RECIPE_CATEGORY) != null) {
+                String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
+                cardAdapter.setData(new ArrayList<>());
+                AsyncCalls.saveCategoryToDB(getContext(), searchValue, true);
+            }
+        };
     }
 }
