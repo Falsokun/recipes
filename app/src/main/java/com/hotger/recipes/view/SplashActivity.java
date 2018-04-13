@@ -21,7 +21,6 @@ public class SplashActivity extends AppCompatActivity {
             FirebaseUtils.saveIngredientsToDatabase(db);
             FirebaseUtils.saveCategoryToDatabase(this, db, FirebaseUtils.CATEGORY);
         }
-        //FirebaseUtils.updateIngredients();
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

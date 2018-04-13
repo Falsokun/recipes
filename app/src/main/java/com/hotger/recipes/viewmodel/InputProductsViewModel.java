@@ -1,6 +1,7 @@
 package com.hotger.recipes.viewmodel;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.databinding.Bindable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -19,9 +20,11 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.DataHintAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.model.Product;
+import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InputProductsViewModel extends ViewModel {
@@ -166,6 +169,31 @@ public class InputProductsViewModel extends ViewModel {
 
         return new ItemTouchHelper(callback);
     }
-
     //endregion
+
+    public void saveListData(Context context, String listId) {
+        AppDatabase.getDatabase(context).getProductDao().removeWhereId(listId);
+        if (getProducts() == null || getProducts().size() == 0) {
+            return;
+        }
+
+        List<Product> products = getProducts();
+        for(Product product : products) {
+            product.setRecipeId(listId);
+        }
+
+        RecipeNF recipeNF = new RecipeNF();
+        recipeNF.setId(listId);
+        AppDatabase.getDatabase(context).getRecipeDao().insert(recipeNF);
+        AppDatabase.getDatabase(context).getProductDao().insertAll(products);
+    }
+
+    public void restoreListData(Context context, String listId) {
+        if (getProducts().size() == 0) {
+            getProducts()
+                    .addAll(AppDatabase.getDatabase(context)
+                            .getProductDao()
+                            .getProducts(listId));
+        }
+    }
 }

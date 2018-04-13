@@ -9,6 +9,10 @@
             type="com.hotger.recipes.viewmodel.InputProductsViewModel" />
 
         <variable
+            name="showCheckButton"
+            type="boolean" />
+
+        <variable
             name="messageModel"
             type="com.hotger.recipes.utils.MessageModel" />
 
@@ -21,15 +25,6 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/padding_dimen"
         android:paddingRight="@dimen/padding_dimen">
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/add_products"
-            android:textColor="@color/colorPrimaryDark" />
 
         <EditText
             android:id="@+id/addProductName"
@@ -62,18 +57,20 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/products_line_rv"
             android:layout_width="match_parent"
+            android:scrollbars="vertical"
             android:layout_height="wrap_content"
-            android:layout_below="@id/addProductName" />
+            android:layout_below="@id/addProductName"
+            android:elevation="10dp" />
 
         <include
-            android:layout_below="@id/addProductName"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_centerInParent="true"
             android:id="@+id/message"
             layout="@layout/fragment_no_fill"
-            bind:model="@{messageModel}"
-            android:visibility="@{model.emptyData ? View.VISIBLE : View.GONE}"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/addProductName"
+            android:layout_centerInParent="true"
+            android:visibility="@{model.emptyData ? View.VISIBLE : View.GONE}"
+            bind:model="@{messageModel}" />
 
     </RelativeLayout>
 </layout>

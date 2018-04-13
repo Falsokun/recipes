@@ -64,39 +64,13 @@ public class FridgeFragment extends BackStackFragment {
     @Override
     public void onStart() {
         super.onStart();
-        restoreFridgeData();
+        inputModel.restoreListData(getContext(), FridgeFragment.ID);
     }
 
     @Override
     public void onStop() {
-        saveFridgeData();
+        inputModel.saveListData(getContext(), FridgeFragment.ID);
         super.onStop();
-    }
-
-    public void saveFridgeData() {
-        AppDatabase.getDatabase(getActivity()).getProductDao().removeWhereId(FridgeFragment.ID);
-        if (inputModel.getProducts() == null || inputModel.getProducts().size() == 0) {
-            return;
-        }
-
-        List<Product> products = inputModel.getProducts();
-        for(Product product : products) {
-            product.setRecipeId(FridgeFragment.ID);
-        }
-
-        RecipeNF recipeNF = new RecipeNF();
-        recipeNF.setId(FridgeFragment.ID);
-        AppDatabase.getDatabase(getActivity()).getRecipeDao().insert(recipeNF);
-        AppDatabase.getDatabase(getActivity()).getProductDao().insertAll(products);
-    }
-
-    public void restoreFridgeData() {
-        if (inputModel.getProducts().size() == 0) {
-            inputModel.getProducts()
-                    .addAll(AppDatabase.getDatabase(getActivity())
-                            .getProductDao()
-                            .getProducts(FridgeFragment.ID));
-        }
     }
 
     public void searchForRecipeWithIngridients(List<Product> products) {

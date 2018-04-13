@@ -22,4 +22,10 @@ public interface RelationRecipeTypeDao extends BaseDao<RelationRecipeType> {
 
     @Query("SELECT * FROM relationrecipetype WHERE recipeId = :id and type = :typeMyFavs")
     List<RelationRecipeType> getRelation(String id, String typeMyFavs);
+
+    @Query("SELECT recipeId FROM relationrecipetype WHERE type = :type and recipeId = :id")
+    List<String> getRecipesById(String id, String type);
+
+    @Query("DELETE FROM relationrecipetype WHERE recipeId = :id")
+    void deleteWhereId(String id);
 }

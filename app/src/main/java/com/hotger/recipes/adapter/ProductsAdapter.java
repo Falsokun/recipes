@@ -1,5 +1,6 @@
 package com.hotger.recipes.adapter;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
@@ -12,14 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
 import com.hotger.recipes.model.Product;
+import com.hotger.recipes.model.RecipeNF;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
+import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_ID;
 
 /**
  * Adapter for handling entering products and its quanitity
@@ -37,6 +44,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private boolean isDetailed;
 
+    private InputProductsViewModel model;
+
     /**
      * All selected products
      */
@@ -53,7 +62,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(activity);
-        return new ViewHolder(ItemProductLineBinding.inflate(inflater, parent, false).getRoot(), isEditable);
+        return new ViewHolder(ItemProductLineBinding.inflate(inflater, parent, false).getRoot());
     }
 
     @Override
@@ -64,6 +73,41 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()));
+        holder.binding.lottieAnim.setOnClickListener(view -> {
+            checkAnimStatus(holder.binding.lottieAnim, productLine);
+            animateView(holder.binding.lottieAnim);
+        });
+    }
+
+    private void checkAnimStatus(LottieAnimationView animationView, Product product) {
+        if (animationView.getProgress() == 0.5f) {
+            removeItemFromList(activity, SHOPPING_LIST_ID, product);
+        } else {
+            saveItemToList(activity, SHOPPING_LIST_ID, product);
+        }
+    }
+
+    public void saveItemToList(ControllableActivity activity, String shoppingListId, Product product) {
+        List<Product> products = new ArrayList<>();
+        products.add(product);
+        product.setRecipeId(shoppingListId);
+
+        RecipeNF recipeNF = new RecipeNF();
+        recipeNF.setId(shoppingListId);
+        AppDatabase.getDatabase(activity).getRecipeDao().insert(recipeNF);
+        AppDatabase.getDatabase(activity).getProductDao().insert(products);
+    }
+
+    public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
+        AppDatabase.getDatabase(activity).getProductDao().delete(product);
+    }
+
+    private void animateView(LottieAnimationView animationView) {
+        float start = animationView.getProgress() == 0f || animationView.getProgress() == 1f ? 0f : 0.5f;
+        float end = start == 0f ? 0.5f : 1f;
+        ValueAnimator animator = ValueAnimator.ofFloat(start, end).setDuration(1000);
+        animator.addUpdateListener(valueAnimator -> animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     @Override
@@ -148,11 +192,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
          */
         ItemProductLineBinding binding;
 
-        ViewHolder(final View itemView, boolean isEditable) {
+        ViewHolder(final View itemView) {
             super(itemView);
 
             binding = DataBindingUtil.bind(itemView);
             binding.setIsDetailed(isDetailed);
+            binding.setIsEditable(ProductsAdapter.this.isEditable);
             if (isEditable) {
                 View.OnClickListener listener = view -> {
                     double temp = Double.parseDouble(binding.finalAmount.getText().toString());

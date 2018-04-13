@@ -109,5 +109,6 @@ public class Utils {
     public static class TYPE {
         public static String TYPE_MY_RECIPES = "MY_RECIPES";
         public static String TYPE_MY_FAVS = "MY_FAVS";
+        public static String TYPE_BOOKMARK = "MY_BOOKMARKS";
     }
 }

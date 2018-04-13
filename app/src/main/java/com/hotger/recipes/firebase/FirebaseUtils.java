@@ -317,6 +317,9 @@ public class FirebaseUtils {
         q.addValueEventListener(getRelationValueListener(ref, adapter, true));
     }
 
+    /**
+     * Redundant function in order not to translate whole set of ingredients
+     */
     public static void updateIngredients() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref.child("ingredients_ref").addValueEventListener(new ValueEventListener() {

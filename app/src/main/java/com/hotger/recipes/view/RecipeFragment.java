@@ -33,6 +33,7 @@ import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.RecipeUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 import com.hotger.recipes.viewmodel.RecipeViewModel;
@@ -54,6 +55,7 @@ public class RecipeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         model = new RecipeViewModel((ControllableActivity) getActivity());
         mMessageReceiver = getRecipeReceiver();
+
         setHasOptionsMenu(true);
     }
 
@@ -65,7 +67,15 @@ public class RecipeFragment extends Fragment {
         mBinding.container.setVisibility(View.GONE);
         mBinding.setModel(model);
         ((ControllableActivity) getActivity()).updateCollapsing(((ControllableActivity) getActivity()).getAppBar(), true);
+        checkForPassingFromDB();
         return mBinding.getRoot();
+    }
+
+    private void checkForPassingFromDB() {
+        if (getArguments() != null && getArguments().getSerializable(Utils.RECIPE_OBJ) != null) {
+            model.setCurrentRecipe((Recipe) getArguments().getSerializable(Utils.RECIPE_OBJ));
+            setData();
+        }
     }
 
     private void setData() {
@@ -136,12 +146,33 @@ public class RecipeFragment extends Fragment {
             mBinding.favorite.setProgress(1f);
         }
 
+        type = AppDatabase.getDatabase(getContext())
+                .getRelationRecipeTypeDao()
+                .getRelation(model.getCurrentRecipe().getId(), Utils.TYPE.TYPE_BOOKMARK);
+        if (type.size() != 0) {
+            mBinding.bookmark.setProgress(1f);
+        }
+
         mBinding.favorite.setOnClickListener(view -> {
             startCheckAnimation(mBinding.favorite);
             checkFavorites(!(mBinding.favorite.getProgress() == 0f), model.getCurrentRecipe().getId());
         });
 
-        mBinding.bookmark.setOnClickListener(view -> startCheckAnimation(mBinding.bookmark));
+        mBinding.bookmark.setOnClickListener(view -> {
+            checkSavedRecipes(!(mBinding.bookmark.getProgress() == 0f), model.getCurrentRecipe());
+            startCheckAnimation(mBinding.bookmark);
+        });
+    }
+
+    private void checkSavedRecipes(boolean isAlreadyInset, Recipe recipe) {
+        //RelationRecipeTypeDao dao = getDatabase(getContext()).getRelationRecipeTypeDao();
+        if (!isAlreadyInset) {
+            //dao.insert(new RelationRecipeType(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK));
+            RecipeUtils.saveToDatabase(recipe, (ControllableActivity) getActivity(), false, null, Utils.TYPE.TYPE_BOOKMARK, true);
+        } else {
+            //dao.delete(new RelationRecipeType(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK));
+            RecipeUtils.deleteBookmarkFromDatabase(recipe, (ControllableActivity) getActivity(), false);
+        }
     }
 
     private void checkFavorites(boolean isAlreadyInset, String id) {

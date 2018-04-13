@@ -37,6 +37,8 @@
 
         <activity android:name=".view.SettingsActivity"/>
 
+        <activity android:name=".view.ShoppingListActivity"/>
+
     </application>
 
 </manifest>

@@ -11,6 +11,8 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemRecipeBinding;
 import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.model.RecipePrev;
+import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import java.util.List;
@@ -43,7 +45,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         Glide.with(activity).load(recipe.getImageUrl()).transition(withCrossFade()).into(holderBinding.recipeImg);
         holderBinding.listItem.setOnClickListener(v -> {
             if (recipe.isFromYummly()) {
-                activity.openRecipe(recipe.getId());
+                List<String> ids = AppDatabase.getDatabase(activity).getRelationRecipeTypeDao().getRecipesById(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK);
+                if (ids.size() != 0) {
+                    activity.openRecipeFromDB(recipe.getId());
+                } else {
+                    activity.openRecipe(recipe.getId());
+                }
             } else {
                 if (false) {
                     activity.openRecipeFromDB(recipe.getId());

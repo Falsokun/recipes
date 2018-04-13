@@ -1,35 +1,18 @@
 package com.hotger.recipes.viewmodel;
 
-import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.hotger.recipes.App;
 import com.hotger.recipes.R;
-import com.hotger.recipes.database.RelationCategoryRecipe;
-import com.hotger.recipes.database.RelationRecipeType;
-import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.model.Category;
-import com.hotger.recipes.model.GsonModel.Image;
-import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
-import com.hotger.recipes.model.RecipePrev;
-import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.RecipeUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 import com.shawnlin.numberpicker.NumberPicker;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class RedactorViewModel extends ViewModel {
 
@@ -86,7 +69,7 @@ public class RedactorViewModel extends ViewModel {
             return;
         }
 
-        saveToDatabase(activity);
+        RecipeUtils.saveToDatabase(currentRecipe, activity, true, categoryTitles, Utils.TYPE.TYPE_MY_RECIPES, false);
     }
 
     public boolean isDataCorrect(ViewPager viewPager) {
@@ -121,73 +104,6 @@ public class RedactorViewModel extends ViewModel {
     @Override
     public void OnPause() {
 
-    }
-
-    public void saveToDatabase(ControllableActivity activity) {
-        if (currentRecipe.getImageURL() == null) {
-            currentRecipe.setImageURL(FirebaseUtils.NO_IMAGE_URL);
-        }
-
-        AppDatabase db = AppDatabase.getDatabase(activity);
-        saveImageToCloudFirebase(currentRecipe.getRecipe().getImageUrl());
-        if (currentRecipe.getId() == null) {
-            currentRecipe.setId(currentRecipe.getName() + UUID.randomUUID().toString());
-        }
-
-        db.getRecipeDao().insert(currentRecipe.getRecipe());
-        for(Product product : currentRecipe.getProducts()) {
-            product.setRecipeId(currentRecipe.getId());
-        }
-
-        if (Utils.isRussian()) {
-            currentRecipe.setLang("ru");
-        }
-
-        db.getRelationRecipeTypeDao().insert(new RelationRecipeType(currentRecipe.getId(), Utils.TYPE.TYPE_MY_RECIPES));
-        List<RelationCategoryRecipe> relations = createRelationTable(db);
-        db.getProductDao().insert(currentRecipe.getProducts());
-        RecipePrev prev = new RecipePrev(currentRecipe.getId(),
-                new Image(currentRecipe.getRecipe().getImageUrl()),
-                currentRecipe.getName(),
-                currentRecipe.getRecipe().getTotalTimeInSeconds(),
-                false);
-        db.getRecipePrevDao().insert(prev);
-
-        if (true) {
-            FirebaseUtils.saveRecipeToFirebase(currentRecipe, relations, prev);
-        }
-    }
-
-    private List<RelationCategoryRecipe> createRelationTable(AppDatabase db) {
-        List<RelationCategoryRecipe> categoryRelations = new ArrayList<>();
-        db.getRelationCategoryRecipeDao().deleteAllWithId(currentRecipe.getId());
-        for (String category : categoryTitles) {
-            String catId = db.getCategoryDao().getCategoryByName(category).get(0).getSearchValue();
-            RelationCategoryRecipe relation = new RelationCategoryRecipe(currentRecipe.getId(), catId);
-            db.getRelationCategoryRecipeDao().insert(relation);
-            categoryRelations.add(relation);
-        }
-
-        return categoryRelations;
-    }
-
-    private void saveImageToCloudFirebase(String path) {
-        String name = Utils.FIREBASE_IMG_STORAGE + path.split("/")[path.split("/").length - 1];
-        StorageReference storageRef = App.getStorage().getReference();
-        StorageReference mountainsRef = storageRef.child(name);
-        try {
-            InputStream stream = new FileInputStream(new File(path));
-            UploadTask uploadTask = mountainsRef.putStream(stream);
-            uploadTask.addOnFailureListener(exception -> {
-                // Handle unsuccessful uploads
-            }).addOnSuccessListener(taskSnapshot -> {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                currentRecipe.setImageURL(downloadUrl.toString());
-            });
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     //region getters setters
