@@ -12,7 +12,7 @@ import java.util.List;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface ProductDao {
+public interface ProductDao extends BaseDao<Product> {
     @Insert(onConflict = REPLACE)
     void insertAll(List<Product> products);
 

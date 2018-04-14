@@ -44,7 +44,7 @@ public class FridgeFragment extends BackStackFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_fridge, container, false);
-        inputModel = new InputProductsViewModel((ControllableActivity) getActivity(), new ArrayList<>(), true, false);
+        inputModel = new InputProductsViewModel((ControllableActivity) getActivity(), new ArrayList<>(), true, false, false);
         mBinding.setModel(inputModel);
         mBinding.fragmentRedactor.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.fragmentRedactor.productsLineRv.setAdapter(inputModel.getProductsAdapter());

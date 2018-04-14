@@ -25,7 +25,7 @@ public class ShoppingListActivity extends ControllableActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_shopping_list);
-        inputModel = new InputProductsViewModel(this, new ArrayList<>(), true, false);
+        inputModel = new InputProductsViewModel(this, new ArrayList<>(), true, false, true);
         mBinding.setModel(inputModel);
         mBinding.fragmentRedactor.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.fragmentRedactor.productsLineRv.setAdapter(inputModel.getProductsAdapter());

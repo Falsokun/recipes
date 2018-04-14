@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -24,6 +25,7 @@ import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_ID;
@@ -44,7 +46,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private boolean isDetailed;
 
-    private InputProductsViewModel model;
+    private boolean isShoppingList;
 
     /**
      * All selected products
@@ -52,11 +54,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     private List<Product> data; //TODO записывать сразу в текущий рецепт
 
     public ProductsAdapter(ControllableActivity context, List<Product> data, boolean isEditable,
-                           boolean isDetailed) {
+                           boolean isDetailed, boolean isShoppingList) {
         this.activity = context;
         this.data = data;
         this.isEditable = isEditable;
         this.isDetailed = isDetailed;
+        this.isShoppingList = isShoppingList;
     }
 
     @Override
@@ -75,8 +78,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()));
         holder.binding.lottieAnim.setOnClickListener(view -> {
             checkAnimStatus(holder.binding.lottieAnim, productLine);
-            animateView(holder.binding.lottieAnim);
+            animateView(holder.binding.lottieAnim, true, 0f, 0.5f);
         });
+
+        if (isShoppingList) {
+            holder.binding.checkAnim.setAnimation(R.raw.check_animation);
+            holder.binding.checkAnim.setVisibility(View.VISIBLE);
+            holder.binding.checkAnim.setOnClickListener(view -> {
+                animateView(holder.binding.checkAnim, false, 0f, 1f);
+                holder.binding.checkAnim.setEnabled(false);
+                Collections.swap(data, position, data.size() - 1);
+                notifyItemMoved(position, data.size() - 1);
+            });
+        }
     }
 
     private void checkAnimStatus(LottieAnimationView animationView, Product product) {
@@ -88,24 +102,32 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     public void saveItemToList(ControllableActivity activity, String shoppingListId, Product product) {
-        List<Product> products = new ArrayList<>();
-        products.add(product);
-        product.setRecipeId(shoppingListId);
+        if (AppDatabase.getDatabase(activity).getRecipeDao().getRecipesById(shoppingListId).size() == 0) {
+            RecipeNF recipeNF = new RecipeNF();
+            recipeNF.setId(shoppingListId);
+            AppDatabase.getDatabase(activity).getRecipeDao().insert(recipeNF);
+        }
 
-        RecipeNF recipeNF = new RecipeNF();
-        recipeNF.setId(shoppingListId);
-        AppDatabase.getDatabase(activity).getRecipeDao().insert(recipeNF);
-        AppDatabase.getDatabase(activity).getProductDao().insert(products);
+        product.setRecipeId(shoppingListId);
+        AppDatabase.getDatabase(activity).getProductDao().insert(product);
     }
 
     public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
         AppDatabase.getDatabase(activity).getProductDao().delete(product);
     }
 
-    private void animateView(LottieAnimationView animationView) {
-        float start = animationView.getProgress() == 0f || animationView.getProgress() == 1f ? 0f : 0.5f;
-        float end = start == 0f ? 0.5f : 1f;
-        ValueAnimator animator = ValueAnimator.ofFloat(start, end).setDuration(1000);
+    private void animateView(LottieAnimationView animationView, boolean shouldCalculate, float start, float end) {
+        float anim_start;
+        float anim_end;
+        if (shouldCalculate) {
+            anim_start = animationView.getProgress() == 0f || animationView.getProgress() == 1f ? start : end;
+            anim_end = anim_start == 0f ? end : 1f;
+        } else {
+            anim_start = start;
+            anim_end = end;
+        }
+
+        ValueAnimator animator = ValueAnimator.ofFloat(anim_start, anim_end).setDuration(1000);
         animator.addUpdateListener(valueAnimator -> animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
         animator.start();
     }
@@ -197,7 +219,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
             binding = DataBindingUtil.bind(itemView);
             binding.setIsDetailed(isDetailed);
-            binding.setIsEditable(ProductsAdapter.this.isEditable);
+            binding.setIsEditable(isEditable);
+
             if (isEditable) {
                 View.OnClickListener listener = view -> {
                     double temp = Double.parseDouble(binding.finalAmount.getText().toString());

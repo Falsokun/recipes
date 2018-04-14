@@ -30,14 +30,14 @@ public class RedactorViewModel extends ViewModel {
         this.activity = activity;
         currentRecipe = new Recipe();
         isEdited = false;
-        inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true);
+        inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true, false);
     }
 
     public RedactorViewModel(ControllableActivity activity, String id) {
         this.activity = activity;
         currentRecipe = activity.getRecipeFromDBByID(id);
         isEdited = false;
-        inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true);
+        inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true, false);
         for(Category category : currentRecipe.getCategories()) {
             categoryTitles.add(category.getTitle());
         }

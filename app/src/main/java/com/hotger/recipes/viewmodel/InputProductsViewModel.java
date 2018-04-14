@@ -35,10 +35,10 @@ public class InputProductsViewModel extends ViewModel {
     private ControllableActivity activity;
     private String productName;
 
-    public InputProductsViewModel(ControllableActivity activity, List<Product> products, boolean isEditable, boolean isDetailed) {
+    public InputProductsViewModel(ControllableActivity activity, List<Product> products, boolean isEditable, boolean isDetailed, boolean isShoppingList) {
         this.products = products;
         this.activity = activity;
-        productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed);
+        productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed, isShoppingList);
         dataHintAdapter = new DataHintAdapter(activity, R.layout.item_list, AppDatabase.getDatabase(activity), "en");
     }
 

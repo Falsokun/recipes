@@ -99,10 +99,22 @@
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:scaleX="0.5"
+                app:lottie_rawRes="@raw/attach_animation"
                 app:lottie_colorFilter="@color/colorPrimaryDark"
                 android:scaleY="0.5"
-                android:visibility="@{isDetailed &amp;&amp; !isEditable ? View.VISIBLE : View.GONE}"
-                app:lottie_rawRes="@raw/attach_animation" />
+                android:visibility="@{isDetailed &amp;&amp; !isEditable ? View.VISIBLE : View.GONE}" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/check_anim"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:scaleX="0.5"
+                app:lottie_rawRes="@raw/check_animation"
+                app:lottie_colorFilter="@color/colorPrimaryDark"
+                android:scaleY="0.5"
+                android:background="@drawable/back"
+                android:visibility="gone" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>

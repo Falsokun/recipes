@@ -148,15 +148,15 @@ public class FirebaseUtils {
                                             RecipePrev prev) {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         db.getReference().child(RECIPES_REF).push().setValue(recipe.getRecipe());
-        DatabaseReference productsRef = db.getReference().child(PRODUCTS_REF).push();
-        DatabaseReference categoryRef = db.getReference().child(CATEGORIES_REF).push();
+        DatabaseReference productsRef = db.getReference().child(PRODUCTS_REF);
+        DatabaseReference categoryRef = db.getReference().child(CATEGORIES_REF);
         db.getReference().child(PREVIEW_REF).push().setValue(prev);
         for (Product p : recipe.getProducts()) {
-            productsRef.setValue(p);
+            productsRef.push().setValue(p);
         }
 
         for (RelationCategoryRecipe rel : relations) {
-            categoryRef.setValue(rel);
+            categoryRef.push().setValue(rel);
         }
     }
 
@@ -174,8 +174,8 @@ public class FirebaseUtils {
                     recipe = shot.getValue(Recipe.class);
                 }
 
-                db.child(CATEGORIES_REF).orderByChild(id).addValueEventListener(getValueListener(new RelationCategoryRecipe(), activity));
-                db.child(PRODUCTS_REF).orderByChild(id).addValueEventListener(getValueListener(new Product(), activity));
+                db.child(CATEGORIES_REF).orderByChild("recipeId").equalTo(id).addValueEventListener(getValueListener(new RelationCategoryRecipe(), activity));
+                db.child(PRODUCTS_REF).orderByChild("recipeId").equalTo(id).addValueEventListener(getValueListener(new Product(), activity));
 
                 Intent intent = new Intent(Utils.RECIPE_OBJ);
                 intent.putExtra(Utils.RECIPE_OBJ, recipe);
