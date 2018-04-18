@@ -51,8 +51,8 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         mBinding.prepTime.setText(timeFormatter(min / 60, min % 60));
         min = mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes();
         mBinding.cookingTime.setText(timeFormatter(min / 60, min % 60));
-        mBinding.prepTime.setOnClickListener(v -> openTimePicker(mRedactorModel.getCurrentRecipe().getPrepTimeMinutes(), PREP_TAG));
-        mBinding.cookingTime.setOnClickListener(v -> openTimePicker(mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes(), COOKING_TAG));
+        mBinding.prepContainer.setOnClickListener(v -> openTimePicker(mRedactorModel.getCurrentRecipe().getPrepTimeMinutes(), PREP_TAG));
+        mBinding.cookingTimeContainer.setOnClickListener(v -> openTimePicker(mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes(), COOKING_TAG));
         mBinding.photoSrcBtn.setOnClickListener(v -> chooseImage());
         return mBinding.getRoot();
     }
@@ -68,7 +68,6 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         dialog.show(getActivity().getFragmentManager(), tag);
     }
 
-    //????
     @SuppressLint("ResourceType")
     private void chooseImage() {
         ArrayList<Image> images = new ArrayList<>();

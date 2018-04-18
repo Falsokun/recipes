@@ -42,7 +42,6 @@ public class Product implements Serializable {
      * Measure of product
      */
     private String measure;
-
     @Ignore
     public Product() {
     }
@@ -164,4 +163,6 @@ public class Product implements Serializable {
 
         return ingredientId;
     }
+
+    public static get
 }

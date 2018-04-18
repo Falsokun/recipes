@@ -19,4 +19,7 @@ public interface RecipePrevDao extends BaseDao<RecipePrev> {
 
     @Transaction @Query("SELECT * FROM recipeprev")
     List<RecipePrev> getAll();
+
+    @Transaction @Query("SELECT * FROM recipeprev WHERE id = :recipeId")
+    List<RecipePrev> find(String recipeId);
 }

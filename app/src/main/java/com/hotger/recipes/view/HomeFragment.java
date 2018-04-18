@@ -12,11 +12,15 @@ import android.widget.Toast;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentHomeBinding;
+import com.hotger.recipes.model.Ingredient;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.TranslateAPI;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,18 +41,8 @@ public class HomeFragment extends BackStackFragment {
     }
 
     public void test() {
-        String text = "sample text";
-        Call<TranslateResponse> call = App.getTranslateApi().translate(text, TranslateAPI.EN_RU);
-        call.enqueue(new Callback<TranslateResponse>() {
-            @Override
-            public void onResponse(Call<TranslateResponse> call, Response<TranslateResponse> response) {
-                //Toast.makeText(mBinding.getRoot().getContext(), response.body().text.get(0), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<TranslateResponse> call, Throwable t) {
-
-            }
-        });
+        AppDatabase db = AppDatabase.getDatabase(getContext());
+        List<Ingredient> list = db.getIngredientDao().getIngredientLike("1/2 milk");
+        String s = list.get(0).getEn();
     }
 }

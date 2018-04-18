@@ -14,25 +14,27 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        android:background="@android:color/white">
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <EditText
-            android:layout_below="@+id/toolbar"
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginLeft="@dimen/padding_dimen"
+            android:layout_marginRight="@dimen/padding_dimen"
             android:backgroundTint="@color/colorPrimaryDark"
             android:hint="@string/write_name"
             android:inputType="text"
@@ -41,20 +43,42 @@
             android:textColor="@color/colorText"
             android:textColorHint="@color/colorHint" />
 
-        <ProgressBar
-            android:id="@+id/redactor_progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        <FrameLayout
+            android:id="@+id/progress_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/name"
-            android:max="100" />
+            android:layout_below="@id/name">
+
+            <ProgressBar
+                android:id="@+id/redactor_progress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:max="100"
+                android:scaleY="6"
+                android:theme="@style/LinearProgress"
+                android:paddingLeft="@dimen/padding_dimen"
+                android:paddingRight="@dimen/padding_dimen"
+                android:progress="50" />
+
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="Step 1 / 1"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText" />
+
+        </FrameLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/recipe_vp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/btn_save"
-            android:layout_below="@id/redactor_progress"
+            android:layout_below="@id/progress_container"
             android:elevation="4dp"
             android:layout="@id/redactor_progress" />
 

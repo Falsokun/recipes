@@ -62,6 +62,9 @@
     <string name="random_recipe">Show random recipe</string>
     <string name="my_favs">My favorites</string>
     <string name="user_recipe">User recipes</string>
+    <string name="max_cooking_time">Choose max cooking time</string>
+    <string name="step">Step</string>
+    <string name="recipe_name">Recipe name</string>
 
     <string-array name="measures_array">
         <item></item>

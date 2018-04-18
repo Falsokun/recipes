@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,13 +22,12 @@ import android.view.ViewGroup;
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.database.RelationCategoryRecipe;
-import com.hotger.recipes.database.RelationObj;
 import com.hotger.recipes.database.RelationRecipeType;
-import com.hotger.recipes.database.dao.FavoritesDao;
 import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
 import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.model.Category;
+import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
@@ -38,8 +36,11 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 import com.hotger.recipes.viewmodel.RecipeViewModel;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.hotger.recipes.utils.AppDatabase.getDatabase;
 
@@ -49,13 +50,13 @@ public class RecipeFragment extends Fragment {
     private RecipeViewModel model;
     private BroadcastReceiver mMessageReceiver;
     private boolean shouldWait = false;
+    private boolean shouldShowOptions = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = new RecipeViewModel((ControllableActivity) getActivity());
         mMessageReceiver = getRecipeReceiver();
-
         setHasOptionsMenu(true);
     }
 
@@ -66,6 +67,8 @@ public class RecipeFragment extends Fragment {
         mBinding.progress.setVisibility(View.VISIBLE);
         mBinding.container.setVisibility(View.GONE);
         mBinding.setModel(model);
+        mBinding.minus.setOnClickListener(model.getOnClickListener(mBinding.portionsValue, false));
+        mBinding.plus.setOnClickListener(model.getOnClickListener(mBinding.portionsValue, true));
         ((ControllableActivity) getActivity()).updateCollapsing(((ControllableActivity) getActivity()).getAppBar(), true);
         checkForPassingFromDB();
         return mBinding.getRoot();
@@ -75,6 +78,8 @@ public class RecipeFragment extends Fragment {
         if (getArguments() != null && getArguments().getSerializable(Utils.RECIPE_OBJ) != null) {
             model.setCurrentRecipe((Recipe) getArguments().getSerializable(Utils.RECIPE_OBJ));
             setData();
+            shouldShowOptions = true;
+            getActivity().invalidateOptionsMenu();
         }
     }
 
@@ -90,6 +95,7 @@ public class RecipeFragment extends Fragment {
         initHotButtons();
         model.addCategories(mBinding.categoryContainer);
         ((ControllableActivity) getActivity()).setToolbarImage(model.getCurrentRecipe().getImageURL());
+        mBinding.portionsValue.setText(model.getCurrentRecipe().getStringPortions());
         mBinding.progress.setVisibility(View.GONE);
         mBinding.container.setVisibility(View.VISIBLE);
 //        ((ControllableActivity) getActivity()).updateTitle(model.getCurrentRecipe().getName());
@@ -97,11 +103,11 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        if (getArguments() != null
-                && getArguments().getSerializable(Utils.RECIPE_OBJ) != null) {
+        if (shouldShowOptions) {
             inflater.inflate(R.menu.menu_fragment, menu);
         }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -211,6 +217,47 @@ public class RecipeFragment extends Fragment {
         super.onPause();
     }
 
+    public void prepareProducts(Recipe recipe) {
+        AppDatabase db = AppDatabase.getDatabase(getContext());
+        Product p;
+        for (String string : recipe.getIngredientLines()) {
+            p = new Product();
+            List<Ingredient> list = db.getIngredientDao().getIngredientLike(string);
+            if (list.size() == 0)
+                continue;
+            p.setIngredientId(list.get(0).getEn());
+            p.setAmount(getIngredientsAmount(string));
+            recipe.getProducts().add(p);
+        }
+    }
+
+    public double getIngredientsAmount(String line) {
+        line = line.toLowerCase();
+        line = line.replaceAll("^(,| )+", "");
+        Pattern p = Pattern.compile("((?:\\d+ )?\\d+(?:(?:,|.|/)\\d+)?)");
+        Matcher m = p.matcher(line);
+        if (!m.find()) {
+            return 0;
+        }
+
+        String amount = m.group(1);
+        if (amount.contains(" ")) {
+            return
+        }
+        if (amount.contains("/")) {
+            DecimalFormat df = new DecimalFormat("#.##");
+            double d = Double.valueOf(amount.split("/")[0]) / Double.valueOf(amount.split("/")[1]);
+            return Double.valueOf(df.format(d));
+        }
+
+        if (amount.contains(",")) {
+            String temp = amount.replace(",", ".");
+            return Double.valueOf(temp);
+        }
+
+        return Double.parseDouble(amount);
+    }
+
     public BroadcastReceiver getRecipeReceiver() {
         return new BroadcastReceiver() {
             @Override
@@ -220,6 +267,7 @@ public class RecipeFragment extends Fragment {
                         Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.RECIPE_OBJ);
                         model.setCurrentRecipe(recipe);
                         if (!intent.getBooleanExtra(FirebaseUtils.RECIPES_REF, false)) {
+                            prepareProducts(recipe);
                             setData();
                         } else {
                             shouldWait = true;

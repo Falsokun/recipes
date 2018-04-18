@@ -77,6 +77,17 @@ public class SearchActivity extends ControllableActivity {
         mBinding.filterBtn.setOnClickListener(v -> slideAnimation(mBinding.filter.filterContainer));
         mBinding.filter.rangebar.setOnRangeBarChangeListener((rangeBar, leftPinIndex, rightPinIndex, leftPinValue, rightPinValue) -> {
             model.setTimeInMinutes(rightPinValue);
+            if (mBinding.filter.checkbox.isChecked()) {
+                mBinding.filter.checkbox.setText(rightPinValue);
+            }
+        });
+
+        mBinding.filter.checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                buttonView.setText(mBinding.filter.rangebar.getRightPinValue());
+            } else {
+                buttonView.setText("");
+            }
         });
         mBinding.searchView.setIconified(true);
         mBinding.searchView.onActionViewExpanded();
@@ -145,10 +156,24 @@ public class SearchActivity extends ControllableActivity {
 
         spinner.setItems(categories);
         spinner.setOnItemSelectedListener((view, position, id, item) -> {
-            List<String> items = spinner.getItems();
-            items.remove(getString(R.string.nothing_selected));
-            spinner.setItems(items);
-            addCategory(categories.get(position), selected);
+            if (!categories.get(position).equals(getString(R.string.nothing_selected))) {
+                addCategory(categories.get(position), selected);
+            } else {
+               int childCount = mBinding.filter.flowLo.getChildCount();
+               for (int i = 0; i < childCount; i++) {
+                   TableRow checkbox = (TableRow) mBinding.filter.flowLo.getChildAt(i);
+                   if (checkbox == null)
+                       continue;
+                   if (categories.contains(checkbox.getTag())) {
+                       if (mBinding.filter.flowLo.getChildCount() != 1) {
+                           ((ViewGroup) checkbox.getParent()).removeView(checkbox);
+                           selected.remove(checkbox.getTag());
+                       } else {
+                           mBinding.filter.flowLo.removeAllViews();
+                       }
+                   }
+               }
+            }
         });
     }
 
@@ -158,6 +183,7 @@ public class SearchActivity extends ControllableActivity {
         }
 
         TableRow row = new TableRow(this);
+        row.setTag(category);
         row.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         row.setPadding(16, 16, 16, 16);
@@ -187,15 +213,14 @@ public class SearchActivity extends ControllableActivity {
     public void prepareSearchingAndStart() {
         cardAdapter.clearData();
         mBinding.progress.setVisibility(View.VISIBLE);
-//        mBinding.searchView.clearFocus();
-        searchRecipe("");
+        searchRecipe();
         if (mBinding.filter.filterContainer.getVisibility() == View.VISIBLE) {
             slideAnimation(mBinding.filter.filterContainer);
         }
     }
 
-    public void searchRecipe(String query) {
-        String searchValue = YummlyAPI.SEARCH + model.getSearchValue();
+    public void searchRecipe() {
+        String searchValue = YummlyAPI.SEARCH + model.getSearchValue(mBinding.filter.checkbox.isChecked());
         App.getApi()
                 .search(searchValue)
                 .enqueue(new Callback<ResponseRecipeAPI>() {

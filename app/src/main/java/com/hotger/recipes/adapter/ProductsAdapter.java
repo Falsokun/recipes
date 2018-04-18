@@ -53,6 +53,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
      */
     private List<Product> data; //TODO записывать сразу в текущий рецепт
 
+    private double koeff = 1;
+
     public ProductsAdapter(ControllableActivity context, List<Product> data, boolean isEditable,
                            boolean isDetailed, boolean isShoppingList) {
         this.activity = context;
@@ -75,7 +77,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Drawable drawable = getAmountDrawable(productLine.getDrawableByMeasure(), activity);
         holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()));
+        holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()* koeff));
+        if (holder.binding.getIsDetailed() && productLine.getAmount() == 0) {
+            holder.binding.setIsDetailed(false);
+        }
+
         holder.binding.lottieAnim.setOnClickListener(view -> {
             checkAnimStatus(holder.binding.lottieAnim, productLine);
             animateView(holder.binding.lottieAnim, true, 0f, 0.5f);
@@ -203,6 +209,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     public void setData(List<Product> shots) {
         data = shots;
+        notifyDataSetChanged();
+    }
+
+    public void setKoeff(double koeff) {
+        this.koeff = koeff;
         notifyDataSetChanged();
     }
 

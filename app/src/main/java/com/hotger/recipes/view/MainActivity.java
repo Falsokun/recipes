@@ -1,30 +1,30 @@
 package com.hotger.recipes.view;
 
-import android.arch.persistence.room.Room;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
-import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 //TODO: короче, наверное нужно запустить так: при запуске открывается куча потоков которые получают данные из апишки и грузят их в бд
 //TODO: а при переключении между всем просто подгружаются данные из бд
@@ -34,6 +34,9 @@ public class MainActivity extends ControllableActivity {
 
     ActivityMainBinding mBinding;
     ViewPagerAdapter adapter;
+    BroadcastReceiver mMessageReceiver;
+
+    private String idToOpen;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +50,9 @@ public class MainActivity extends ControllableActivity {
         mBinding.viewPager.setOffscreenPageLimit(3); //to keep fragments in memory
         Utils.disableShiftMode(mBinding.bottomNavigation);
         updateCollapsing(mBinding.appbar, false);
+        mMessageReceiver = getRecipeReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(Utils.RECIPE_ID));
     }
 
     public void setListeners() {
@@ -179,6 +185,42 @@ public class MainActivity extends ControllableActivity {
     private void openRedactorFraqment(Context context) {
         Intent intent = new Intent(context, RedactorActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
+    public BroadcastReceiver getRecipeReceiver() {
+        return new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(Utils.RECIPE_ID)) {
+                    Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.RECIPE_ID);
+                    idToOpen = recipe.getId();
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        openRecipeIfNeeded();
+    }
+
+    public void openRecipeIfNeeded() {
+        if (idToOpen == null)
+            return;
+        mBinding.bottomNavigation.setSelectedItemId(R.id.menu_profile);
+        ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+                "Loading. Please wait...", true);
+        dialog.show();
+        openRecipeFromDB(idToOpen);
+        dialog.cancel();
+        idToOpen = null;
     }
 }
 

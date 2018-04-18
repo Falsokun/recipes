@@ -18,6 +18,7 @@ import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.RelationCategoryRecipe;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.model.Ingredient;
@@ -169,10 +170,12 @@ public class FirebaseUtils {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Recipe recipe = null;
+                RecipeNF recipenf = null;
                 for (DataSnapshot shot : dataSnapshot.getChildren()) {
-                    recipe = shot.getValue(Recipe.class);
+                    recipenf = shot.getValue(RecipeNF.class);
                 }
+
+                Recipe recipe = new Recipe(recipenf);
 
                 db.child(CATEGORIES_REF).orderByChild("recipeId").equalTo(id).addValueEventListener(getValueListener(new RelationCategoryRecipe(), activity));
                 db.child(PRODUCTS_REF).orderByChild("recipeId").equalTo(id).addValueEventListener(getValueListener(new Product(), activity));

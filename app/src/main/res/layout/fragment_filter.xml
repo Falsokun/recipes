@@ -48,34 +48,36 @@
             app:ms_text_color="@color/colorPrimaryLight" />
 
         <RelativeLayout
-            android:padding="@dimen/padding_dimen"
-            android:layout_below="@id/diet_sp"
+            android:id="@+id/cooking_time_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/diet_sp"
+            android:paddingLeft="@dimen/padding_dimen"
+            android:paddingRight="@dimen/padding_dimen"
+            android:paddingTop="@dimen/padding_dimen">
 
             <TextView
                 android:id="@+id/result"
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cooking_time" />
+                android:layout_centerVertical="true"
+                android:text="@string/max_cooking_time" />
 
             <CheckBox
-                android:checked="true"
+                android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:focusable="true"
-                android:clickable="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:button="@null"
+                android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
         </RelativeLayout>
 
         <com.appyvet.materialrangebar.RangeBar
             android:id="@+id/rangebar"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_below="@id/diet_sp"
-            android:layout_marginTop="@dimen/padding_dimen"
+            android:layout_height="80dp"
+            android:layout_below="@id/cooking_time_title"
             app:mrb_connectingLineColor="@color/colorPrimaryLight"
             app:mrb_pinColor="@color/colorPrimaryLight"
             app:mrb_rangeBar="false"

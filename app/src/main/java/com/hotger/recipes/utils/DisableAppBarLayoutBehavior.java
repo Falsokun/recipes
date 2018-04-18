@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class DisableAppBarLayoutBehavior extends AppBarLayout.Behavior {
@@ -50,6 +51,11 @@ public class DisableAppBarLayoutBehavior extends AppBarLayout.Behavior {
     @Override
     public boolean onNestedPreFling(@NonNull CoordinatorLayout coordinatorLayout, @NonNull AppBarLayout child, @NonNull View target, float velocityX, float velocityY) {
         return super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY);
+    }
+
+    @Override
+    public boolean onTouchEvent(CoordinatorLayout parent, AppBarLayout child, MotionEvent ev) {
+        return mEnabled && super.onTouchEvent(parent, child, ev);
     }
 
     public boolean isEnabled() {

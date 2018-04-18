@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@IgnoreExtraProperties
 public class Recipe implements Serializable {
 
     @Embedded
@@ -73,12 +74,6 @@ public class Recipe implements Serializable {
         this.recipe = recipe;
     }
 
-    public void prepareDataForShowing(ControllableActivity activity) {
-        for (String ingredientLine : recipe.getIngredientLines()) {
-            products.add(Product.getProductByLine(ingredientLine, activity));
-        }
-    }
-
     //region simplier life
     public String getName() {
         return recipe.getName();
@@ -121,10 +116,12 @@ public class Recipe implements Serializable {
         recipe.setPreparations(preparations);
     }
 
+    @Ignore
     public int getCookingTimeInMinutes() {
         return recipe.getCookTimeInMinutes();
     }
 
+    @Ignore
     public int getPrepTimeMinutes() {
         return recipe.getPrepTimeInMinutes();
     }
@@ -135,6 +132,14 @@ public class Recipe implements Serializable {
 
     public void setPrepTimeInMinutes(int prepTimeInMin) {
         recipe.setPrepTimeInSeconds(prepTimeInMin * 60);
+    }
+
+    public void setCookTimeInSeconds(int cookTimeInSeconds) {
+        recipe.setCookTimeInSeconds(cookTimeInSeconds);
+    }
+
+    public void setPrepTimeInSeconds(int prepTimeInSeconds) {
+        recipe.setPrepTimeInSeconds(prepTimeInSeconds);
     }
 
     public int getTotalTimeInMinutes() {

@@ -48,8 +48,8 @@
     <string name="add_image">Добавить картинку</string>
     <string name="min">мин.</string>
     <string name="hour">ч.</string>
-    <string name="total_time">Общее время</string>
-    <string name="prep_time">Время подготовок</string>
+    <string name="total_time">"Общее время"</string>
+    <string name="prep_time">Время\nподготовок</string>
     <string name="delete">Удалить</string>
     <string name="turn_on_translations_to_russian">Включить перевод на русский</string>
     <string name="publish_my_recipes">Публиковать мои рецепты</string>

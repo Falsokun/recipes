@@ -29,15 +29,16 @@ public class SearchViewModel extends BaseObservable {
         this.db = db;
     }
 
-    public String getSearchValue() {
+    public String getSearchValue(boolean shouldCheckTime) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getCategoryString(YummlyAPI.ALLOWED_COURSE, course, YummlyAPI.Description.COURSE));
         stringBuilder.append(getCategoryString(YummlyAPI.ALLOWED_CUISINE_PARAM, cuisines, YummlyAPI.Description.CUISINE));
         stringBuilder.append(getCategoryString(YummlyAPI.ALLOWED_DIET_PARAM, diets, YummlyAPI.Description.DIET));
         stringBuilder.append("&maxResult=" + YummlyAPI.MAX_RESULT);
-        if (timeInMinutes != 0) {
+        if (shouldCheckTime && timeInMinutes != 0) {
             stringBuilder.append("&maxTotalTimeInSeconds" + timeInMinutes * 60);
         }
+
         stringBuilder.replace(0, 1, "");
         return stringBuilder.toString();
     }

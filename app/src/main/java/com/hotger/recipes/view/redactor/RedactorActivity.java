@@ -1,11 +1,13 @@
 package com.hotger.recipes.view.redactor;
 
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 
@@ -57,8 +59,13 @@ public class RedactorActivity extends ControllableActivity {
                     .equals(getResources().getString(R.string.next))) {
                 mBinding.recipeVp.setCurrentItem(mBinding.recipeVp.getCurrentItem() + 1);
             } else {
-                mRedactorModel.onSave(mBinding.recipeVp);
-                onBackPressed();
+                boolean result = mRedactorModel.onSave(mBinding.recipeVp);
+                if (result) {
+                    onBackPressed();
+                    Intent intent = new Intent(Utils.RECIPE_ID);
+                    intent.putExtra(Utils.RECIPE_ID, mRedactorModel.getCurrentRecipe());
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                }
             }
         });
     }
@@ -128,6 +135,9 @@ public class RedactorActivity extends ControllableActivity {
             @Override
             public void onPageSelected(int position) {
                 mBinding.redactorProgress.setProgress(getProgress(position));
+                String progressText = getString(R.string.step) + " " + (position + 1) +
+                        " / " + mRedactorAdapter.getCount();
+                mBinding.progressText.setText(progressText);
                 if (mRedactorAdapter.getCount() == position + 1) {
                     mBinding.btnSave.setText(getResources().getString(R.string.save));
                 } else {

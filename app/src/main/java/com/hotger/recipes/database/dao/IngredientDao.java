@@ -32,4 +32,7 @@ public interface IngredientDao extends BaseDao<Ingredient> {
 
     @Query("SELECT * FROM ingredient WHERE en = :id")
     List<Ingredient> getIngredientById(String id);
+
+    @Query("Select * FROM ingredient WHERE :s LIKE '%' || en || '%'")
+    List<Ingredient> getIngredientLike(String s);
 }

@@ -2,9 +2,11 @@ package com.hotger.recipes.viewmodel;
 
 
 import android.databinding.Bindable;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
@@ -77,6 +79,21 @@ public class RecipeViewModel extends ViewModel {
         } else {
             return hours + " : " + min;
         }
+    }
+
+    public View.OnClickListener getOnClickListener(TextView textView, boolean isPlus) {
+        return v -> {
+            int sign = isPlus ? 1 : -1;
+            if (isPlus) {
+                int portions = mCurrentRecipe.getNumberOfServings();
+                int currentPortions = Integer.valueOf(textView.getText().toString()) + sign;
+                if (currentPortions == 0)
+                    return;
+
+                textView.setText(String.valueOf(currentPortions));
+                productsAdapter.setKoeff(currentPortions / portions);
+            }
+        };
     }
 
     public void deleteRecipeFromDatabase(ControllableActivity activity, String recipeId) {

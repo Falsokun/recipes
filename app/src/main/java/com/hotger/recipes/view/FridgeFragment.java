@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
@@ -68,19 +69,25 @@ public class FridgeFragment extends BackStackFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mBinding.fragmentRedactor.inputProducts.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onStop() {
         inputModel.saveListData(getContext(), FridgeFragment.ID);
         super.onStop();
     }
 
     public void searchForRecipeWithIngridients(List<Product> products) {
+        mBinding.fragmentRedactor.inputProducts.setVisibility(View.GONE);
         mBinding.progress.setVisibility(View.VISIBLE);
         ArrayList<String> ingredients = new ArrayList<>();
         for(Product product : products) {
             ingredients.add(product.getIngredientId());
         }
 
-//        String[] ingredients = {"honey", "sugar"};
         StringBuilder builder = new StringBuilder();
         builder.append(YummlyAPI.SEARCH);
         for (String ingredient : ingredients) {
@@ -98,15 +105,22 @@ public class FridgeFragment extends BackStackFragment {
                                  Fragment fragment = new BackStackFragment();
                                  Bundle bundle = new Bundle();
                                  bundle.putSerializable(Utils.RECIPE_OBJ, response.body());
-                                 bundle.putInt(Utils.EXTRA_NAVIGATION_ID, RecipeListFragment.ID);
-                                 fragment.setArguments(bundle);
-                                 ((ControllableActivity)getActivity()).setCurrentFragment(fragment, true, fragment.getTag());
+                                 if (response.body() != null && response.body().getMatches().size() == 0) {
+                                     Toast.makeText(getContext(), "no matches found", Toast.LENGTH_SHORT).show();
+                                     mBinding.progress.setVisibility(View.VISIBLE);
+                                 } else {
+                                     bundle.putInt(Utils.EXTRA_NAVIGATION_ID, RecipeListFragment.ID);
+                                     fragment.setArguments(bundle);
+                                     ((ControllableActivity) getActivity()).setCurrentFragment(fragment, true, fragment.getTag());
+                                 }
+
                                  mBinding.progress.setVisibility(View.GONE);
                              }
 
                              @Override
                              public void onFailure(Call<ResponseRecipeAPI> call, Throwable t) {
-//                                 Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                                 mBinding.fragmentRedactor.inputProducts.setVisibility(View.VISIBLE);
+                                 mBinding.progress.setVisibility(View.GONE);
                              }
                          }
                 );

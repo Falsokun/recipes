@@ -1,7 +1,9 @@
 package com.hotger.recipes.viewmodel;
 
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hotger.recipes.R;
@@ -64,31 +66,41 @@ public class RedactorViewModel extends ViewModel {
     }
     //endregion
 
-    public void onSave(ViewPager viewPager) {
+    /**
+     * Returns true if data correct
+     * @param viewPager
+     * @return
+     */
+    public boolean onSave(ViewPager viewPager) {
         if (!isDataCorrect(viewPager)) {
-            return;
+            return false;
         }
 
         RecipeUtils.saveToDatabase(currentRecipe, activity, true, categoryTitles, Utils.TYPE.TYPE_MY_RECIPES, false);
+        return true;
     }
 
     public boolean isDataCorrect(ViewPager viewPager) {
+        String errorText = "";
         int errorType = -1;
         if (currentRecipe.getName() == null) {
             Toast.makeText(activity,
-                    activity.getResources().getString(R.string.fill_data) + " name ", Toast.LENGTH_SHORT).show();
+                    activity.getResources().getString(R.string.fill_data) + activity.getString(R.string.recipe_name), Toast.LENGTH_SHORT).show();
             return false;
         } else if (currentRecipe.getProducts().size() == 0) {
+            errorText = activity.getString(R.string.add_products);
             errorType = 0;
         } else if (currentRecipe.getPreparations() == null) {
-            errorType = 1;
+            errorText = activity.getString(R.string.preparations);
+            errorType = 2;
         } else if (currentRecipe.getTotalTimeInMinutes() == 0) {
+            errorText = activity.getString(R.string.total_time);
             errorType = 4;
         }
 
-        if (errorType > -1) {
+        if (errorText.length() != 0) {
             Toast.makeText(activity,
-                    activity.getResources().getString(R.string.fill_data) + errorType, Toast.LENGTH_SHORT).show();
+                    activity.getResources().getString(R.string.fill_data) + errorText, Toast.LENGTH_SHORT).show();
             viewPager.setCurrentItem(errorType);
             return false;
         }

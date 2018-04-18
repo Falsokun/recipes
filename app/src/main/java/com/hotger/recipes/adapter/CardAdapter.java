@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemRecipeBinding;
 import com.hotger.recipes.firebase.FirebaseUtils;
@@ -52,7 +53,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     activity.openRecipe(recipe.getId());
                 }
             } else {
-                if (false) {
+                List<RecipePrev> prev = AppDatabase.getDatabase(activity).getRecipePrevDao().find(recipe.getId());
+                if (prev.size() != 0 && !prev.get(0).isFromYummly()) {
                     activity.openRecipeFromDB(recipe.getId());
                 } else {
                     FirebaseUtils.getRecipeFromFirebase(recipe.getId(), activity);
