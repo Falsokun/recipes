@@ -189,11 +189,12 @@ public class InputProductsViewModel extends ViewModel {
     }
 
     public void restoreListData(Context context, String listId) {
+        List<Product> list = AppDatabase.getDatabase(context)
+                .getProductDao()
+                .getProducts(listId);
         if (getProducts().size() == 0) {
             getProducts()
-                    .addAll(AppDatabase.getDatabase(context)
-                            .getProductDao()
-                            .getProducts(listId));
+                    .addAll(list);
         }
     }
 }

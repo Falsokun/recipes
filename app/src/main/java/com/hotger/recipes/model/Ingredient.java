@@ -5,7 +5,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.Locale;
 
@@ -16,19 +16,16 @@ public class Ingredient {
     @NonNull
     private String en;
     private String ru;
-    private String measure;
 
     @Ignore
     public Ingredient() {
         en = "";
         ru = "";
-        measure = "";
     }
 
-    public Ingredient(@NonNull String en, String ru, String measure) {
+    public Ingredient(@NonNull String en, String ru) {
         this.en = en;
         this.ru = ru;
-        this.measure = measure;
     }
 
     //region Getters and setters
@@ -46,14 +43,6 @@ public class Ingredient {
 
     public void setRu(String ru) {
         this.ru = ru;
-    }
-
-    public String getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(String measure) {
-        this.measure = measure;
     }
 
     @Ignore

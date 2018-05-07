@@ -19,21 +19,13 @@ public interface YummlyAPI {
     int MAX_RESULT = 300;
     String ALLOWED_CUISINE_PARAM = "&allowedCuisine[]=";
     String ALLOWED_DIET_PARAM = "&allowedDiet[]=";
-    String ALLOWED_INGREDIENT_PARAM = "&allowedCuisine[]=";
-    String ALLOWED_ALLERGY = "&allowedAllergy[]=";
     String ALLOWED_COURSE = "&allowedCourse[]=";
-    String EXCLUDED_INGREDIENT_PARAM = "&excludedIngredient[]=";
-    String EXCLUDED_CUISINE_PARAM = "&excludedCuisine[]=";
-    String HOLIDAY_PARAM = "";
-    //еще есть диета
 
-    String[] CATEGORIES = {"Asian, American"};
+    String REC_DIRECTIONS = "RECIPE_DIRECTIONS";
 
-    //recipe/recipe-id?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY
     @GET("/v1/api/recipe/{id}?" + BASE)
     Call<RecipeNF> getRecipeByID(@Path("id") String recipeID);
 
-    //http://api.yummly.com/v1/api/recipes?_app_id=ID&_app_key=KEY&allowedCuisine[]=cuisine^cuisine-american
     @GET("/v1/api/recipes?" + BASE)
     Call<ResponseRecipeAPI> getCategoryList(@Query("allowedCuisine[]") String cuisine, @Query("maxResult") int maxResult);
 
@@ -57,6 +49,5 @@ public interface YummlyAPI {
         public final static String CUISINE = "cuisine";
         public final static String COURSE = "course";
         public final static String DIET = "diet";
-        public final static String NONE = "None";
     }
 }

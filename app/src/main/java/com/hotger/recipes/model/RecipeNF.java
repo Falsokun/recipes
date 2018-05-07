@@ -3,12 +3,12 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.Exclude;
 import com.google.gson.annotations.Expose;
-import com.hotger.recipes.database.ListConverter;
+import com.hotger.recipes.database.ObjConverter;
 import com.hotger.recipes.model.GsonModel.Attributes;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.model.GsonModel.Source;
@@ -48,13 +48,13 @@ public class RecipeNF implements Serializable {
     private int numberOfServings = 1;
 
     @Expose
-    @TypeConverters({ListConverter.class})
+    @TypeConverters({ObjConverter.class})
     private List<Image> images = new ArrayList<>();
 
     @Ignore
     private Attributes attributes = new Attributes();
 
-    @Ignore
+    @TypeConverters({ObjConverter.class})
     private Source source;
 
     private String lang = "en";
@@ -127,7 +127,6 @@ public class RecipeNF implements Serializable {
         this.ingredientLines = ingredientLines;
     }
 
-    @Exclude
     public List<Image> getImages() {
         return images;
     }
@@ -142,6 +141,14 @@ public class RecipeNF implements Serializable {
 
     public void setLang(String lang) {
         this.lang = lang;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    public Source getSource() {
+        return source;
     }
     //endregion
 

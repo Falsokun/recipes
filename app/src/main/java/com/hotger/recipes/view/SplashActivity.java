@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hotger.recipes.R;
 import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
@@ -52,6 +53,8 @@ public class SplashActivity extends AwesomeSplash {
 
     @Override
     public void animationsFinished() {
+        FirebaseUtils.deleteAllDocuments();
+        FirebaseUtils.addCategoriesToFirestore(this);
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "populus-database").allowMainThreadQueries().build();
         if (db.getRecipePrevDao().getAll().size() == 0) {

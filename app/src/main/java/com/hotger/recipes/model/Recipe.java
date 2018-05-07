@@ -3,9 +3,9 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
+import android.databinding.Bindable;
 
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
@@ -114,6 +114,7 @@ public class Recipe implements Serializable {
 
     public void setPreparations(String preparations) {
         recipe.setPreparations(preparations);
+
     }
 
     @Ignore

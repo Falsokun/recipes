@@ -6,6 +6,10 @@ public class Source {
     @Expose
     private String sourceRecipeUrl;
 
+    public Source(String sourceRecipeUrl) {
+        this.sourceRecipeUrl = sourceRecipeUrl;
+    }
+
     public String getSourceRecipeUrl() {
         return sourceRecipeUrl;
     }

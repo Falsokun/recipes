@@ -9,22 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentHomeBinding;
-import com.hotger.recipes.model.Ingredient;
-import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.ResponseRecipeAPI;
-import com.hotger.recipes.utils.TranslateAPI;
-import com.hotger.recipes.utils.YummlyAPI;
+import com.hotger.recipes.utils.ParseUtils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HomeFragment extends BackStackFragment {
 
@@ -41,8 +30,12 @@ public class HomeFragment extends BackStackFragment {
     }
 
     public void test() {
-        AppDatabase db = AppDatabase.getDatabase(getContext());
-        List<Ingredient> list = db.getIngredientDao().getIngredientLike("1/2 milk");
-        String s = list.get(0).getEn();
+        if (mBinding.recipeText.getText().toString().length() == 0) {
+            Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String url = mBinding.recipeText.getText().toString(); //"http://redmond.company/ru/recipes/82/2777/"
+        ParseUtils.parseRecipe(url, getContext(), false);
     }
 }

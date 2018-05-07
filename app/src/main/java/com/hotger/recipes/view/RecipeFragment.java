@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
+import android.util.Rational;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +35,7 @@ import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.RecipeUtils;
 import com.hotger.recipes.utils.Utils;
+import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 import com.hotger.recipes.viewmodel.RecipeViewModel;
 
@@ -98,6 +101,7 @@ public class RecipeFragment extends Fragment {
         mBinding.portionsValue.setText(model.getCurrentRecipe().getStringPortions());
         mBinding.progress.setVisibility(View.GONE);
         mBinding.container.setVisibility(View.VISIBLE);
+        mBinding.recipeSteps.setText(Html.fromHtml(model.getCurrentRecipe().getPreparations()));
 //        ((ControllableActivity) getActivity()).updateTitle(model.getCurrentRecipe().getName());
     }
 
@@ -207,6 +211,7 @@ public class RecipeFragment extends Fragment {
         model.OnResume();
         IntentFilter filter = new IntentFilter(Utils.RECIPE_OBJ);
         filter.addAction(FirebaseUtils.RECIPES_REF);
+        filter.addAction(YummlyAPI.REC_DIRECTIONS);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,
                 filter);
     }
@@ -223,39 +228,140 @@ public class RecipeFragment extends Fragment {
         for (String string : recipe.getIngredientLines()) {
             p = new Product();
             List<Ingredient> list = db.getIngredientDao().getIngredientLike(string);
-            if (list.size() == 0)
-                continue;
-            p.setIngredientId(list.get(0).getEn());
             p.setAmount(getIngredientsAmount(string));
+            if (list.size() == 0) {
+                String id = getClosestToLine(string, getContext());
+                p.setIngredientId(id);
+            } else {
+                p.setIngredientId(list.get(0).getEn());
+            }
+
             recipe.getProducts().add(p);
         }
     }
 
-    public double getIngredientsAmount(String line) {
+    public String getClosestToLine(String productLine, Context context) {
+        int minDistance;
+        List<String> closestIngredients = new ArrayList<>();
+        for (int i = 0; i < productLine.split(" ").length; i++) {
+            closestIngredients.add(getClosestIngredient(productLine.split(" ")[i], context));
+        }
+
+        String s1 = closestIngredients.get(0);
+        minDistance = levenshteinDistance2(productLine, s1);
+        int tempDistance;
+        for (int i = 1; i < productLine.split(" ").length; i++) {
+            String s2 = closestIngredients.get(i);
+            tempDistance = levenshteinDistance2(productLine, s2);
+            if (tempDistance < minDistance) {
+                s1 = s2;
+                minDistance = tempDistance;
+            }
+        }
+
+        return s1;
+    }
+
+    public static String getClosestIngredient(String ingredient, Context context) {
+        AppDatabase db = AppDatabase.getDatabase(context);
+        int tempDistance;
+        int minDistance = -1;
+        String closestIngredient = "";
+        for (int i = 0; i < db.getIngredientDao().getAllIngredients().size() / 500; i++) {
+            List<Ingredient> ingredientList = db.getIngredientDao().getIngredientRange(i * 500, 500);
+            for (int j = 0; j < ingredientList.size(); j++) {
+                String s = ingredientList.get(j).getEn();
+                tempDistance = levenshteinDistance2(s, ingredient);
+                if (minDistance == -1 || minDistance > tempDistance) {
+                    minDistance = tempDistance;
+                    closestIngredient = ingredientList.get(j).getEn();
+                }
+
+                if (tempDistance < 3) {
+                    return ingredientList.get(j).getEn();
+                }
+            }
+        }
+
+        return closestIngredient;
+    }
+//
+//    /**
+//     * @param s1 - string to compare
+//     * @param s2 - string to compare
+//     * @return Levenshtein distance
+//     */
+//    private static int levenshteinDistance(String s1, String s2) {
+//        int n = s2.length();
+//        int m = s1.length();
+//        int[] v0 = new int[n + 1];
+//        int[] v1 = new int[n + 1];
+//        int[] temp;
+//        for (int i = 0; i < n; i++) {
+//            v0[i] = i;
+//        }
+//
+//        for (int i = 0; i < m; i++) {
+//            v1[0] = i + 1;
+//            for (int j = 0; j < n; j++) {
+//                int del = v0[j + 1] + 1;
+//                int ins = v1[j] + 1;
+//                int sub;
+//                if (s1.charAt(i) == s2.charAt(j)) {
+//                    sub = v0[j];
+//                } else {
+//                    sub = v0[j] + 1;
+//                }
+//
+//                v1[j + 1] = Math.min(Math.min(del, ins), sub);
+//            }
+//
+//            temp = v0;
+//            v0 = v1;
+//            v1 = temp;
+//        }
+//
+//        return v0[n];
+//    }
+
+    private static int levenshteinDistance2(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        int[] D1;
+        int[] D2 = new int[n + 1];
+
+        for(int i = 0; i <= n; i ++)
+            D2[i] = i;
+
+        for(int i = 1; i <= m; i ++) {
+            D1 = D2;
+            D2 = new int[n + 1];
+            for(int j = 0; j <= n; j ++) {
+                if(j == 0) D2[j] = i;
+                else {
+                    int cost = (s1.charAt(i - 1) != s2.charAt(j - 1)) ? 1 : 0;
+                    if(D2[j - 1] < D1[j] && D2[j - 1] < D1[j - 1] + cost)
+                        D2[j] = D2[j - 1] + 1;
+                    else if(D1[j] < D1[j - 1] + cost)
+                        D2[j] = D1[j] + 1;
+                    else
+                        D2[j] = D1[j - 1] + cost;
+                }
+            }
+        }
+        return D2[n];
+    }
+
+    public Rational getIngredientsAmount(String line) {
         line = line.toLowerCase();
         line = line.replaceAll("^(,| )+", "");
         Pattern p = Pattern.compile("((?:\\d+ )?\\d+(?:(?:,|.|/)\\d+)?)");
         Matcher m = p.matcher(line);
         if (!m.find()) {
-            return 0;
+            return new Rational(0, 1);
         }
 
         String amount = m.group(1);
-        if (amount.contains(" ")) {
-            return
-        }
-        if (amount.contains("/")) {
-            DecimalFormat df = new DecimalFormat("#.##");
-            double d = Double.valueOf(amount.split("/")[0]) / Double.valueOf(amount.split("/")[1]);
-            return Double.valueOf(df.format(d));
-        }
-
-        if (amount.contains(",")) {
-            String temp = amount.replace(",", ".");
-            return Double.valueOf(temp);
-        }
-
-        return Double.parseDouble(amount);
+        return Product.parseAmount(amount);
     }
 
     public BroadcastReceiver getRecipeReceiver() {
@@ -266,11 +372,9 @@ public class RecipeFragment extends Fragment {
                     case Utils.RECIPE_OBJ:
                         Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.RECIPE_OBJ);
                         model.setCurrentRecipe(recipe);
+                        shouldWait = true;
                         if (!intent.getBooleanExtra(FirebaseUtils.RECIPES_REF, false)) {
                             prepareProducts(recipe);
-                            setData();
-                        } else {
-                            shouldWait = true;
                         }
 
                         break;
@@ -283,7 +387,7 @@ public class RecipeFragment extends Fragment {
                                 ids.add(rel.getCategoryId());
                             }
 
-                            List<Category> categories  = AppDatabase
+                            List<Category> categories = AppDatabase
                                     .getDatabase(context)
                                     .getCategoryDao()
                                     .getCategoriesWithIds(ids);
@@ -298,6 +402,13 @@ public class RecipeFragment extends Fragment {
                         } else {
                             shouldWait = false;
                         }
+                        break;
+
+                    case YummlyAPI.REC_DIRECTIONS:
+                        String instructions = intent.getStringExtra(YummlyAPI.REC_DIRECTIONS);
+                        model.setInstructions(instructions);
+                        shouldWait = false;
+                        setData();
                         break;
                 }
             }

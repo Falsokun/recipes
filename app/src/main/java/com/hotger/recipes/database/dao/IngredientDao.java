@@ -24,9 +24,6 @@ public interface IngredientDao extends BaseDao<Ingredient> {
     @Query("SELECT ru FROM ingredient")
     List<String> getRussianNames();
 
-    @Query("SELECT measure FROM ingredient WHERE en like :english")
-    String getMeasureOfProduct(String english);
-
     @Query("SELECT * FROM ingredient WHERE en = :name OR ru = :name")
     List<Ingredient> getIngredientByName(String name);
 
@@ -35,4 +32,7 @@ public interface IngredientDao extends BaseDao<Ingredient> {
 
     @Query("Select * FROM ingredient WHERE :s LIKE '%' || en || '%'")
     List<Ingredient> getIngredientLike(String s);
+
+    @Query("Select * FROM ingredient LIMIT :start, :range")
+    List<Ingredient> getIngredientRange(int start, int range);
 }

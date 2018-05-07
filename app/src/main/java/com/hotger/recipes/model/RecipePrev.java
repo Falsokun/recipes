@@ -6,10 +6,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.Exclude;
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.hotger.recipes.database.ImageConverter;
+import com.hotger.recipes.database.ObjConverter;
 import com.hotger.recipes.model.GsonModel.Image;
 
 import java.io.Serializable;
@@ -24,7 +24,7 @@ public class RecipePrev implements Serializable {
 
     @SerializedName("imageUrlsBySize")
     @Expose
-    @TypeConverters({ImageConverter.class})
+    @TypeConverters({ObjConverter.class})
     private Image images;
 
     @SerializedName("recipeName")

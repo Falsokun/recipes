@@ -2,7 +2,6 @@ package com.hotger.recipes;
 
 import android.app.Application;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.hotger.recipes.utils.TranslateAPI;
 import com.hotger.recipes.utils.YummlyAPI;

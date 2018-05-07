@@ -39,6 +39,11 @@ public class RecipeViewModel extends ViewModel {
         notifyPropertyChanged(BR.currentRecipe);
     }
 
+    public void setInstructions(String instructions) {
+        mCurrentRecipe.setPreparations(instructions);
+        notifyPropertyChanged(BR.currentRecipe);
+    }
+
     @Override
     public void OnResume() {
         activity.setUpNavigation(true);

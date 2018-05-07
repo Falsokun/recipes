@@ -19,6 +19,7 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.DisableAppBarLayoutBehavior;
+import com.hotger.recipes.utils.ParseUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.model.RecipeNF;
@@ -29,8 +30,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hotger.recipes.firebase.FirebaseUtils.RECIPES_REF;
 
 public abstract class ControllableActivity extends AppCompatActivity {
 
@@ -66,10 +65,12 @@ public abstract class ControllableActivity extends AppCompatActivity {
                                      return;
                                  }
 
-                                 Recipe recipe = new Recipe((RecipeNF) response.body(), ControllableActivity.this);
+                                 Recipe recipe = new Recipe(response.body(), ControllableActivity.this);
                                  Intent intent = new Intent(Utils.RECIPE_OBJ);
                                  intent.putExtra(Utils.RECIPE_OBJ, recipe);
                                  LocalBroadcastManager.getInstance(ControllableActivity.this).sendBroadcast(intent);
+                                 ParseUtils.parseRecipe(recipe.getRecipe().getSource().getSourceRecipeUrl(),
+                                         ControllableActivity.this, true);
                              }
 
                              @Override

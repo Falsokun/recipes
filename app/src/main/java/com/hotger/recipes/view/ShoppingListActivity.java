@@ -20,6 +20,7 @@ public class ShoppingListActivity extends ControllableActivity {
     ActivityShoppingListBinding mBinding;
     InputProductsViewModel inputModel;
     public static String SHOPPING_LIST_ID = "shopping_list_id";
+    public static String SHOPPING_LIST_CHECKED = "shopping_list_checked";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

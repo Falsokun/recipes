@@ -5,10 +5,14 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Rational;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +20,9 @@ import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
+import com.hotger.recipes.database.RelationRecipeType;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
+import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
@@ -28,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_CHECKED;
 import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_ID;
 
 /**
@@ -55,6 +62,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private double koeff = 1;
 
+    private List<Product> checked;
+
     public ProductsAdapter(ControllableActivity context, List<Product> data, boolean isEditable,
                            boolean isDetailed, boolean isShoppingList) {
         this.activity = context;
@@ -62,6 +71,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         this.isEditable = isEditable;
         this.isDetailed = isDetailed;
         this.isShoppingList = isShoppingList;
+        if (isShoppingList) {
+             checked = AppDatabase.getDatabase(context)
+                    .getProductDao()
+                    .getProducts(SHOPPING_LIST_CHECKED);
+        }
     }
 
     @Override
@@ -77,9 +91,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Drawable drawable = getAmountDrawable(productLine.getDrawableByMeasure(), activity);
         holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        holder.binding.finalAmount.setText(Utils.numberToString(productLine.getAmount()* koeff));
-        if (holder.binding.getIsDetailed() && productLine.getAmount() == 0) {
-            holder.binding.setIsDetailed(false);
+        holder.binding.finalAmount.setText(Product.doubleToStringWithKoeff(productLine.getAmount(), koeff));
+        if (holder.binding.getIsDetailed() && productLine.getAmount().getNumerator() == 0) {
+            holder.binding.finalAmount.setVisibility(View.GONE);
         }
 
         holder.binding.lottieAnim.setOnClickListener(view -> {
@@ -88,15 +102,29 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         });
 
         if (isShoppingList) {
+            if (checked.contains(productLine)) {
+                holder.binding.lottieAnim.setProgress(1f);
+            }
+
             holder.binding.checkAnim.setAnimation(R.raw.check_animation);
             holder.binding.checkAnim.setVisibility(View.VISIBLE);
             holder.binding.checkAnim.setOnClickListener(view -> {
                 animateView(holder.binding.checkAnim, false, 0f, 1f);
                 holder.binding.checkAnim.setEnabled(false);
-                Collections.swap(data, position, data.size() - 1);
-                notifyItemMoved(position, data.size() - 1);
+                saveItemToList(activity, SHOPPING_LIST_CHECKED, productLine);
+                Collections.swap(data, position, 0);
+                notifyItemMoved(position, 0);
             });
         }
+    }
+
+    public void clearAllChecked() {
+        List<Product> products = AppDatabase.getDatabase(activity).getProductDao().getProducts(SHOPPING_LIST_CHECKED);
+        for (Product product : products) {
+            removeItemFromList(activity, SHOPPING_LIST_ID, product);
+        }
+
+        AppDatabase.getDatabase(activity).getProductDao().removeWhereId(SHOPPING_LIST_CHECKED);
     }
 
     private void checkAnimStatus(LottieAnimationView animationView, Product product) {
@@ -119,7 +147,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
-        AppDatabase.getDatabase(activity).getProductDao().delete(product);
+        AppDatabase.getDatabase(activity).getProductDao().delete(product); // ЭТО УДАЛЯЕТ ВЕСЬ ПРОДУКТ НАДО ВСТАВИТЬ ID
     }
 
     private void animateView(LottieAnimationView animationView, boolean shouldCalculate, float start, float end) {
@@ -219,18 +247,20 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     //endregion
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         /**
          * Data binding variable
          */
         ItemProductLineBinding binding;
 
+        //TODO: стринговое представление 1 1/2 во вьюхе
         ViewHolder(final View itemView) {
             super(itemView);
 
             binding = DataBindingUtil.bind(itemView);
             binding.setIsDetailed(isDetailed);
             binding.setIsEditable(isEditable);
+            itemView.setOnLongClickListener(this);
 
             if (isEditable) {
                 View.OnClickListener listener = view -> {
@@ -246,27 +276,30 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
                 binding.btnAdd.setOnClickListener(listener);
                 binding.btnSub.setOnClickListener(listener);
-                binding.finalAmount.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (isDetailed) {
+                    binding.finalAmount.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        if (editable.toString().length() != 0) {
-                            double val = Double.valueOf(editable.toString());
-                            data.get(getAdapterPosition()).setAmount(val);
-                        } else {
-                            data.get(getAdapterPosition()).setAmount(0);
                         }
-                    }
-                });
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            if (editable.toString().length() != 0) {
+                                double val = Double.valueOf(editable.toString());
+                                //TODO: ТУТ ИСПРАВИТЬ
+                                data.get(getAdapterPosition()).setAmount(new Rational((int) val, 1));
+                            } else {
+                                data.get(getAdapterPosition()).setAmount(new Rational(0, 1));
+                            }
+                        }
+                    });
+                }
 
                 binding.amountIcon.setOnClickListener(view -> showDialog());
             } else {
@@ -297,6 +330,20 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             Drawable drawable = getAmountDrawable(position, activity);
             binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[position]);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+            List<Ingredient> list = AppDatabase.getDatabase(v.getContext())
+                    .getIngredientDao()
+                    .getEnTranslation(binding.productName.getText().toString());
+            builder.setTitle("Translation")
+                    .setMessage(list.get(0).getEn())
+                    .setNeutralButton("OK", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return true;
         }
     }
 }
