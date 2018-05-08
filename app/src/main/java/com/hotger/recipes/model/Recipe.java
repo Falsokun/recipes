@@ -3,7 +3,6 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
-import android.databinding.Bindable;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.hotger.recipes.model.GsonModel.Image;
@@ -25,8 +24,6 @@ public class Recipe implements Serializable {
 
     @Ignore
     private List<Category> categories = new ArrayList<>();
-
-//    private int calories;
 
     public void add(Product line) {
         products.add(line);
@@ -174,6 +171,14 @@ public class Recipe implements Serializable {
     public String getLang() {
         return recipe.getLang();
     }
+
+    public void setCalories(int calories) {
+        this.recipe.setCalories(calories);
+    }
+
+    public int getCalories() {
+        return this.recipe.getCalories();
+    }
     //endregion
 
     public void setImageURL(String url) {
@@ -195,7 +200,7 @@ public class Recipe implements Serializable {
         return getCategoriesTitles().contains(category);
     }
 
-    //    private JSONObject toJSON() {
-//
-//    }
+    public List<NutritionEstimates> getNutritionEstimates() {
+        return recipe.getNutritionEstimates();
+    }
 }

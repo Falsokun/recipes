@@ -9,5 +9,4 @@
     android:paddingTop="@dimen/low_padding"
     android:textColor="@android:color/white"
     android:textSize="20sp"
-    android:text="asdnsdfydsf"
     android:background="@color/colorPrimary"/>

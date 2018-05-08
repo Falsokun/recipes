@@ -52,7 +52,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/recipe_info"
+                        android:id="@+id/nutrition_estimates"
                         style="@style/SquaredStyle"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"

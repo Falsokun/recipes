@@ -1,7 +1,5 @@
 package com.hotger.recipes.utils;
 
-import com.hotger.recipes.view.TranslateResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

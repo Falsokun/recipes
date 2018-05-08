@@ -11,6 +11,7 @@ import android.util.Rational;
 
 import com.hotger.recipes.database.ObjConverter;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.MeasureUtils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.io.Serializable;
@@ -140,7 +141,7 @@ public class Product implements Serializable {
         List<Ingredient> ingredients = AppDatabase.getDatabase(activity).getIngredientDao().getIngredientByName(name);
         if (ingredients.size() == 0) {
             ingredientId = name;
-            measure = "cup";
+            measure = MeasureUtils.DEFAULT_MEASURE;
             return;
         }
 

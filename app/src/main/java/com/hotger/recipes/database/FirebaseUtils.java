@@ -1,4 +1,4 @@
-package com.hotger.recipes.firebase;
+package com.hotger.recipes.database;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,8 +16,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hotger.recipes.App;
-import com.hotger.recipes.IngredientFake;
-import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.RelationCategoryRecipe;
 import com.hotger.recipes.model.Category;
@@ -32,7 +30,7 @@ import com.hotger.recipes.utils.TranslateAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.view.RecipeFragment;
-import com.hotger.recipes.view.TranslateResponse;
+import com.hotger.recipes.utils.TranslateResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;

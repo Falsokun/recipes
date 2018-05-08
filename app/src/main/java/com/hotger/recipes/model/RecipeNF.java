@@ -17,9 +17,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * RealmObject to store the recipe
- */
 @Entity
 public class RecipeNF implements Serializable {
 
@@ -54,12 +51,51 @@ public class RecipeNF implements Serializable {
     @Ignore
     private Attributes attributes = new Attributes();
 
+    @Expose
     @TypeConverters({ObjConverter.class})
-    private Source source;
+    private List<NutritionEstimates> nutritionEstimates = new ArrayList<>();
+
+    @TypeConverters({ObjConverter.class})
+    private Source source = new Source();
 
     private String lang = "en";
 
+    private int calories;
+
     public RecipeNF() {
+    }
+
+    public int getCookTimeInMinutes() {
+        return cookTimeInSeconds / 60;
+    }
+
+    public int getPrepTimeInMinutes() {
+        return prepTimeInSeconds / 60;
+    }
+
+    public String getImageUrl() {
+        if (images == null
+                || images.size() == 0
+                || images.get(0) == null)
+            return null;
+        return images.get(0).getUrl();
+    }
+
+    public ArrayList<String> getAllAttributes() {
+        ArrayList<String> out = new ArrayList<>();
+        if (attributes == null) {
+            return out;
+        }
+
+        if (attributes.getCourse() != null)
+            out.addAll(attributes.getCourse());
+
+        if (attributes.getCuisine() != null)
+            out.addAll(attributes.getCuisine());
+
+        if (attributes.getHoliday() != null)
+            out.addAll(attributes.getHoliday());
+        return out;
     }
 
     //region Getters and Setters
@@ -150,52 +186,31 @@ public class RecipeNF implements Serializable {
     public Source getSource() {
         return source;
     }
+
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Attributes attributes) {
+        this.attributes = attributes;
+    }
+
+    public List<NutritionEstimates> getNutritionEstimates() {
+        return nutritionEstimates;
+    }
+
+    public void setNutritionEstimates(List<NutritionEstimates> nutritionEstimates) {
+        this.nutritionEstimates = nutritionEstimates;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
     //endregion
-
-    public int getCookTimeInMinutes() {
-        return cookTimeInSeconds / 60;
-    }
-
-    public int getPrepTimeInMinutes() {
-        return prepTimeInSeconds / 60;
-    }
-
-    public String getImageUrl() {
-        if (images == null
-                || images.size() == 0
-                || images.get(0) == null)
-            return null;
-        return images.get(0).getUrl();
-    }
-
-    public ArrayList<String> getAllAttributes() {
-        ArrayList<String> out = new ArrayList<>();
-        if (attributes == null) {
-            return out;
-        }
-
-        if (attributes.getCourse() != null)
-            out.addAll(attributes.getCourse());
-
-        if (attributes.getCuisine() != null)
-            out.addAll(attributes.getCuisine());
-
-        if (attributes.getHoliday() != null)
-            out.addAll(attributes.getHoliday());
-        return out;
-    }
-
-    //    @Override
-//    public Object clone() throws CloneNotSupportedException {
-//        RecipeNF r = new RecipeNF();
-//        r.setCategories(categories);
-//        r.setId(id);
-////        r.setProducts(products);
-//        r.setTotalTimeInSeconds(totalTimeInSeconds);
-//        r.setNumberOfServings(numberOfServings);
-//        r.setName(name);
-//        r.setPreparations(preparations);
-//        return r;
-//    }
 }
 

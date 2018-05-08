@@ -19,8 +19,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/prep_time"
                 android:drawableLeft="@drawable/ic_time_white"
-                android:drawableTint="@color/colorText"
                 android:drawablePadding="5dp"
+                android:drawableTint="@color/colorText"
                 android:gravity="center_vertical"
                 android:text="@string/prep_time"
                 android:textColor="@color/colorText" />
@@ -49,13 +49,13 @@
                 android:id="@+id/cooking_time_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_time_white"
-                android:drawableTint="@color/colorText"
-                android:drawablePadding="5dp"
-                android:gravity="center_vertical"
-                android:layout_toStartOf="@+id/cooking_time"
-                android:text="@string/cooking_time"
                 android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/cooking_time"
+                android:drawableLeft="@drawable/ic_time_white"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/colorText"
+                android:gravity="center_vertical"
+                android:text="@string/cooking_time"
                 android:textColor="@color/colorText" />
 
             <Button
@@ -74,9 +74,9 @@
 
         <RelativeLayout
             android:id="@+id/image_src_container"
-            android:layout_below="@+id/cooking_time_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/cooking_time_container"
             android:padding="@dimen/padding_dimen">
 
             <TextView
@@ -84,11 +84,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/ic_image_black"
-                android:drawableTint="@color/colorText"
-                android:drawablePadding="5dp"
-                android:gravity="center_vertical"
                 android:layout_toStartOf="@+id/photo_src_btn"
+                android:drawableLeft="@drawable/ic_image_black"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/colorText"
+                android:gravity="center_vertical"
                 android:text="@string/select_image"
                 android:textColor="@color/colorText" />
 
@@ -100,7 +100,8 @@
                 android:layout_alignParentEnd="true"
                 android:width="100dp"
                 android:gravity="center"
-                android:text="..."
+                android:hint="..."
+                android:textColorHint="@color/colorText"
                 android:textAllCaps="false"
                 android:textColor="@color/colorText" />
 
@@ -108,9 +109,9 @@
 
         <RelativeLayout
             android:id="@+id/calories_container"
-            android:layout_below="@+id/image_src_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/image_src_container"
             android:padding="@dimen/padding_dimen">
 
             <TextView
@@ -118,10 +119,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:drawableLeft="@drawable/ic_info"
-                android:drawableTint="@color/colorText"
-                android:drawablePadding="5dp"
                 android:layout_toStartOf="@+id/cal_selector"
+                android:drawableLeft="@drawable/ic_info"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/colorText"
+                android:gravity="center_vertical"
                 android:text="@string/number_of_calories"
                 android:textColor="@color/colorText" />
 
@@ -133,8 +135,45 @@
                 android:layout_alignParentEnd="true"
                 android:width="100dp"
                 android:gravity="center"
+                android:textColorHint="@color/colorText"
+                android:hint="0"
                 android:textAllCaps="false"
                 android:textColor="@color/colorText" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/portions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/calories_container"
+            android:padding="@dimen/padding_dimen">
+
+            <TextView
+                android:id="@+id/portions_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/num_selector"
+                android:drawableLeft="@drawable/ic_persons_num"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/colorText"
+                android:gravity="center_vertical"
+                android:text="@string/persons_number"
+                android:textColor="@color/colorText" />
+
+            <Button
+                android:id="@+id/portions_selector"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:width="100dp"
+                android:gravity="center"
+                android:hint="0"
+                android:textAllCaps="false"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorText" />
 
         </RelativeLayout>
 

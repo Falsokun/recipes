@@ -1,4 +1,4 @@
-package com.hotger.recipes.view;
+package com.hotger.recipes.utils;
 
 import com.google.gson.annotations.Expose;
 

@@ -1,7 +1,10 @@
 package com.hotger.recipes.viewmodel;
 
 
+import android.content.Context;
 import android.databinding.Bindable;
+import android.support.v7.app.AlertDialog;
+import android.util.Rational;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -11,11 +14,17 @@ import android.widget.TextView;
 import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ProductsAdapter;
+import com.hotger.recipes.model.Ingredient;
+import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.MeasureUtils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RecipeViewModel extends ViewModel {
 
@@ -106,5 +115,114 @@ public class RecipeViewModel extends ViewModel {
         db.getRecipeDao().deleteById(recipeId);
         db.getRelationCategoryRecipeDao().deleteAllWithId(recipeId);
         db.getRecipePrevDao().deleteAllById(recipeId);
+    }
+
+
+    public String getClosestToLine(String productLine, Context context) {
+        int minDistance;
+        List<String> closestIngredients = new ArrayList<>();
+        for (int i = 0; i < productLine.split(" ").length; i++) {
+            closestIngredients.add(getClosestIngredient(productLine.split(" ")[i], context));
+        }
+
+        String s1 = closestIngredients.get(0);
+        minDistance = levenshteinDistance2(productLine, s1);
+        int tempDistance;
+        for (int i = 1; i < productLine.split(" ").length; i++) {
+            String s2 = closestIngredients.get(i);
+            tempDistance = levenshteinDistance2(productLine, s2);
+            if (tempDistance < minDistance) {
+                s1 = s2;
+                minDistance = tempDistance;
+            }
+        }
+
+        return s1;
+    }
+
+    public static String getClosestIngredient(String ingredient, Context context) {
+        AppDatabase db = AppDatabase.getDatabase(context);
+        int tempDistance;
+        int minDistance = -1;
+        String closestIngredient = "";
+        for (int i = 0; i < db.getIngredientDao().getAllIngredients().size() / 500; i++) {
+            List<Ingredient> ingredientList = db.getIngredientDao().getIngredientRange(i * 500, 500);
+            for (int j = 0; j < ingredientList.size(); j++) {
+                String s = ingredientList.get(j).getEn();
+                tempDistance = levenshteinDistance2(s, ingredient);
+                if (minDistance == -1 || minDistance > tempDistance) {
+                    minDistance = tempDistance;
+                    closestIngredient = ingredientList.get(j).getEn();
+                }
+
+                if (tempDistance < 3) {
+                    return ingredientList.get(j).getEn();
+                }
+            }
+        }
+
+        return closestIngredient;
+    }
+
+    private static int levenshteinDistance2(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        int[] D1;
+        int[] D2 = new int[n + 1];
+
+        for (int i = 0; i <= n; i++)
+            D2[i] = i;
+
+        for (int i = 1; i <= m; i++) {
+            D1 = D2;
+            D2 = new int[n + 1];
+            for (int j = 0; j <= n; j++) {
+                if (j == 0) D2[j] = i;
+                else {
+                    int cost = (s1.charAt(i - 1) != s2.charAt(j - 1)) ? 1 : 0;
+                    if (D2[j - 1] < D1[j] && D2[j - 1] < D1[j - 1] + cost)
+                        D2[j] = D2[j - 1] + 1;
+                    else if (D1[j] < D1[j - 1] + cost)
+                        D2[j] = D1[j] + 1;
+                    else
+                        D2[j] = D1[j - 1] + cost;
+                }
+            }
+        }
+        return D2[n];
+    }
+
+    public Rational getIngredientsAmount(String line) {
+        line = line.toLowerCase();
+        line = line.replaceAll("^(,| )+", "");
+        Pattern p = Pattern.compile("((?:\\d+ )?\\d+(?:(?:,|.|/)\\d+)?)");
+        Matcher m = p.matcher(line);
+        if (!m.find()) {
+            return new Rational(0, 1);
+        }
+
+        String amount = m.group(1);
+        return Product.parseAmount(amount);
+    }
+
+    public void prepareProducts(Recipe recipe, Context context) {
+        AppDatabase db = AppDatabase.getDatabase(context);
+        Product p;
+        for (String string : recipe.getIngredientLines()) {
+            p = new Product();
+            List<Ingredient> list = db.getIngredientDao().getIngredientLike(string);
+            p.setAmount(getIngredientsAmount(string));
+            p.setMeasure(MeasureUtils.matchMeasure(string));
+            if (list.size() == 0) {
+                String id = getClosestToLine(string, context);
+                p.setIngredientId(id);
+            } else {
+                // вот тут еще посмотреть, потому что вместое chicken thighs
+                // он просто выдает курицу, хотя мб там в списке оно есть
+                // вместо sour cream выдает cream
+                p.setIngredientId(list.get(0).getEn());
+            }
+
+            recipe.getProducts().add(p);
+        }
     }
 }

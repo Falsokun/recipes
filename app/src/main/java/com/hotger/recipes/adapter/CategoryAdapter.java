@@ -3,11 +3,14 @@ package com.hotger.recipes.adapter;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemCategoryBinding;
 import com.hotger.recipes.model.Category;
@@ -35,7 +38,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = View.inflate(activity, R.layout.item_category, null);
         return new CategoryAdapter.ViewHolder(view);
     }
@@ -46,7 +48,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         final ItemCategoryBinding holderBinding = holder.mBinding;
         holderBinding.title.setText(category.getTitle());
         holderBinding.type.setText(category.getType());
-        Glide.with(activity).load(category.getUrl()).transition(withCrossFade()).into(holderBinding.bgImage);
+        Glide.with(activity).load(category.getUrl())
+                .apply(new RequestOptions().skipMemoryCache(true))
+                .transition(withCrossFade()).into(holderBinding.bgImage);
         holderBinding.bgImage.setImageURI(Uri.parse(category.getUrl()));
         holderBinding.bgImage.setOnClickListener(v -> changeCategory(category.getSearchValue()));
     }
@@ -73,14 +77,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return categoryList;
     }
 
-
-    public boolean isEmpty() {
-        return getData().isEmpty();
-    }
-
     public void setData(List<Category> data) {
+        notifyItemRangeRemoved(0, categoryList.size() - 1);
+        categoryList.clear();
         this.categoryList = data;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, data.size() - 1);
     }
 
     public void setType(String type) {

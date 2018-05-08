@@ -7,16 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.hotger.recipes.App;
+import com.bumptech.glide.request.RequestOptions;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemRecipeBinding;
-import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
-import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 import java.util.List;
+
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 /**
  * Displaying recipes list
@@ -43,7 +45,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         RecipePrev recipe = data.get(position);
         final ItemRecipeBinding holderBinding = holder.mBinding;
         holderBinding.recipeName.setText(recipe.getName());
-        Glide.with(activity).load(recipe.getImageUrl()).transition(withCrossFade()).into(holderBinding.recipeImg);
+        Glide.with(activity).load(recipe.getImageUrl())
+                .apply(new RequestOptions().skipMemoryCache(true))
+                .transition(withCrossFade()).into(holderBinding.recipeImg);
         holderBinding.listItem.setOnClickListener(v -> {
             if (recipe.isFromYummly()) {
                 List<String> ids = AppDatabase.getDatabase(activity).getRelationRecipeTypeDao().getRecipesById(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK);

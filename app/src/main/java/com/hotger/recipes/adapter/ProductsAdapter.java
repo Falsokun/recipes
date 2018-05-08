@@ -26,6 +26,7 @@ import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.MeasureUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.InputProductsViewModel;
@@ -88,7 +89,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Product productLine = data.get(position);
         holder.binding.productName.setText(productLine.getIngredientById(activity));
-        Drawable drawable = getAmountDrawable(productLine.getDrawableByMeasure(), activity);
+        Drawable drawable = MeasureUtils.getDrawableByMeasure(activity, productLine.getMeasure());
         holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         holder.binding.finalAmount.setText(Product.doubleToStringWithKoeff(productLine.getAmount(), koeff));
@@ -169,40 +170,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public int getItemCount() {
         return data.size();
-    }
-
-    //TODO все очень плохо
-
-    /**
-     * Returns drawable depending on {@param quantity} of the product
-     *
-     * @param quantity - quanitity of the product
-     * @param context  - activity
-     * @return drawable received from the resource
-     */
-    private Drawable getAmountDrawable(int quantity, Context context) {
-        Drawable drawable;
-        switch (quantity) {
-            case Utils.Measure.LITERS:
-            case Utils.Measure.CUPS:
-                drawable = context.getResources().getDrawable(R.drawable.ic_glass_white);
-                break;
-            case Utils.Measure.TABLESPOON:
-            case Utils.Measure.TEASPOON:
-                drawable = context.getResources().getDrawable(R.drawable.ic_spoon);
-                break;
-            case Utils.Measure.PIECE:
-                drawable = context.getResources().getDrawable(R.drawable.ic_pcs_white);
-                break;
-            case Utils.Measure.GRAMM:
-            case Utils.Measure.KG:
-            case Utils.Measure.OUNCE:
-            default:
-                drawable = context.getResources().getDrawable(R.drawable.ic_gram);
-                break;
-        }
-
-        return drawable;
     }
 
     /**
@@ -327,7 +294,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
          */
         private void changeMeasure(String measurePosition, int position) {
             data.get(getAdapterPosition()).setMeasure(measurePosition);
-            Drawable drawable = getAmountDrawable(position, activity);
+            Drawable drawable = MeasureUtils.getDrawableByMeasure(activity, MeasureUtils.getFromArray(position));
             binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             binding.amountIcon.setText(activity.getResources().getStringArray(R.array.measures_array)[position]);
         }

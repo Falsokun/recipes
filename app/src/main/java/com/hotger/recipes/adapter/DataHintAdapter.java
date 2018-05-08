@@ -18,18 +18,13 @@ import java.util.Arrays;
 
 /**
  * Adapter to show hint while typing product's name
- *
+ * <p>
  * Адаптер для отображения всплывающих подсказок внутри редактора рецептов
  */
 public class DataHintAdapter extends ArrayAdapter<String> {
 
-    /**
-     * Maximal number of products in hint
-     */
-    private final int MAX_COUNT = 3;
-
     public DataHintAdapter(@NonNull Context context, @LayoutRes int resource, AppDatabase db, String language) {
-        super(context, resource, R.id.product_name, new ArrayList<>());
+        super(context, resource, R.id.name, new ArrayList<>());
         clear();
         addAll(db.getIngredientDao().getEnglishNames());
         addAll(db.getIngredientDao().getRussianNames());
@@ -37,11 +32,7 @@ public class DataHintAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        if (super.getCount() > MAX_COUNT) {
-            return MAX_COUNT;
-        } else {
-            return super.getCount();
-        }
+        return super.getCount();
     }
 
     @NonNull

@@ -1,4 +1,4 @@
-package com.hotger.recipes.utils;
+package com.hotger.recipes.utils.UI;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

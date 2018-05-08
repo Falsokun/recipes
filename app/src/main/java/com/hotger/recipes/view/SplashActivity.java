@@ -2,14 +2,10 @@ package com.hotger.recipes.view;
 
 import android.arch.persistence.room.Room;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hotger.recipes.R;
-import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
@@ -29,7 +25,6 @@ public class SplashActivity extends AwesomeSplash {
         configSplash.setLogoSplash(R.mipmap.ic_launcher); //or any other drawable
         configSplash.setAnimLogoSplashDuration(1000); //int ms
         configSplash.setAnimLogoSplashTechnique(Techniques.Pulse); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
-
 
         //Customize Path
 //        configSplash.setPathSplash(Constants.DROID_LOGO); //set path String
@@ -58,8 +53,9 @@ public class SplashActivity extends AwesomeSplash {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "populus-database").allowMainThreadQueries().build();
         if (db.getRecipePrevDao().getAll().size() == 0) {
-            FirebaseUtils.saveIngredientsToDatabase(db);
             FirebaseUtils.saveCategoryToDatabase(this, db, FirebaseUtils.CATEGORY);
+            FirebaseUtils.saveIngredientsToDatabase(db);
+            //может вот тут не пропускать пока он не сохранит все чо надо
         }
 
         Intent intent = new Intent(this, MainActivity.class);

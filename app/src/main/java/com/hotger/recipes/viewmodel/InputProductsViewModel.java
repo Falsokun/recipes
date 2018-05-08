@@ -24,7 +24,6 @@ import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InputProductsViewModel extends ViewModel {
@@ -54,7 +53,7 @@ public class InputProductsViewModel extends ViewModel {
 
     //region actions
     public void onHintItemClickAction(View view) {
-        TextView childView = view.findViewById(R.id.product_name);
+        TextView childView = view.findViewById(R.id.name);
         String productName = childView.getText().toString();
         if (!productsAdapter.isAlreadyInSet(productName)) {
             products.add(new Product(productName, activity));

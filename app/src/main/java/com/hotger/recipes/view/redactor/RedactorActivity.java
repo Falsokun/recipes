@@ -51,6 +51,7 @@ public class RedactorActivity extends ControllableActivity {
         mBinding.setModel(mRedactorModel);
         initAdapter();
         mBinding.recipeVp.setAdapter(mRedactorAdapter);
+        mBinding.recipeVp.setOffscreenPageLimit(mRedactorAdapter.getCount());
         mBinding.redactorProgress.setProgress(getProgress(0));
         initListeners();
         initToolbar();
@@ -103,12 +104,6 @@ public class RedactorActivity extends ControllableActivity {
             PickerFragment timePickerFragment = new PickerFragment();
             timePickerFragment.setRedactorModel(mRedactorModel);
             mRedactorAdapter.addFragment(timePickerFragment);
-
-            NumberPickerFragment portions = new NumberPickerFragment();
-            Bundle bundle1 = new Bundle();
-            portions.setArguments(bundle1);
-            portions.setRedactorModel(mRedactorModel);
-            mRedactorAdapter.addFragment(portions);
         }
     }
 

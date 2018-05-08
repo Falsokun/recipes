@@ -7,7 +7,7 @@ import com.google.firebase.storage.UploadTask;
 import com.hotger.recipes.App;
 import com.hotger.recipes.database.RelationCategoryRecipe;
 import com.hotger.recipes.database.RelationRecipeType;
-import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.model.Product;
@@ -87,6 +87,7 @@ public class RecipeUtils {
         return categoryRelations;
     }
 
+    //А если изображение с таким именем существует?
     private static void saveImageToCloudFirebase(Recipe currentRecipe, String path) {
         String name = Utils.FIREBASE_IMG_STORAGE + path.split("/")[path.split("/").length - 1];
         StorageReference storageRef = App.getStorage().getReference();
@@ -95,9 +96,7 @@ public class RecipeUtils {
             InputStream stream = new FileInputStream(new File(path));
             UploadTask uploadTask = mountainsRef.putStream(stream);
             uploadTask.addOnFailureListener(exception -> {
-                // Handle unsuccessful uploads
             }).addOnSuccessListener(taskSnapshot -> {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 currentRecipe.setImageURL(downloadUrl.toString());
             });

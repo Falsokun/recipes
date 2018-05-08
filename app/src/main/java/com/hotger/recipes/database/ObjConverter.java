@@ -4,9 +4,12 @@ import android.arch.persistence.room.TypeConverter;
 import android.text.TextUtils;
 import android.util.Rational;
 
+import com.hotger.recipes.model.GsonModel.Attributes;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.model.GsonModel.Source;
+import com.hotger.recipes.model.NutritionEstimates;
 
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,9 +41,9 @@ public class ObjConverter {
     }
 
     @TypeConverter
-    public Rational fromString(String rationalStr) {
-        return new Rational(Integer.parseInt(rationalStr.split("/")[0]),
-                Integer.parseInt(rationalStr.split("/")[1]));
+    public Rational fromString(String data) {
+        return new Rational(Integer.parseInt(data.split("/")[0]),
+                Integer.parseInt(data.split("/")[1]));
     }
 
     @TypeConverter
@@ -61,5 +64,27 @@ public class ObjConverter {
     @TypeConverter
     public Source toSource(String data) {
         return new Source(data);
+    }
+
+    @TypeConverter
+    public List<NutritionEstimates> toEstimates(String data) {
+        List<NutritionEstimates> res = new ArrayList<>();
+        for (String strEstimate : data.split("\\|")) {
+            res.add(new NutritionEstimates(strEstimate.split(":")[0],
+                    strEstimate.split(":")[1], strEstimate.split(":")[2]));
+        }
+
+        return res;
+    }
+
+    @TypeConverter
+    public String fromEstimates(List<NutritionEstimates> estimates) {
+        List<String> stringEstimates = new ArrayList<>();
+        for(NutritionEstimates estimate : estimates) {
+            stringEstimates.add(estimate.getAttribute() + ":" + estimate.getValue() + ":"
+            + estimate.getDescription());
+        }
+
+        return TextUtils.join("|", stringEstimates);
     }
 }

@@ -33,12 +33,12 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@android:color/transparent"
-                android:drawablePadding="-20dp"
                 android:drawableTint="@color/colorPrimaryDark"
                 android:drawableTop="@drawable/ic_glass_white"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp"
                 android:textAllCaps="false"
+                android:text="pcs"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="8sp" />
 

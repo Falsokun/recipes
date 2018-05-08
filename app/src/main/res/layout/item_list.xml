@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!-- Товары которые будут в списке-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/product_name"
-            android:layout_width="fill_parent"
+            android:id="@+id/name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="texttext"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="16dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_toStartOf="@+id/amount"/>
+
+        <TextView
+            android:id="@+id/amount"
+            android:padding="10dp"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            />
     </RelativeLayout>
 
 </LinearLayout>

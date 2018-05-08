@@ -20,16 +20,11 @@ import android.widget.ImageView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
-import com.hotger.recipes.firebase.FirebaseUtils;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
 
-//TODO: короче, наверное нужно запустить так: при запуске открывается куча потоков которые получают данные из апишки и грузят их в бд
-//TODO: а при переключении между всем просто подгружаются данные из бд
-//TODO: сейчас доделываю просто работу с апишкой, получая все данные, которые нужны (раз такие пироги)
-//TODO: включая парсинг html - получение инструкций. Затем коммит и после в чистом коде с этим говном буду разбираться
 public class MainActivity extends ControllableActivity {
 
     ActivityMainBinding mBinding;
@@ -101,7 +96,14 @@ public class MainActivity extends ControllableActivity {
     }
 
     public void updateTitle() {
-//        mBinding.toolbar.setName(R.string.app_name);
+        Fragment curFragment = getNavigationFragment(mBinding.viewPager.getCurrentItem());
+        FragmentManager fm = curFragment.getChildFragmentManager();
+        String title = "";
+        if (fm.getBackStackEntryCount() == 0) {
+            title = getTitleByTag(curFragment.getTag());
+        }
+
+        mBinding.toolbar.setTitle(title);
     }
 
     public Fragment getNavigationFragment(int position) {

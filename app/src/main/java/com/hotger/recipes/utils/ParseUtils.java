@@ -43,12 +43,18 @@ public class ParseUtils {
 
     public static void parseRecipe(String url, Context context, boolean isFromApi) {
         Thread t = new Thread(() -> {
-            String finalUrl = getRedirectIfAny(url);
-            String body = getBody(getRecipeText(finalUrl));
-            String recipeText = removeRedundantLabels(body);
-            //getRecipeSteps(recipeText, context, isFromApi);
+            String recipeText = "";
+//            String finalUrl = getRedirectIfAny(url);
+//            String body = getBody(getRecipeText(finalUrl));
+//            recipeText = removeRedundantLabels(body);
+//            recipeText = getRecipeSteps(recipeText, context, isFromApi);
             if (!isFromApi) {
+//                displayAlert(recipeText, context);
                 getRecipeInfo(recipeText, context);
+            } else {
+                Intent intent = new Intent(YummlyAPI.REC_DIRECTIONS);
+                intent.putExtra(YummlyAPI.REC_DIRECTIONS, recipeText);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         });
         t.start();
@@ -80,7 +86,7 @@ public class ParseUtils {
         return 0;
     }
 
-    public static void getRecipeSteps(String recipeText, Context context, boolean isFromApi) {
+    public static String getRecipeSteps(String recipeText, Context context, boolean isFromApi) {
         //минуты в большом количестве встречаются в других местах
         String[] keywords = new String[keyWordsEn.length + keyWordsRu.length];
         System.arraycopy(keyWordsEn, 0, keywords, 0, keyWordsEn.length);
@@ -93,13 +99,7 @@ public class ParseUtils {
         String result = getFromInstructions(div.toString());
 //            result = result.replaceAll(">(\n| )*<", "><");
         result = result.replaceAll("([\n]+[ ]{2,})+", "\n");
-        if (isFromApi) {
-            Intent intent = new Intent(YummlyAPI.REC_DIRECTIONS);
-            intent.putExtra(YummlyAPI.REC_DIRECTIONS, result);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        } else {
-            displayAlert(result, context);
-        }
+        return result;
     }
 
     private static void displayAlert(String result, Context context) {

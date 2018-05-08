@@ -1,17 +1,19 @@
 package com.hotger.recipes.view.redactor;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TimePicker;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorPickersBinding;
@@ -21,7 +23,6 @@ import com.nguyenhoanglam.imagepicker.model.Image;
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -51,9 +52,17 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         mBinding.prepTime.setText(timeFormatter(min / 60, min % 60));
         min = mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes();
         mBinding.cookingTime.setText(timeFormatter(min / 60, min % 60));
-        mBinding.prepContainer.setOnClickListener(v -> openTimePicker(mRedactorModel.getCurrentRecipe().getPrepTimeMinutes(), PREP_TAG));
-        mBinding.cookingTimeContainer.setOnClickListener(v -> openTimePicker(mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes(), COOKING_TAG));
+        mBinding.prepContainer.setOnClickListener(v ->
+                openTimePicker(mRedactorModel.getCurrentRecipe().getPrepTimeMinutes(), PREP_TAG));
+        mBinding.cookingTimeContainer.setOnClickListener(v ->
+                openTimePicker(mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes(), COOKING_TAG));
         mBinding.photoSrcBtn.setOnClickListener(v -> chooseImage());
+        mBinding.caloriesContainer.setOnClickListener(v -> openNumberPickerDialog(getContext(),
+                mBinding.calSelector, getString(R.string.number_of_calories),
+                getValueChangedListener(true), 20, 1000, 5));
+        mBinding.portionsContainer.setOnClickListener(v -> openNumberPickerDialog(getContext(),
+                mBinding.portionsSelector, getString(R.string.persons_number),
+                getValueChangedListener(false), 1, 20, 1));
         return mBinding.getRoot();
     }
 
@@ -63,7 +72,7 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
 
     public void openTimePicker(int initTime, String tag) {
         TimePickerDialog dialog = TimePickerDialog.newInstance(this,
-                 initTime / 60, initTime % 60, 0,
+                initTime / 60, initTime % 60, 0,
                 true);
         dialog.show(getActivity().getFragmentManager(), tag);
     }
@@ -99,7 +108,8 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
             String path = images.get(0).getPath();
             mRedactorModel.getCurrentRecipe().setImageURL(path);
         }
-        super.onActivityResult(requestCode, resultCode, data);  // THIS METHOD SHOULD BE HERE so that ImagePicker works with fragment
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -115,5 +125,42 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
 
     public String timeFormatter(int hour, int minute) {
         return String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+    }
+
+    public void openNumberPickerDialog(Context context, TextView view, String title,
+                                       NumberPicker.OnValueChangeListener valueChangeListener,
+                                       int min, int max, int step) {
+        final Dialog d = new Dialog(context);
+        d.setTitle(title);
+        d.setContentView(R.layout.fragment_number_picker);
+        Button okBtn = d.findViewById(R.id.ok_btn);
+        final NumberPicker np = d.findViewById(R.id.number_picker);
+        np.setOnLongPressUpdateInterval(50);
+        np.setMaxValue(max);
+        np.setMinValue(min);
+        String[] array = new String[(max - min) / step];
+        for (int i = 0; i < (max - min) / step; i++) {
+            array[i] = Integer.toString(min + i * step);
+        }
+
+        np.setWrapSelectorWheel(false);
+        np.setOnValueChangedListener(valueChangeListener);
+        np.setDisplayedValues(array);
+
+        okBtn.setOnClickListener(v -> {
+            view.setText(String.valueOf(np.getValue()));
+            d.dismiss();
+        });
+        d.show();
+    }
+
+    public NumberPicker.OnValueChangeListener getValueChangedListener(boolean isCalories) {
+        return (picker, oldVal, newVal) -> {
+            if (isCalories) {
+                mRedactorModel.getCurrentRecipe().setCalories(newVal);
+            } else {
+                mRedactorModel.getCurrentRecipe().setNumberOfServings(newVal);
+            }
+        };
     }
 }

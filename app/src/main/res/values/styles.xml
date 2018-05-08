@@ -24,7 +24,7 @@
         <item name="android:background">@color/colorBackground</item>
     </style>
 
-    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
+    <style name="AppTheme.Picker" parent="AppTheme" >
         <item name="android:textColorPrimary">@color/colorAccent</item>
         <item name="colorControlNormal">@color/colorAccent</item>
     </style>

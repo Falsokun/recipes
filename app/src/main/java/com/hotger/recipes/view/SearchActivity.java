@@ -1,7 +1,6 @@
 package com.hotger.recipes.view;
 
 import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,13 +10,10 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
-import android.util.AttributeSet;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
@@ -26,12 +22,11 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-import com.appyvet.materialrangebar.RangeBar;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.databinding.ActivitySearchBinding;
-import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseRecipeAPI;
 import com.hotger.recipes.utils.Utils;

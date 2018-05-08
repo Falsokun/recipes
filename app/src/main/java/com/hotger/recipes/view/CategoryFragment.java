@@ -12,15 +12,16 @@ import android.view.ViewGroup;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CategoryAdapter;
 import com.hotger.recipes.databinding.FragmentCategoriesBinding;
-import com.hotger.recipes.firebase.FirebaseUtils;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 //TODO: красивую анимацию перехода между категориями
 public class CategoryFragment extends BackStackFragment {
@@ -47,6 +48,7 @@ public class CategoryFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_categories, container, false);
         mBinding.cuisineRv.setAdapter(categoryAdapter);
+        mBinding.cuisineRv.setItemAnimator(new SlideInLeftAnimator());
         mBinding.cuisineRv.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
         setSpinnerAdapter();
         return mBinding.getRoot();
@@ -80,8 +82,6 @@ public class CategoryFragment extends BackStackFragment {
                 default:
                     break;
             }
-
-            categoryAdapter.notifyDataSetChanged();
         });
     }
 

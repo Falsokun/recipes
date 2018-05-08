@@ -65,6 +65,9 @@
     <string name="max_cooking_time">Choose max cooking time</string>
     <string name="step">Step</string>
     <string name="recipe_name">Recipe name</string>
+    <string name="nutrition_estimates">Nutrition Estimates</string>
+    <string name="no_data_available">No data available for this recipe</string>
+    <string name="choose_number">Choose number</string>
 
     <string-array name="measures_array">
         <item></item>

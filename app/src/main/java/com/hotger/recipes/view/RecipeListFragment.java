@@ -14,15 +14,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.RelationRecipeTypeViewModel;
 import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipesListBinding;
-import com.hotger.recipes.firebase.FirebaseUtils;
-import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.AsyncCalls;
@@ -33,10 +31,6 @@ import com.hotger.recipes.view.redactor.BackStackFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RecipeListFragment extends BackStackFragment {
 
