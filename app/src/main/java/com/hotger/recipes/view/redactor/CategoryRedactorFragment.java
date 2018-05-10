@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-//TODO База данных
 public class CategoryRedactorFragment extends Fragment {
 
     /**
@@ -76,6 +75,13 @@ public class CategoryRedactorFragment extends Fragment {
         allTags.get(categories[3]).addAll(getTitlesWithType(dao, YummlyAPI.Description.DIET));
     }
 
+    /**
+     * Get title which corresponds current locale
+     *
+     * @param dao - category dao
+     * @param type - category description
+     * @return
+     */
     private List<String> getTitlesWithType(CategoryDao dao, String type) {
         String lang = Locale.getDefault().toString();
         if(lang.contains("ru")) {

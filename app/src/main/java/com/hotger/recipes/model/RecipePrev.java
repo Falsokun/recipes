@@ -14,6 +14,9 @@ import com.hotger.recipes.model.GsonModel.Image;
 
 import java.io.Serializable;
 
+/**
+ * Priority class
+ */
 @Entity
 public class RecipePrev implements Serializable {
 

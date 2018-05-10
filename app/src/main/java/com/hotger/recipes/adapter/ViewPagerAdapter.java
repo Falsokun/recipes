@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * View pager adapter
+ *
+ * Адаптер для редактора и других вьюх, которые можно свайпнуть
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 

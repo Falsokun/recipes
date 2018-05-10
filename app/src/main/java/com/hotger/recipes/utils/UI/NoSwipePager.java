@@ -10,24 +10,29 @@ import android.view.MotionEvent;
  */
 public class NoSwipePager extends ViewPager {
 
-    private boolean enabled;
+    private boolean isEnabled;
 
     public NoSwipePager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.enabled = true;
+        this.isEnabled = true;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return this.enabled && super.onTouchEvent(event);
+        return this.isEnabled && super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        return this.enabled && super.onInterceptTouchEvent(event);
+        return this.isEnabled && super.onInterceptTouchEvent(event);
     }
 
-    public void setPagingEnabled(boolean enabled) {
-        this.enabled = enabled;
+    /**
+     * Enabled paging
+     *
+     * @param isEnabled
+     */
+    public void setPagingEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 }

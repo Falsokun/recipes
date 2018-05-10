@@ -8,6 +8,13 @@ import com.hotger.recipes.model.RecipePrev;
 
 import java.util.List;
 
+/**
+ * DAO for recipe previews
+ * Fields: id, images, recipeName, totalTimeInSeconds
+ * (вообще говоря лучше было бы Prev и RecipeDAO объединить, по реляционным соображениям, но исходя
+ *  из того, что это все подкачивается из другой апишки другим запросом и в целом это не нужно,
+ *  решила не делать)
+ */
 @Dao
 public interface RecipePrevDao extends BaseDao<RecipePrev> {
 

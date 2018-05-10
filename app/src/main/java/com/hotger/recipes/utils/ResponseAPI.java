@@ -7,12 +7,15 @@ import com.hotger.recipes.model.RecipePrev;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ResponseRecipeAPI implements Serializable {
+/**
+ * Dummy class for getting response of recipePrev's
+ */
+public class ResponseAPI<T> implements Serializable {
     @SerializedName("matches")
     @Expose
-    ArrayList<RecipePrev> matches;
+    ArrayList<T> results;
 
-    public ArrayList<RecipePrev> getMatches() {
-        return matches;
+    public ArrayList<T> getMatches() {
+        return results;
     }
 }

@@ -4,12 +4,15 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Query;
 
-import com.hotger.recipes.database.RelationObj;
+import com.hotger.recipes.database.relations.RelationObj;
 
 import java.util.List;
 
+/**
+ * Database which has is made for RelationObj
+ */
 @Dao
-public interface FavoritesDao extends BaseDao<RelationObj> {
+public interface RelationsDao extends BaseDao<RelationObj> {
     @Query("SELECT * from RelationObj")
     LiveData<List<RelationObj>> getFavorites();
 

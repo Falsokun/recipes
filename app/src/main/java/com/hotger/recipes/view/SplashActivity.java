@@ -48,12 +48,10 @@ public class SplashActivity extends AwesomeSplash {
 
     @Override
     public void animationsFinished() {
-        FirebaseUtils.deleteAllDocuments();
-        FirebaseUtils.addCategoriesToFirestore(this);
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "populus-database").allowMainThreadQueries().build();
         if (db.getRecipePrevDao().getAll().size() == 0) {
-            FirebaseUtils.saveCategoryToDatabase(this, db, FirebaseUtils.CATEGORY);
+            FirebaseUtils.saveCategoryToDatabase(this, db);
             FirebaseUtils.saveIngredientsToDatabase(db);
             //может вот тут не пропускать пока он не сохранит все чо надо
         }

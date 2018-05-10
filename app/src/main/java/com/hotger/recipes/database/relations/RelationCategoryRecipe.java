@@ -1,10 +1,12 @@
-package com.hotger.recipes.database;
+package com.hotger.recipes.database.relations;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+/**
+ * Relation to category and recipe
+ */
 @Entity(primaryKeys = {"recipeId", "categoryId"})
 public class RelationCategoryRecipe {
     @NonNull

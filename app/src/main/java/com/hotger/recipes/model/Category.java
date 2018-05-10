@@ -12,6 +12,9 @@ import com.hotger.recipes.BR;
 import java.io.Serializable;
 import java.util.Locale;
 
+/**
+ * Priority class to present category of recipe
+ */
 @Entity
 public class Category extends BaseObservable implements Serializable {
 
@@ -37,6 +40,15 @@ public class Category extends BaseObservable implements Serializable {
         this.ruTitle = ruTitle;
         this.type = type;
         this.searchValue = searchValue;
+    }
+
+    @Bindable
+    public String getTitle() {
+        if (Locale.getDefault().toString().contains("ru")) {
+            return ruTitle;
+        } else {
+            return enTitle;
+        }
     }
 
     //region Getters and Setters
@@ -82,13 +94,4 @@ public class Category extends BaseObservable implements Serializable {
         this.searchValue = searchValue;
     }
     //endregion
-
-    @Bindable
-    public String getTitle() {
-        if (Locale.getDefault().toString().contains("ru")) {
-            return ruTitle;
-        } else {
-            return enTitle;
-        }
-    }
 }

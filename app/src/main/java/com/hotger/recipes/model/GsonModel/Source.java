@@ -2,6 +2,9 @@ package com.hotger.recipes.model.GsonModel;
 
 import com.google.gson.annotations.Expose;
 
+/**
+ * Class to get response from {@link com.hotger.recipes.utils.YummlyAPI} by gson
+ */
 public class Source {
     @Expose
     private String sourceRecipeUrl;
@@ -14,6 +17,7 @@ public class Source {
         this.sourceRecipeUrl = sourceRecipeUrl;
     }
 
+    //region Setters and getters
     public String getSourceRecipeUrl() {
         return sourceRecipeUrl;
     }
@@ -21,4 +25,5 @@ public class Source {
     public void setSourceRecipeUrl(String sourceRecipeUrl) {
         this.sourceRecipeUrl = sourceRecipeUrl;
     }
+    //endregion
 }

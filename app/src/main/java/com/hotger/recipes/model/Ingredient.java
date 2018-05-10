@@ -9,6 +9,9 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.Locale;
 
+/**
+ * Priority class
+ */
 @Entity
 @IgnoreExtraProperties
 public class Ingredient {

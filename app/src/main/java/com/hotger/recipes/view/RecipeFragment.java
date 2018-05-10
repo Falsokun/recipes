@@ -22,13 +22,13 @@ import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
-import com.hotger.recipes.database.RelationCategoryRecipe;
-import com.hotger.recipes.database.RelationRecipeType;
+import com.hotger.recipes.database.relations.RelationCategoryRecipe;
+import com.hotger.recipes.database.relations.RelationRecipeType;
 import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.Category;
-import com.hotger.recipes.model.EstimatesDialog;
+import com.hotger.recipes.utils.UI.EstimatesDialog;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
@@ -76,8 +76,8 @@ public class RecipeFragment extends Fragment {
     }
 
     private void checkForPassingFromDB() {
-        if (getArguments() != null && getArguments().getSerializable(Utils.RECIPE_OBJ) != null) {
-            model.setCurrentRecipe((Recipe) getArguments().getSerializable(Utils.RECIPE_OBJ));
+        if (getArguments() != null && getArguments().getSerializable(Utils.IntentVars.RECIPE_OBJ) != null) {
+            model.setCurrentRecipe((Recipe) getArguments().getSerializable(Utils.IntentVars.RECIPE_OBJ));
             setData();
             shouldShowOptions = true;
             getActivity().invalidateOptionsMenu();
@@ -116,7 +116,7 @@ public class RecipeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_edit) {
             Intent intent = new Intent(getActivity(), RedactorActivity.class);
-            intent.putExtra(Utils.RECIPE_ID, model.getCurrentRecipe().getId());
+            intent.putExtra(Utils.IntentVars.RECIPE_ID, model.getCurrentRecipe().getId());
             startActivity(intent);
         } else if (item.getItemId() == R.id.menu_delete) {
             model.deleteRecipeFromDatabase((ControllableActivity) getActivity(),
@@ -207,7 +207,7 @@ public class RecipeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         model.OnResume();
-        IntentFilter filter = new IntentFilter(Utils.RECIPE_OBJ);
+        IntentFilter filter = new IntentFilter(Utils.IntentVars.RECIPE_OBJ);
         filter.addAction(FirebaseUtils.RECIPES_REF);
         filter.addAction(YummlyAPI.REC_DIRECTIONS);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver,
@@ -225,8 +225,8 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 switch (intent.getAction()) {
-                    case Utils.RECIPE_OBJ:
-                        Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.RECIPE_OBJ);
+                    case Utils.IntentVars.RECIPE_OBJ:
+                        Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.IntentVars.RECIPE_OBJ);
                         model.setCurrentRecipe(recipe);
                         shouldWait = true;
                         if (!intent.getBooleanExtra(FirebaseUtils.RECIPES_REF, false)) {

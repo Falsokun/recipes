@@ -22,12 +22,16 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 /**
  * Displaying recipes list
+ *
+ * Отображение списка рецептов (превью)
  */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
-    private ControllableActivity activity;
-    private List<RecipePrev> data;
     public static int COLUMNS_COUNT = 3;
+
+    private ControllableActivity activity;
+
+    private List<RecipePrev> data;
 
     public CardAdapter(ControllableActivity activity, List<RecipePrev> data) {
         this.activity = activity;
@@ -70,10 +74,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return data.size();// - data.size() % COLUMNS_COUNT;
-    }
-
-    public boolean isEmpty() {
-        return data.isEmpty();
     }
 
     public void clearData() {

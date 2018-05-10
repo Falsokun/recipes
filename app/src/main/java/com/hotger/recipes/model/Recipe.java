@@ -6,6 +6,7 @@ import android.arch.persistence.room.Relation;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.hotger.recipes.model.GsonModel.Image;
+import com.hotger.recipes.model.GsonModel.NutritionEstimates;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.view.ControllableActivity;
 
@@ -13,6 +14,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Priority class
+ */
 @IgnoreExtraProperties
 public class Recipe implements Serializable {
 
@@ -43,6 +47,12 @@ public class Recipe implements Serializable {
         this.recipe = recipe;
     }
 
+    /**
+     * Get all categories from database by its name
+     *
+     * @param activity      - context
+     * @param allAttributes - category names
+     */
     private void filterCategories(ControllableActivity activity, ArrayList<String> allAttributes) {
         for (String category : allAttributes) {
             List<Category> queryRes = AppDatabase.getDatabase(activity).getCategoryDao().getCategoryByName(category);
@@ -55,6 +65,42 @@ public class Recipe implements Serializable {
         }
     }
 
+    /**
+     * Create image object from url and use it as a setter
+     *
+     * @param url - image url
+     */
+    public void setImageURL(String url) {
+        Image im = new Image(url);
+        ArrayList<Image> list = new ArrayList<>();
+        list.add(im);
+        recipe.setImages(list);
+    }
+
+    /**
+     * Get image url from {@link Image} object
+     *
+     * @return
+     */
+    public String getImageURL() {
+        if (recipe.getImages().size() == 0) {
+            return null;
+        }
+
+        return recipe.getImages().get(0).getUrl();
+    }
+
+    /**
+     * Checks if {@param category} contains in current categories
+     *
+     * @param category
+     * @return <code>true</code> if contains
+     */
+    public boolean hasCategory(String category) {
+        return getCategoriesTitles().contains(category);
+    }
+
+    //region getters and setters
     public List<Product> getProducts() {
         return products;
     }
@@ -71,7 +117,6 @@ public class Recipe implements Serializable {
         this.recipe = recipe;
     }
 
-    //region simplier life
     public String getName() {
         return recipe.getName();
     }
@@ -179,28 +224,9 @@ public class Recipe implements Serializable {
     public int getCalories() {
         return this.recipe.getCalories();
     }
-    //endregion
-
-    public void setImageURL(String url) {
-        Image im = new Image(url);
-        ArrayList<Image> list = new ArrayList<>();
-        list.add(im);
-        recipe.setImages(list);
-    }
-
-    public String getImageURL() {
-        if (recipe.getImages().size() == 0) {
-            return null;
-        }
-
-        return recipe.getImages().get(0).getUrl();
-    }
-
-    public boolean hasCategory(String category) {
-        return getCategoriesTitles().contains(category);
-    }
 
     public List<NutritionEstimates> getNutritionEstimates() {
         return recipe.getNutritionEstimates();
     }
+    //endregion
 }

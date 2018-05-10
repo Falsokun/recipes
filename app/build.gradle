@@ -47,7 +47,6 @@ dependencies {
     compile 'com.android.support:design:27.0.2'
     compile 'com.nex3z:flow-layout:1.0.0'
     compile 'com.shawnlin:number-picker:2.4.4'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0'

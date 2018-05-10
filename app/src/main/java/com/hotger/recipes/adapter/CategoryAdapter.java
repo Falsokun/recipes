@@ -3,13 +3,11 @@ package com.hotger.recipes.adapter;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ItemCategoryBinding;
@@ -23,15 +21,28 @@ import java.util.List;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
+/**
+ * Adapter for showing categories in main viewpager
+ *
+ * Адаптер для отображения категорий в главном меню
+ */
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    private List<Category> categoryList = new ArrayList<>();
     private MainActivity activity;
+
+    /**
+     * Adapter's data
+     */
+    private List<Category> data = new ArrayList<>();
+
+    /**
+     * Type of the category {cuisine, course or diet}
+     */
     private String type;
 
-    public CategoryAdapter(MainActivity activity, List<Category> categoryList, String type) {
+    public CategoryAdapter(MainActivity activity, List<Category> data, String type) {
         super();
-        this.categoryList = categoryList;
+        this.data = data;
         this.activity = activity;
         this.type = type;
     }
@@ -52,41 +63,43 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .apply(new RequestOptions().skipMemoryCache(true))
                 .transition(withCrossFade()).into(holderBinding.bgImage);
         holderBinding.bgImage.setImageURI(Uri.parse(category.getUrl()));
-        holderBinding.bgImage.setOnClickListener(v -> changeCategory(category.getSearchValue()));
+        holderBinding.bgImage.setOnClickListener(v -> chooseCategory(category.getSearchValue()));
     }
 
-    private void changeCategory(String searchValue) {
+    private void chooseCategory(String searchValue) {
         RecipeListFragment fragment = new RecipeListFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Utils.RECIPE_CATEGORY, searchValue);
-        bundle.putSerializable(Utils.RECIPE_TYPE, type);
+        bundle.putSerializable(Utils.IntentVars.RECIPE_CATEGORY, searchValue);
+        bundle.putSerializable(Utils.IntentVars.RECIPE_TYPE, type);
         fragment.setArguments(bundle);
         activity.setCurrentFragment(fragment, true, fragment.getTag());
     }
 
     @Override
     public int getItemCount() {
-        return categoryList.size();
+        return data.size();
     }
 
     private Category getItem(int position) {
-        return categoryList.get(position);
+        return data.get(position);
     }
 
+    //region Getters and setters
     public List<Category> getData() {
-        return categoryList;
+        return data;
     }
 
     public void setData(List<Category> data) {
-        notifyItemRangeRemoved(0, categoryList.size() - 1);
-        categoryList.clear();
-        this.categoryList = data;
+        notifyItemRangeRemoved(0, this.data.size() - 1);
+        this.data.clear();
+        this.data = data;
         notifyItemRangeChanged(0, data.size() - 1);
     }
 
     public void setType(String type) {
         this.type = type;
     }
+    //endregion
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -47,7 +47,7 @@ public class MainActivity extends ControllableActivity {
         updateCollapsing(mBinding.appbar, false);
         mMessageReceiver = getRecipeReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                new IntentFilter(Utils.RECIPE_ID));
+                new IntentFilter(Utils.IntentVars.RECIPE_ID));
     }
 
     public void setListeners() {
@@ -199,8 +199,8 @@ public class MainActivity extends ControllableActivity {
         return new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Utils.RECIPE_ID)) {
-                    Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.RECIPE_ID);
+                if (intent.getAction().equals(Utils.IntentVars.RECIPE_ID)) {
+                    Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.IntentVars.RECIPE_ID);
                     idToOpen = recipe.getId();
                 }
             }

@@ -4,6 +4,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+/**
+ * Api of yandex translations
+ */
 public interface TranslateAPI {
 
     String API_KEY = "key=trnsl.1.1.20180331T110910Z.b27cad1c9db5f675.99651a7a2790a10de243d668869e0b9f357e8e2d";
@@ -12,5 +15,5 @@ public interface TranslateAPI {
     String EN_RU = "en-ru";
 
     @GET("/api/v1.5/tr.json/translate?" + API_KEY)
-    Call<TranslateResponse> translate(@Query("text") String text, @Query("lang") String lang);
+    Call<ResponseAPI<String>> translate(@Query("text") String text, @Query("lang") String lang);
 }

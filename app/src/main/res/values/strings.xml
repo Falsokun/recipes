@@ -68,6 +68,7 @@
     <string name="nutrition_estimates">Nutrition Estimates</string>
     <string name="no_data_available">No data available for this recipe</string>
     <string name="choose_number">Choose number</string>
+    <string name="translation">Translation</string>
 
     <string-array name="measures_array">
         <item></item>

@@ -1,16 +1,11 @@
 package com.hotger.recipes.adapter;
 
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Rational;
 import android.view.ContextThemeWrapper;
@@ -20,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
-import com.hotger.recipes.database.RelationRecipeType;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
@@ -29,9 +23,7 @@ import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.MeasureUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
-import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,7 +65,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         this.isDetailed = isDetailed;
         this.isShoppingList = isShoppingList;
         if (isShoppingList) {
-             checked = AppDatabase.getDatabase(context)
+            checked = AppDatabase.getDatabase(context)
                     .getProductDao()
                     .getProducts(SHOPPING_LIST_CHECKED);
         }
@@ -147,10 +139,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         AppDatabase.getDatabase(activity).getProductDao().insert(product);
     }
 
+    //TODO: Эта функция удаляет весь продукт, надо вставить ID
     public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
-        AppDatabase.getDatabase(activity).getProductDao().delete(product); // ЭТО УДАЛЯЕТ ВЕСЬ ПРОДУКТ НАДО ВСТАВИТЬ ID
+        AppDatabase.getDatabase(activity).getProductDao().delete(product);
     }
 
+    /**
+     * Animates {@param animationView} with its animation from {@param start} to {@param end}
+     *
+     * @param animationView   - view to be animated
+     * @param shouldCalculate - boolean value which helps to figure out is it IN animation or OUT
+     * @param start           - start value
+     * @param end             - end value
+     */
     private void animateView(LottieAnimationView animationView, boolean shouldCalculate, float start, float end) {
         float anim_start;
         float anim_end;
@@ -170,16 +171,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public int getItemCount() {
         return data.size();
-    }
-
-    /**
-     * Add a new data to variable
-     *
-     * @param line - new product
-     */
-    public void addData(Product line) {
-        data.add(line);
-        notifyItemInserted(data.size() - 1);
     }
 
     /**
@@ -276,6 +267,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             }
         }
 
+        /**
+         * Show dialog with options about saving measure
+         */
         private void showDialog() {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.AppDialog));
             builder.setTitle(activity.getResources().getString(R.string.choose_measure));
@@ -305,9 +299,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             List<Ingredient> list = AppDatabase.getDatabase(v.getContext())
                     .getIngredientDao()
                     .getEnTranslation(binding.productName.getText().toString());
-            builder.setTitle("Translation")
+            builder.setTitle(activity.getString(R.string.translation))
                     .setMessage(list.get(0).getEn())
-                    .setNeutralButton("OK", null)
+                    .setNeutralButton(activity.getString(R.string.OK), null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
             return true;

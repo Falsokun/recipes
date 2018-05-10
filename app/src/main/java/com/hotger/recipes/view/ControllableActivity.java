@@ -66,8 +66,8 @@ public abstract class ControllableActivity extends AppCompatActivity {
                                  }
 
                                  Recipe recipe = new Recipe(response.body(), ControllableActivity.this);
-                                 Intent intent = new Intent(Utils.RECIPE_OBJ);
-                                 intent.putExtra(Utils.RECIPE_OBJ, recipe);
+                                 Intent intent = new Intent(Utils.IntentVars.RECIPE_OBJ);
+                                 intent.putExtra(Utils.IntentVars.RECIPE_OBJ, recipe);
                                  LocalBroadcastManager.getInstance(ControllableActivity.this).sendBroadcast(intent);
                                  ParseUtils.parseRecipe(recipe.getRecipe().getSource().getSourceRecipeUrl(),
                                          ControllableActivity.this, true);
@@ -118,7 +118,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
         RecipeFragment fragment = new RecipeFragment();
         Bundle bundle = new Bundle();
 //        recipe.prepareDataForShowing(ControllableActivity.this);
-        bundle.putSerializable(Utils.RECIPE_OBJ, recipe);
+        bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, recipe);
         fragment.setArguments(bundle);
 
         setCurrentFragment(fragment, true, fragment.getTag());

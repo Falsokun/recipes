@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to get response from {@link com.hotger.recipes.utils.YummlyAPI} by gson
+ */
 public class Attributes implements Serializable {
 
     private ArrayList<String> course;

@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Priority class
+ */
 @Entity(
         foreignKeys = @ForeignKey(entity = RecipeNF.class,
                 parentColumns = "id",
@@ -32,8 +35,6 @@ public class Product implements Serializable {
     /**
      * Product name
      */
-//    @SerializedName("searchValue")
-//    @Expose
     @NonNull
     private String ingredientId;
 
@@ -43,7 +44,6 @@ public class Product implements Serializable {
     @TypeConverters({ObjConverter.class})
     private Rational amount = new Rational(0, 1);
 
-    //TODO measure нужно из базы качать
     /**
      * Measure of product
      */
@@ -78,47 +78,6 @@ public class Product implements Serializable {
         this.amount = amount;
         this.measure = measure;
     }
-
-    //TODO реализовать
-
-    //region Getters and Setters
-    public String getIngredientId() {
-        return ingredientId;
-    }
-
-    public void setIngredientId(String ingredientId) {
-        this.ingredientId = ingredientId;
-    }
-
-    public Rational getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Rational amount) {
-        this.amount = amount;
-    }
-
-    public void setMeasure(String measure) {
-        this.measure = measure;
-    }
-
-    public String getMeasure() {
-        return measure;
-    }
-
-    public int getDrawableByMeasure() {
-        return 0;
-    }
-
-    public String getRecipeId() {
-        return recipeId;
-    }
-
-    public void setRecipeId(String recipeId) {
-        this.recipeId = recipeId;
-    }
-
-    //endregion
 
     //TODO может тут лучше не парсинг, а посмотреть по базе чо есть (нооо это долго наверное)
     public static Product getProductByLine(String productLine, ControllableActivity activity) {
@@ -162,6 +121,15 @@ public class Product implements Serializable {
         return ingredientId;
     }
 
+    //region rational processing
+
+    /**
+     * Get value with the multiplied coefficient
+     *
+     * @param rational - rational number
+     * @param koeff    - koeffitient
+     * @return string number of rational * koeff
+     */
     public static CharSequence doubleToStringWithKoeff(Rational rational, double koeff) {
         Rational res;
         if ((int) koeff != koeff) {
@@ -171,10 +139,16 @@ public class Product implements Serializable {
             res = new Rational(rational.getNumerator() * (int) koeff, rational.getDenominator());
         }
 
-        return printRational(res);
+        return getStringRational(res);
     }
 
-    public static CharSequence printRational(Rational rational) {
+    /**
+     * Get rational in a convienient string way (e.g. 1/4, 0, 2 3/4)
+     *
+     * @param rational - rational number
+     * @return rational string
+     */
+    public static CharSequence getStringRational(Rational rational) {
         if (rational.getDenominator() == 1) {
             return String.valueOf(rational.getNumerator());
         }
@@ -193,6 +167,12 @@ public class Product implements Serializable {
                 + rational.getDenominator() + "</sub></small>");
     }
 
+    /**
+     * Get from String
+     *
+     * @param amount - string rational
+     * @return rational number
+     */
     public static Rational parseAmount(String amount) {
         if (amount.contains("/")) {
             if (!amount.contains(" ")) {
@@ -220,4 +200,43 @@ public class Product implements Serializable {
         }
         return new Rational(Integer.parseInt(amount), 1);
     }
+    //endregion
+
+    //region Getters and Setters
+    public String getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(String ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public Rational getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Rational amount) {
+        this.amount = amount;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
+    }
+
+    public String getMeasure() {
+        return measure;
+    }
+
+    public int getDrawableByMeasure() {
+        return 0;
+    }
+
+    public String getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(String recipeId) {
+        this.recipeId = recipeId;
+    }
+    //endregion
 }

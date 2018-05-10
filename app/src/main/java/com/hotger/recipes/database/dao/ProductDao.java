@@ -11,6 +11,10 @@ import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
+/**
+ * Dao for products
+ * Fields: recipeId (FK), ingredientId (PK), amount, measure
+ */
 @Dao
 public interface ProductDao extends BaseDao<Product> {
     @Insert(onConflict = REPLACE)

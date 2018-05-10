@@ -1,5 +1,8 @@
-package com.hotger.recipes.model;
+package com.hotger.recipes.model.GsonModel;
 
+/**
+ * Class to get response from {@link com.hotger.recipes.utils.YummlyAPI} by gson
+ */
 public class NutritionEstimates {
     private String attribute;
 

@@ -28,7 +28,7 @@ import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.databinding.ActivitySearchBinding;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.ResponseRecipeAPI;
+import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.model.Category;
@@ -218,16 +218,16 @@ public class SearchActivity extends ControllableActivity {
         String searchValue = YummlyAPI.SEARCH + model.getSearchValue(mBinding.filter.checkbox.isChecked());
         App.getApi()
                 .search(searchValue)
-                .enqueue(new Callback<ResponseRecipeAPI>() {
+                .enqueue(new Callback<ResponseAPI>() {
                              @Override
-                             public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
+                             public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
                                  FirebaseUtils.searchRecipes(model.getCategories(), cardAdapter);
                                  cardAdapter.setData(response.body().getMatches());
                                  mBinding.progress.setVisibility(View.GONE);
                              }
 
                              @Override
-                             public void onFailure(Call<ResponseRecipeAPI> call, Throwable t) {
+                             public void onFailure(Call<ResponseAPI> call, Throwable t) {
                                  Toast.makeText(SearchActivity.this, "failed", Toast.LENGTH_SHORT).show();
                                  mBinding.progress.setVisibility(View.GONE);
                              }
@@ -257,7 +257,7 @@ public class SearchActivity extends ControllableActivity {
         BackStackFragment fragment = new BackStackFragment();
         Bundle recipeBundle = new Bundle();
         recipeBundle.putInt(Utils.EXTRA_NAVIGATION_ID, RecipeListFragment.ID);
-        recipeBundle.putBoolean(Utils.NEED_INIT, true);
+        recipeBundle.putBoolean(Utils.IntentVars.NEED_INIT, true);
         fragment.setArguments(recipeBundle);
         updateCollapsing(mBinding.appbar, false);
         getSupportFragmentManager().beginTransaction()

@@ -1,4 +1,4 @@
-package com.hotger.recipes.database;
+package com.hotger.recipes.database.relations;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -14,6 +14,7 @@ public class RelationObj {
         this.recipeId = recipeId;
     }
 
+    //region Getters and setters
     @NonNull
     public String getRecipeId() {
         return recipeId;
@@ -22,4 +23,5 @@ public class RelationObj {
     public void setRecipeId(@NonNull String recipeId) {
         this.recipeId = recipeId;
     }
+    //endregion
 }

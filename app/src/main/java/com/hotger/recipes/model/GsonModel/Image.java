@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-//@Entity
+/**
+ * Class to get response from {@link com.hotger.recipes.utils.YummlyAPI} by gson
+ */
 public class Image implements Serializable {
-//    @PrimaryKey
-//    @NonNull
 @SerializedName(value="hostedLargeUrl", alternate={"90"})
 @Expose
     private String url;
@@ -21,6 +21,7 @@ public class Image implements Serializable {
         this.url = url;
     }
 
+    //region Setters and getters
     @NonNull
     public String getUrl() {
         return url;
@@ -37,4 +38,5 @@ public class Image implements Serializable {
     public static Image fromString(String string) {
         return new Image(string.split(";")[0]);
     }
+    //endregion
 }

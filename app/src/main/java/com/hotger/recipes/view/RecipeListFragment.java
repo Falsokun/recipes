@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
-import com.hotger.recipes.database.RelationRecipeTypeViewModel;
+import com.hotger.recipes.database.relations.RelationRecipeTypeViewModel;
 import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipesListBinding;
 import com.hotger.recipes.database.FirebaseUtils;
@@ -25,7 +25,7 @@ import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.AsyncCalls;
 import com.hotger.recipes.utils.MessageModel;
-import com.hotger.recipes.utils.ResponseRecipeAPI;
+import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 
@@ -66,7 +66,7 @@ public class RecipeListFragment extends BackStackFragment {
         mBinding.listRv.setLayoutManager(new GridLayoutManager(getContext(), CardAdapter.COLUMNS_COUNT, GridLayoutManager.VERTICAL, false));
 
         //may be another way
-        if (getArguments() != null && getArguments().getString(Utils.RECIPE_CATEGORY) != null) {
+        if (getArguments() != null && getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY) != null) {
             mBinding.swipeRefresh.setOnRefreshListener(getOnRefreshListener());
             mBinding.swipeRefresh.setEnabled(true);
         } else {
@@ -78,7 +78,7 @@ public class RecipeListFragment extends BackStackFragment {
     @Override
     public void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter(Utils.NEED_INIT);
+        IntentFilter filter = new IntentFilter(Utils.IntentVars.NEED_INIT);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 filter);
     }
@@ -94,7 +94,7 @@ public class RecipeListFragment extends BackStackFragment {
     }
 
     private void checkForFavorites() {
-        String navId = getArguments().getString(Utils.EXTRA_TYPE);
+        String navId = getArguments().getString(Utils.IntentVars.EXTRA_TYPE);
         if (navId == null)
             return;
 
@@ -125,24 +125,24 @@ public class RecipeListFragment extends BackStackFragment {
     }
 
     private void checkForPassingFromApi() {
-        ResponseRecipeAPI rra = (ResponseRecipeAPI) getArguments().getSerializable(Utils.RECIPE_OBJ);
+        ResponseAPI rra = (ResponseAPI) getArguments().getSerializable(Utils.IntentVars.RECIPE_OBJ);
         if (rra != null) {
             cardAdapter.setData(rra.getMatches());
         }
     }
 
     private void checkForInit() {
-        if (getArguments().getBoolean(Utils.NEED_INIT, false)) {
+        if (getArguments().getBoolean(Utils.IntentVars.NEED_INIT, false)) {
             ((SearchActivity) getActivity()).setCardAdapter(cardAdapter);
         }
     }
 
     private void checkForCategory() {
-        if (getArguments() == null || getArguments().getString(Utils.RECIPE_CATEGORY) == null)
+        if (getArguments() == null || getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY) == null)
             return;
 
-        String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
-        String type = getArguments().getString(Utils.RECIPE_TYPE);
+        String searchValue = getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY);
+        String type = getArguments().getString(Utils.IntentVars.RECIPE_TYPE);
         if (!searchValue.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
             List<String> ids = AppDatabase.getDatabase(getContext()).getRelationRecipeTypeDao().getRecipesByType(searchValue);
             FirebaseUtils.getRecipesByType(searchValue, cardAdapter);
@@ -161,8 +161,8 @@ public class RecipeListFragment extends BackStackFragment {
     public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return () -> {
             //if category
-            if (getArguments() != null && getArguments().getString(Utils.RECIPE_CATEGORY) != null) {
-                String searchValue = getArguments().getString(Utils.RECIPE_CATEGORY);
+            if (getArguments() != null && getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY) != null) {
+                String searchValue = getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY);
                 cardAdapter.setData(new ArrayList<>());
                 AsyncCalls.saveCategoryToDB(getContext(), searchValue, true);
             }

@@ -7,6 +7,11 @@ import com.hotger.recipes.model.Ingredient;
 
 import java.util.List;
 
+//TODO: measure убрать
+/**
+ * Database for ingredients
+ * Fields: id, en, ru, measure
+ */
 @Dao
 public interface IngredientDao extends BaseDao<Ingredient> {
     @Query("SELECT * FROM ingredient")

@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hotger.recipes.R;
-import com.hotger.recipes.model.NutritionEstimates;
+import com.hotger.recipes.model.GsonModel.NutritionEstimates;
 
 import java.util.List;
 
+//TODO: объединить с DataListAdapter после того как там доделается все
+/**
+ * Adapter used
+ */
 public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
 
     private List<NutritionEstimates> data;

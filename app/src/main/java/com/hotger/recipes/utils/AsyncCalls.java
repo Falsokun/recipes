@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.hotger.recipes.App;
-import com.hotger.recipes.adapter.CardAdapter;
-import com.hotger.recipes.database.RelationRecipeType;
+import com.hotger.recipes.database.relations.RelationRecipeType;
 import com.hotger.recipes.model.RecipePrev;
 
 import java.util.ArrayList;
@@ -17,9 +16,14 @@ import retrofit2.Response;
 
 public class AsyncCalls {
 
-    //category = allowedCuisine[]
+    /**
+     * Save categories to database
+     * @param context
+     * @param searchValue
+     * @param sendMessage
+     */
     public static void saveCategoryToDB(Context context, String searchValue, boolean sendMessage) {
-        Call<ResponseRecipeAPI> call;
+        Call<ResponseAPI> call;
         YummlyAPI api = App.getApi();
         String category = searchValue.split("\\^")[0];
         switch (category) {
@@ -39,10 +43,10 @@ public class AsyncCalls {
         call.enqueue(getCallback(context, searchValue, sendMessage));
     }
 
-    public static Callback<ResponseRecipeAPI> getCallback(Context context, String searchValue, boolean shouldSendMessage) {
-        return new Callback<ResponseRecipeAPI>() {
+    public static Callback<ResponseAPI> getCallback(Context context, String searchValue, boolean shouldSendMessage) {
+        return new Callback<ResponseAPI>() {
             @Override
-            public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
+            public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
                 if (response.body() == null) {
                     return;
                 }
@@ -55,13 +59,13 @@ public class AsyncCalls {
                         .insertAll(prevs);
 
                 if (shouldSendMessage) {
-                    Intent intent = new Intent(Utils.NEED_INIT);
+                    Intent intent = new Intent(Utils.IntentVars.NEED_INIT);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseRecipeAPI> call, Throwable t) {
+            public void onFailure(Call<ResponseAPI> call, Throwable t) {
             }
         };
     }

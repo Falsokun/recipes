@@ -1,6 +1,5 @@
 package com.hotger.recipes.view.redactor;
 
-import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityRedactorBinding;
-import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
@@ -39,9 +37,9 @@ public class RedactorActivity extends ControllableActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent().getStringExtra(Utils.RECIPE_ID) != null) {
+        if (getIntent().getStringExtra(Utils.IntentVars.RECIPE_ID) != null) {
             mRedactorModel = new RedactorViewModel(this,
-                    getIntent().getStringExtra(Utils.RECIPE_ID));
+                    getIntent().getStringExtra(Utils.IntentVars.RECIPE_ID));
         } else {
             mRedactorModel = new RedactorViewModel(this);
         }
@@ -63,8 +61,8 @@ public class RedactorActivity extends ControllableActivity {
                 boolean result = mRedactorModel.onSave(mBinding.recipeVp);
                 if (result) {
                     onBackPressed();
-                    Intent intent = new Intent(Utils.RECIPE_ID);
-                    intent.putExtra(Utils.RECIPE_ID, mRedactorModel.getCurrentRecipe());
+                    Intent intent = new Intent(Utils.IntentVars.RECIPE_ID);
+                    intent.putExtra(Utils.IntentVars.RECIPE_ID, mRedactorModel.getCurrentRecipe());
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                 }
             }
@@ -96,12 +94,11 @@ public class RedactorActivity extends ControllableActivity {
             fragment1.setModel(mRedactorModel);
             mRedactorAdapter.addFragment(fragment1);
 
-            //TODO:Что-то с этим говном не так
             TextRedactorFragment fragment2 = new TextRedactorFragment();
             fragment2.setRedactorModel(mRedactorModel);
             mRedactorAdapter.addFragment(fragment2);
 
-            PickerFragment timePickerFragment = new PickerFragment();
+            PickerRedactorFragment timePickerFragment = new PickerRedactorFragment();
             timePickerFragment.setRedactorModel(mRedactorModel);
             mRedactorAdapter.addFragment(timePickerFragment);
         }

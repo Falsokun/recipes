@@ -1,15 +1,16 @@
-package com.hotger.recipes.database;
+package com.hotger.recipes.database.relations;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.hotger.recipes.database.dao.RecipePrevDao;
 import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
-import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.Utils;
 
 import java.util.List;
 
+/**
+ * Live data viewModel
+ */
 public class RelationRecipeTypeViewModel extends ViewModel {
 
     private LiveData<List<String>> myRecipes;

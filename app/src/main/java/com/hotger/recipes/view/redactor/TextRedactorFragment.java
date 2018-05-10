@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
@@ -25,16 +24,6 @@ public class TextRedactorFragment extends Fragment {
      * Numbered list for text
      */
     private EditText numberedText;
-//
-//    /**
-//     * Current number in the numbered list
-//     */
-    private int marker = 1;
-//
-//    /**
-//     * Variable if last input change was deleting
-//     */
-//    private boolean keyDelete = false;
 
     private boolean isEditedRecipe = false;
 
@@ -47,10 +36,10 @@ public class TextRedactorFragment extends Fragment {
         if (mRedactorModel.getCurrentRecipe() != null) {
             numberedText.setText(mRedactorModel.getCurrentRecipe().getPreparations());
         }
+
         numberedText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int count) {
-//                keyDelete = i1 - count == 1;
             }
 
             @Override
@@ -60,49 +49,9 @@ public class TextRedactorFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 mRedactorModel.getCurrentRecipe().setPreparations(editable.toString());
-//                if (!keyDelete) {
-//                    addMarker();
-//                } else {
-//                    deleteMarker();
-//                    if (editable.toString().length() == 2) {
-//                        editable.append(" ");
-//                    }
-//
-//                }
-//
-//                if (editable.toString().length() > 3) {
-//                    mRedactorModel.getCurrentRecipe().setPreparations(editable.toString());
-//                }
             }
         });
         return rootView;
-    }
-
-    /**
-     * Deleting "#." from the new string if is necessary
-     */
-    private void deleteMarker() {
-        String wholeText = numberedText.getText().toString();
-        int cursor = numberedText.getSelectionEnd();
-        if (wholeText.length() > 3) {
-            String last = wholeText.substring(wholeText.length() - 3);
-            if (wholeText.substring(wholeText.length() - 3, wholeText.length() - 2).equals("\n")) {
-                numberedText.setText(wholeText.replace(last, ""));
-                numberedText.setSelection(cursor - 3);
-                marker--;
-            }
-        }
-    }
-
-    /**
-     * Adding marker "#." for the new string if necessary
-     */
-    private void addMarker() {
-        String wholeText = numberedText.getText().toString();
-        if (wholeText.length() == 0 || wholeText.substring(wholeText.length() - 1, wholeText.length()).equals("\n")) {
-            numberedText.getText().append(marker + ". ");
-            marker++;
-        }
     }
 
     /**

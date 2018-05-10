@@ -7,11 +7,14 @@ import android.arch.persistence.room.Query;
 
 import com.hotger.recipes.model.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
+/**
+ * Category DAO;
+ * fields: searchValue (PK), url, enTitle, ruTitle, type
+ */
 @Dao
 public interface CategoryDao {
 

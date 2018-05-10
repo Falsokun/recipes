@@ -5,8 +5,8 @@ import android.net.Uri;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hotger.recipes.App;
-import com.hotger.recipes.database.RelationCategoryRecipe;
-import com.hotger.recipes.database.RelationRecipeType;
+import com.hotger.recipes.database.relations.RelationCategoryRecipe;
+import com.hotger.recipes.database.relations.RelationRecipeType;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.GsonModel.Image;
@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Recipe utils;
+ */
 public class RecipeUtils {
     public static void saveToDatabase(Recipe currentRecipe, ControllableActivity activity,
                                       boolean shouldSaveToFirebase, ArrayList<String> categoryTitles,
@@ -87,9 +90,9 @@ public class RecipeUtils {
         return categoryRelations;
     }
 
-    //А если изображение с таким именем существует?
+    //TODO: А если изображение с таким именем существует?
     private static void saveImageToCloudFirebase(Recipe currentRecipe, String path) {
-        String name = Utils.FIREBASE_IMG_STORAGE + path.split("/")[path.split("/").length - 1];
+        String name = FirebaseUtils.FIREBASE_IMG_STORAGE + path.split("/")[path.split("/").length - 1];
         StorageReference storageRef = App.getStorage().getReference();
         StorageReference mountainsRef = storageRef.child(name);
         try {

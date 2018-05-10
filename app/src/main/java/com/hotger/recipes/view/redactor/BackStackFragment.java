@@ -13,10 +13,12 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.CategoryFragment;
 import com.hotger.recipes.view.FridgeFragment;
 import com.hotger.recipes.view.HomeFragment;
-import com.hotger.recipes.view.MainActivity;
 import com.hotger.recipes.view.ProfileFragment;
 import com.hotger.recipes.view.RecipeListFragment;
 
+/**
+ * Fragment to add a child fragments to stack
+ */
 public class BackStackFragment extends Fragment {
 
     @Override

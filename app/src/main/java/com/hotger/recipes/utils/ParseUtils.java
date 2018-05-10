@@ -20,16 +20,15 @@ import java.util.regex.Pattern;
 
 public class ParseUtils {
 
-    private static final int MAX_DISTANCE = 5;
     private static Pattern instructionsPattern = Pattern.compile("(instructions?|directions?|preparations?" +
             "|приготовление|инструкции|(инструкция|способ|рецепт|порядок) приготовления|пошаговый( фото)? рецепт( приготовления)|подготовка)");//.*?( |:|\n|<.*?>)
     private static Pattern ingredientsPattern = Pattern.compile("(ингредиенты|вам понадоб[ия]тся|ingredients)");//.*?( |:|\n|<.*?>)
     private static Pattern portionsPattern = Pattern.compile("(на \\d+ (персон.?|порци.?)|количество (порций|персон)? \\d+|(\\d+)? ?порци. (\\d+)?)");
     private static Pattern timePattern = Pattern.compile("(общее время )?(\\d+ час.*? )?\\d+ мин(\\w+|\\.| )");
     private static Pattern caloriesPattern = Pattern.compile("(калорий.*? )?\\d+( ккал| калорий)");
-    //    Количество порций
+//    Количество порций
 //    Порций
-//            порции
+//    порции
 //    количество персон
     private static Pattern relatedPattern = Pattern.compile("(похож.*? рецепт?| вам (также|могут) понравит|подбор( рецепта)?)");
     private static String[] keyWordsEn = {"cook for", "bon appetit", "rest", "serving", "serve", "hour", "until", "bake"};

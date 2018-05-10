@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
-import com.hotger.recipes.adapter.DataHintAdapter;
+import com.hotger.recipes.adapter.DataListAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.RecipeNF;
@@ -29,7 +29,7 @@ import java.util.List;
 public class InputProductsViewModel extends ViewModel {
 
     private ProductsAdapter productsAdapter;
-    private DataHintAdapter dataHintAdapter;
+    private DataListAdapter dataHintAdapter;
     private List<Product> products;
     private ControllableActivity activity;
     private String productName;
@@ -38,7 +38,7 @@ public class InputProductsViewModel extends ViewModel {
         this.products = products;
         this.activity = activity;
         productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed, isShoppingList);
-        dataHintAdapter = new DataHintAdapter(activity, R.layout.item_list, AppDatabase.getDatabase(activity), "en");
+        dataHintAdapter = new DataListAdapter(activity, R.layout.item_list, AppDatabase.getDatabase(activity), "en");
     }
 
     @Override
@@ -130,7 +130,7 @@ public class InputProductsViewModel extends ViewModel {
         Toast.makeText(activity, "add product to base", Toast.LENGTH_SHORT).show();
     }
 
-    public DataHintAdapter getDataHintAdapter() {
+    public DataListAdapter getDataHintAdapter() {
         return dataHintAdapter;
     }
 

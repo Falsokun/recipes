@@ -4,16 +4,17 @@ import android.arch.persistence.room.TypeConverter;
 import android.text.TextUtils;
 import android.util.Rational;
 
-import com.hotger.recipes.model.GsonModel.Attributes;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.model.GsonModel.Source;
-import com.hotger.recipes.model.NutritionEstimates;
+import com.hotger.recipes.model.GsonModel.NutritionEstimates;
 
-import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Type converter for different types
+ */
 public class ObjConverter {
     @TypeConverter
     public String fromList(List<Image> urls) {
@@ -68,6 +69,9 @@ public class ObjConverter {
 
     @TypeConverter
     public List<NutritionEstimates> toEstimates(String data) {
+        if (data.length() == 0)
+            return new ArrayList<>();
+
         List<NutritionEstimates> res = new ArrayList<>();
         for (String strEstimate : data.split("\\|")) {
             res.add(new NutritionEstimates(strEstimate.split(":")[0],

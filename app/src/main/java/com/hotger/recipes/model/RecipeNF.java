@@ -3,7 +3,6 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
@@ -11,6 +10,7 @@ import com.google.gson.annotations.Expose;
 import com.hotger.recipes.database.ObjConverter;
 import com.hotger.recipes.model.GsonModel.Attributes;
 import com.hotger.recipes.model.GsonModel.Image;
+import com.hotger.recipes.model.GsonModel.NutritionEstimates;
 import com.hotger.recipes.model.GsonModel.Source;
 
 import java.io.Serializable;

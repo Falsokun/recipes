@@ -1,8 +1,11 @@
-package com.hotger.recipes.database;
+package com.hotger.recipes.database.relations;
 
 import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;
 
+/**
+ * Relation to recipe and type
+ */
 @Entity(primaryKeys = {"recipeId", "type"})
 public class RelationRecipeType {
 
@@ -17,6 +20,7 @@ public class RelationRecipeType {
         this.type = type;
     }
 
+    //region Getters and setters
     @NonNull
     public String getRecipeId() {
         return recipeId;
@@ -34,4 +38,5 @@ public class RelationRecipeType {
     public void setType(@NonNull String type) {
         this.type = type;
     }
+    //endregion
 }

@@ -40,7 +40,7 @@
     <string name="no_diet_filter">Фильтр диет не выбран</string>
     <string name="add_products_hint">Чтобы добавить продукты, используйте поле выше</string>
     <string name="favorite_hint">Ищите рецепты и добавляйте их в избранное! Начните прямо сейчас!</string>
-    <string name="course">Время</string>
+    <string name="course">Меню</string>
     <string name="diet">Диета</string>
     <string name="add_recipe">Добавьте свой рецепт</string>
     <string name="shopping_list">Список покупок</string>

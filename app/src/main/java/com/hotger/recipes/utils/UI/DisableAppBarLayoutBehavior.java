@@ -8,7 +8,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * Disable coordinator layouts swipe
+ */
 public class DisableAppBarLayoutBehavior extends AppBarLayout.Behavior {
+
     private boolean mEnabled;
 
     public DisableAppBarLayoutBehavior() {
@@ -56,9 +60,5 @@ public class DisableAppBarLayoutBehavior extends AppBarLayout.Behavior {
     @Override
     public boolean onTouchEvent(CoordinatorLayout parent, AppBarLayout child, MotionEvent ev) {
         return mEnabled && super.onTouchEvent(parent, child, ev);
-    }
-
-    public boolean isEnabled() {
-        return mEnabled;
     }
 }

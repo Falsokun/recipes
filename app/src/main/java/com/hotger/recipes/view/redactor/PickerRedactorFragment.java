@@ -28,7 +28,10 @@ import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
-public class PickerFragment extends Fragment implements com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener {
+/**
+ * Redactor Fragment
+ */
+public class PickerRedactorFragment extends Fragment implements com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener {
     /**
      * Redactor view model
      */
@@ -70,6 +73,12 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         this.mRedactorModel = mRedactorModel;
     }
 
+    /**
+     * Open time picker dialog
+     *
+     * @param initTime - init time
+     * @param tag      - tag
+     */
     public void openTimePicker(int initTime, String tag) {
         TimePickerDialog dialog = TimePickerDialog.newInstance(this,
                 initTime / 60, initTime % 60, 0,
@@ -77,6 +86,9 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         dialog.show(getActivity().getFragmentManager(), tag);
     }
 
+    /**
+     * Opens fragment for choosing image
+     */
     @SuppressLint("ResourceType")
     private void chooseImage() {
         ArrayList<Image> images = new ArrayList<>();
@@ -95,7 +107,6 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
                 .setImageTitle("Galleries")         //  Image title (works with FolderMode = false)
                 .setDoneTitle(getString(R.string.OK))               //  Done button title
                 .setMaxSize(1)                     //  Max images can be selected
-//                .setSavePath("ImagePicker")         //  Image capture folder name
                 .setSelectedImages(images)          //  Selected images
                 .setKeepScreenOn(true)              //  Keep screen on when selecting images
                 .start();                           //  Start ImagePicker
@@ -123,6 +134,13 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         }
     }
 
+    /**
+     * Format time in XX:XX format
+     *
+     * @param hour
+     * @param minute
+     * @return string time in convenient format
+     */
     public String timeFormatter(int hour, int minute) {
         return String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
     }
@@ -154,6 +172,12 @@ public class PickerFragment extends Fragment implements com.wdullaer.materialdat
         d.show();
     }
 
+    /**
+     * Get value changed listener
+     *
+     * @param isCalories
+     * @return
+     */
     public NumberPicker.OnValueChangeListener getValueChangedListener(boolean isCalories) {
         return (picker, oldVal, newVal) -> {
             if (isCalories) {

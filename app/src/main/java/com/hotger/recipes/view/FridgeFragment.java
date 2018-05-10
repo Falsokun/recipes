@@ -13,12 +13,10 @@ import android.widget.Toast;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentFridgeBinding;
-import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.ResponseRecipeAPI;
+import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.model.Product;
-import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
@@ -99,12 +97,12 @@ public class FridgeFragment extends BackStackFragment {
 
         App.getApi()
                 .search(builder.toString())
-                .enqueue(new Callback<ResponseRecipeAPI>() {
+                .enqueue(new Callback<ResponseAPI>() {
                              @Override
-                             public void onResponse(Call<ResponseRecipeAPI> call, Response<ResponseRecipeAPI> response) {
+                             public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
                                  Fragment fragment = new BackStackFragment();
                                  Bundle bundle = new Bundle();
-                                 bundle.putSerializable(Utils.RECIPE_OBJ, response.body());
+                                 bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, response.body());
                                  if (response.body() != null && response.body().getMatches().size() == 0) {
                                      Toast.makeText(getContext(), "no matches found", Toast.LENGTH_SHORT).show();
                                      mBinding.progress.setVisibility(View.VISIBLE);
@@ -118,7 +116,7 @@ public class FridgeFragment extends BackStackFragment {
                              }
 
                              @Override
-                             public void onFailure(Call<ResponseRecipeAPI> call, Throwable t) {
+                             public void onFailure(Call<ResponseAPI> call, Throwable t) {
                                  mBinding.fragmentRedactor.inputProducts.setVisibility(View.VISIBLE);
                                  mBinding.progress.setVisibility(View.GONE);
                              }

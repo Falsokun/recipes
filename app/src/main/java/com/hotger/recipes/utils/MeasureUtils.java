@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utils to process measure and other
+ */
 public class MeasureUtils {
     public static final String DEFAULT_MEASURE = "pcs";
     private static List<String> TSP = Arrays.asList("tsp", "ч\\. л\\.", "чайн.?.? ложк", "teaspoon", "t");
@@ -38,7 +41,8 @@ public class MeasureUtils {
                 m = p.matcher(str);
             }
             if (m.find()) {
-                if (tempUnit == LIQUID || tempUnit == LITTLE) { //тут сравнения по ссылке достаточно
+                //тут сравнения по ссылке достаточно
+                if (tempUnit == LIQUID || tempUnit == LITTLE) {
                     return m.group(1);
                 }
 
