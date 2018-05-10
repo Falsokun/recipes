@@ -14,27 +14,20 @@
 
             <TextView
                 android:id="@+id/prep_time_title"
+                style="@style/ImageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/prep_time"
                 android:drawableLeft="@drawable/ic_time_white"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/colorText"
-                android:gravity="center_vertical"
-                android:text="@string/prep_time"
-                android:textColor="@color/colorText" />
+                android:text="@string/prep_time" />
 
             <Button
                 android:id="@+id/prep_time"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                style="@style/BorderlessTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:width="100dp"
-                android:gravity="center"
-                android:text="00:00"
-                android:textColor="@color/colorText" />
+                android:text="00:00" />
 
         </RelativeLayout>
 
@@ -47,27 +40,20 @@
 
             <TextView
                 android:id="@+id/cooking_time_title"
+                style="@style/ImageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/cooking_time"
                 android:drawableLeft="@drawable/ic_time_white"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/colorText"
-                android:gravity="center_vertical"
-                android:text="@string/cooking_time"
-                android:textColor="@color/colorText" />
+                android:text="@string/cooking_time" />
 
             <Button
                 android:id="@+id/cooking_time"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                style="@style/BorderlessTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:width="100dp"
-                android:gravity="center"
-                android:text="00:00"
-                android:textColor="@color/colorText" />
+                android:text="00:00" />
 
         </RelativeLayout>
 
@@ -81,29 +67,20 @@
 
             <TextView
                 android:id="@+id/choose_img_title"
+                style="@style/ImageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/photo_src_btn"
                 android:drawableLeft="@drawable/ic_image_black"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/colorText"
-                android:gravity="center_vertical"
-                android:text="@string/select_image"
-                android:textColor="@color/colorText" />
+                android:text="@string/select_image" />
 
             <Button
                 android:id="@+id/photo_src_btn"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                style="@style/BorderlessTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:width="100dp"
-                android:gravity="center"
-                android:hint="..."
-                android:textColorHint="@color/colorText"
-                android:textAllCaps="false"
-                android:textColor="@color/colorText" />
+                android:text="..." />
 
         </RelativeLayout>
 
@@ -116,29 +93,20 @@
 
             <TextView
                 android:id="@+id/cal_title"
+                style="@style/ImageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/cal_selector"
                 android:drawableLeft="@drawable/ic_info"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/colorText"
-                android:gravity="center_vertical"
-                android:text="@string/number_of_calories"
-                android:textColor="@color/colorText" />
+                android:text="@string/number_of_calories" />
 
             <Button
                 android:id="@+id/cal_selector"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                style="@style/BorderlessTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:width="100dp"
-                android:gravity="center"
-                android:textColorHint="@color/colorText"
-                android:hint="0"
-                android:textAllCaps="false"
-                android:textColor="@color/colorText" />
+                android:text="0" />
 
         </RelativeLayout>
 
@@ -151,29 +119,20 @@
 
             <TextView
                 android:id="@+id/portions_number"
+                style="@style/ImageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/num_selector"
+                android:layout_toStartOf="@+id/portions_selector"
                 android:drawableLeft="@drawable/ic_persons_num"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/colorText"
-                android:gravity="center_vertical"
-                android:text="@string/persons_number"
-                android:textColor="@color/colorText" />
+                android:text="@string/persons_number" />
 
             <Button
                 android:id="@+id/portions_selector"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                style="@style/BorderlessTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:width="100dp"
-                android:gravity="center"
-                android:hint="0"
-                android:textAllCaps="false"
-                android:textColor="@color/colorText"
-                android:textColorHint="@color/colorText" />
+                android:text="0" />
 
         </RelativeLayout>
 

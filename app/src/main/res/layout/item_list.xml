@@ -12,22 +12,19 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/amount"
             android:hint="texttext"
             android:padding="10dp"
             android:textColor="@android:color/white"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:layout_toStartOf="@+id/amount"/>
+            android:textSize="@dimen/text_size" />
 
         <TextView
             android:id="@+id/amount"
-            android:padding="10dp"
-            android:textSize="16dp"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            />
+            android:padding="10dp"
+            android:textSize="@dimen/text_size" />
     </RelativeLayout>
 
 </LinearLayout>

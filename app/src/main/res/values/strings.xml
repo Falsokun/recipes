@@ -69,6 +69,8 @@
     <string name="no_data_available">No data available for this recipe</string>
     <string name="choose_number">Choose number</string>
     <string name="translation">Translation</string>
+    <string name="translate_from_american_metrics">Translate from american metrics</string>
+    <string name="write_instructions">Write here your recipe instructions</string>
 
     <string-array name="measures_array">
         <item></item>

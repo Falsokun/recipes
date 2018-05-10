@@ -5,9 +5,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:padding="@dimen/padding_dimen"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="@dimen/padding_dimen"
+        android:layout_marginTop="@dimen/padding_dimen"
+        android:padding="@dimen/padding_dimen">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -17,19 +17,19 @@
 
             <TextView
                 android:id="@+id/category_title"
+                style="@style/TextTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/choose_categories"
-                android:textColor="@color/colorPrimaryDark" />
+                android:text="@string/choose_categories" />
 
 
             <com.nex3z.flowlayout.FlowLayout
                 android:id="@+id/category_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flChildSpacing="8dp"
-                app:flRowSpacing="8dp"
-                android:layout_below="@id/category_title"/>
+                android:layout_below="@id/category_title"
+                app:flChildSpacing="@dimen/low_padding"
+                app:flRowSpacing="@dimen/low_padding" />
         </RelativeLayout>
 
     </ScrollView>

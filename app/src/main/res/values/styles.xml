@@ -24,7 +24,7 @@
         <item name="android:background">@color/colorBackground</item>
     </style>
 
-    <style name="AppTheme.Picker" parent="AppTheme" >
+    <style name="AppTheme.Picker" parent="AppTheme">
         <item name="android:textColorPrimary">@color/colorAccent</item>
         <item name="colorControlNormal">@color/colorAccent</item>
     </style>
@@ -58,5 +58,64 @@
     <style name="LinearProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:progressBackgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="TextTheme">
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textColorHint">@color/colorHint</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ImageText" parent="TextTheme">
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:tint">@color/colorText</item>
+    </style>
+
+    <style name="EntireLineBtn">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ScrollableImView">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="layout_collapseMode">parallax</item>
+    </style>
+
+    <style name="MaterialSpinner">
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="ms_arrow_tint">@color/colorPrimaryLight</item>
+        <item name="ms_background_selector">@color/colorPrimary</item>
+        <item name="ms_dropdown_height">300dp</item>
+        <item name="ms_text_color">@color/colorPrimaryLight</item>
+    </style>
+
+    <style name="RangeBar">
+        <item name="mrb_connectingLineColor">@color/colorPrimaryLight</item>
+        <item name="mrb_pinColor">@color/colorPrimaryLight</item>
+        <item name="mrb_rangeBar">false</item>
+        <item name="mrb_rangeBarColor">@color/colorPrimaryLight</item>
+        <item name="mrb_selectorColor">@color/colorPrimaryLight</item>
+    </style>
+
+    <style name="BorderlessTextButton" parent="@style/Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:width">100dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColorHint">@color/colorHint</item>
+    </style>
+
+    <style name="Item">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">#00ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>

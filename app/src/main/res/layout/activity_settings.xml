@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -22,7 +23,7 @@
             android:padding="@dimen/padding_dimen">
 
             <TextView
-                android:textColor="@color/colorText"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/switch1"
@@ -30,11 +31,11 @@
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/switch1"
-                app:trackTint="@color/grey"
                 android:layout_width="wrap_content"
-                android:thumbTint="@color/colorHint"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentEnd="true"
+                android:thumbTint="@color/colorHint"
+                app:trackTint="@color/grey" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -43,7 +44,7 @@
             android:padding="@dimen/padding_dimen">
 
             <TextView
-                android:textColor="@color/colorText"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/switch2"
@@ -51,10 +52,31 @@
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/switch2"
-                app:trackTint="@color/grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentEnd="true"
+                app:trackTint="@color/grey" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_dimen">
+
+            <TextView
+                style="@style/TextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/switch3"
+                android:text="@string/translate_from_american_metrics" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                app:trackTint="@color/grey" />
         </RelativeLayout>
     </LinearLayout>
 </layout>

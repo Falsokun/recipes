@@ -31,10 +31,10 @@
 
             <include
                 android:id="@+id/results"
-                bind:data="@{model}"
                 layout="@layout/fragment_recipes_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                bind:data="@{model}" />
         </FrameLayout>
     </RelativeLayout>
 </layout>

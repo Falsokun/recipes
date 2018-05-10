@@ -12,40 +12,28 @@
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/cuisine_sp"
+            style="@style/MaterialSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/no_cuisine_filter"
-            app:ms_arrow_tint="@color/colorPrimaryLight"
-            app:ms_background_color="#000000ff"
-            app:ms_background_selector="@color/colorPrimaryDarkOpaque"
-            app:ms_dropdown_height="300dp"
-            app:ms_text_color="@color/colorPrimaryLight" />
+            android:hint="@string/no_cuisine_filter" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/course_sp"
+            style="@style/MaterialSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/cuisine_sp"
             android:layout_marginTop="@dimen/padding_dimen"
-            android:hint="@string/no_course_filter"
-            app:ms_arrow_tint="@color/colorPrimaryLight"
-            app:ms_background_color="#000000ff"
-            app:ms_background_selector="@color/colorPrimaryDarkOpaque"
-            app:ms_dropdown_height="300dp"
-            app:ms_text_color="@color/colorPrimaryLight" />
+            android:hint="@string/no_course_filter" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/diet_sp"
+            style="@style/MaterialSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/course_sp"
             android:layout_marginTop="@dimen/padding_dimen"
-            android:hint="@string/no_diet_filter"
-            app:ms_arrow_tint="@color/colorPrimaryLight"
-            app:ms_background_color="#000000ff"
-            app:ms_background_selector="@color/colorPrimaryDarkOpaque"
-            app:ms_dropdown_height="300dp"
-            app:ms_text_color="@color/colorPrimaryLight" />
+            android:hint="@string/no_diet_filter" />
 
         <RelativeLayout
             android:id="@+id/cooking_time_title"
@@ -74,15 +62,11 @@
         </RelativeLayout>
 
         <com.appyvet.materialrangebar.RangeBar
-            android:id="@+id/rangebar"
+            android:id="@+id/range_bar"
+            style="@style/RangeBar"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_below="@id/cooking_time_title"
-            app:mrb_connectingLineColor="@color/colorPrimaryLight"
-            app:mrb_pinColor="@color/colorPrimaryLight"
-            app:mrb_rangeBar="false"
-            app:mrb_rangeBarColor="@color/colorPrimaryLight"
-            app:mrb_selectorColor="@color/colorPrimaryLight"
             app:mrb_tickEnd="60"
             app:mrb_tickInterval="5"
             app:mrb_tickStart="5" />
@@ -91,7 +75,7 @@
             android:id="@+id/flow_lo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rangebar" />
+            android:layout_below="@id/range_bar" />
 
         <Button
             android:id="@+id/search_btn"
@@ -99,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/flow_lo"
-            android:drawableRight="@drawable/ic_search"
+            android:drawableEnd="@drawable/ic_search"
             android:text="@string/start_searching" />
     </RelativeLayout>
 </layout>

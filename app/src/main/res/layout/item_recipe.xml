@@ -20,21 +20,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/recipe_name"
+                style="@style/Item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:hint="Recipe name"
                 android:paddingLeft="@dimen/low_padding"
                 android:paddingRight="@dimen/low_padding"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white"
-                android:textSize="@dimen/small_text_size"
-                android:gravity="center"/>
+                android:textSize="@dimen/small_text_size" />
         </RelativeLayout>
 
     </FrameLayout>

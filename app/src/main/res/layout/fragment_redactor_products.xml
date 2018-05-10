@@ -29,18 +29,16 @@
 
         <EditText
             android:id="@+id/addProductName"
+            style="@style/TextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/padding_dimen"
             android:backgroundTint="@color/colorPrimaryDark"
             android:elevation="4dp"
             android:hint="@string/add_products"
-            android:inputType="text"
             android:maxLines="1"
-            android:text="@={model.productName}"
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorHint" />
+            android:text="@={model.productName}" />
 
         <ListView
             android:id="@+id/list_view"
@@ -53,7 +51,6 @@
             android:elevation="4dp"
             android:translationZ="10dp"
             android:visibility="@{model.productName.length() != 0 ? View.VISIBLE : View.GONE}" />
-        <!--&amp;&amp; model.keyboardVisible? View.VISIBLE : View.GONE-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/products_line_rv"

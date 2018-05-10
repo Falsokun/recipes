@@ -24,22 +24,17 @@
 
             <TextView
                 android:id="@+id/title"
+                style="@style/Item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:background="#00ffffff"
-                android:gravity="center"
-                android:hint="@string/category"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white" />
+                android:hint="@string/category" />
 
             <TextView
                 android:id="@+id/type"
+                style="@style/Item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
                 android:hint="@string/description_hint"
                 android:paddingTop="@dimen/low_padding" />
         </RelativeLayout>

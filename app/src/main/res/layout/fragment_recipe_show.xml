@@ -35,12 +35,12 @@
 
                 <TextView
                     android:id="@+id/name"
+                    style="@style/TextTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@{model.currentRecipe.name}"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
                     android:textSize="@dimen/title_size" />
 
                 <LinearLayout
@@ -98,38 +98,38 @@
                             style="@style/SquaredStyle"
                             android:layout_width="32dp"
                             android:layout_height="wrap_content"
-                            android:text="-"
+                            android:includeFontPadding="false"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
-                            android:scaleY="0.7"
                             android:scaleX="0.7"
-                            android:textSize="18sp"
-                            android:includeFontPadding="false"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:scaleY="0.7"
+                            android:text="-"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="18sp" />
 
                         <TextView
                             android:id="@+id/portions_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorPrimaryDark"
+                            android:layout_centerVertical="true"
                             android:layout_toEndOf="@id/minus"
-                            android:layout_centerVertical="true"/>
+                            android:textColor="@color/colorPrimaryDark" />
 
                         <Button
                             android:id="@+id/plus"
-                            android:layout_toEndOf="@+id/portions_value"
                             style="@style/SquaredStyle"
                             android:layout_width="32dp"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/portions_value"
+                            android:includeFontPadding="false"
                             android:minHeight="0dp"
                             android:minWidth="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="+"
                             android:padding="10dp"
-                            android:scaleY="0.7"
                             android:scaleX="0.7"
-                            android:textSize="18sp"
-                            android:includeFontPadding="false"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:scaleY="0.7"
+                            android:text="+"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="18sp" />
                     </RelativeLayout>
 
                     <TextView
@@ -166,6 +166,7 @@
                         android:layout_marginRight="@dimen/padding_dimen"
                         app:wlv_borderColor="@color/colorAccent"
                         app:wlv_borderWidth="3dp"
+                        app:wlv_progressValue="130"
                         app:wlv_round_rectangle="true"
                         app:wlv_shapeType="circle"
                         app:wlv_titleBottom="@string/prep_time"
@@ -174,7 +175,6 @@
                         app:wlv_titleCenterSize="14sp"
                         app:wlv_triangle_direction="north"
                         app:wlv_waveAmplitude="70"
-                        app:wlv_progressValue="130"
                         app:wlv_waveColor="@color/colorAccent" />
 
                     <me.itangqi.waveloadingview.WaveLoadingView
@@ -184,9 +184,9 @@
                         android:layout_marginRight="@dimen/padding_dimen"
                         app:wlv_borderColor="@color/colorAccent"
                         app:wlv_borderWidth="3dp"
+                        app:wlv_progressValue="130"
                         app:wlv_round_rectangle="true"
                         app:wlv_shapeType="circle"
-                        app:wlv_progressValue="130"
                         app:wlv_titleBottom="@string/cooking_time"
                         app:wlv_titleBottomSize="8sp"
                         app:wlv_titleCenterColor="@color/colorText"
@@ -201,11 +201,11 @@
                         android:layout_height="90dp"
                         app:wlv_borderColor="@color/colorAccent"
                         app:wlv_borderWidth="3dp"
+                        app:wlv_progressValue="240"
                         app:wlv_round_rectangle="true"
                         app:wlv_shapeType="circle"
                         app:wlv_titleBottom="@string/total_time"
                         app:wlv_titleBottomSize="8sp"
-                        app:wlv_progressValue="240"
                         app:wlv_titleCenterColor="@color/colorText"
                         app:wlv_titleCenterSize="14sp"
                         app:wlv_triangle_direction="north"

@@ -3,5 +3,7 @@
     <dimen name="padding_dimen">16dp</dimen>
     <dimen name="title_size">20sp</dimen>
     <dimen name="small_text_size">10sp</dimen>
+    <dimen name="text_size">14sp</dimen>
     <dimen name="low_padding">8dp</dimen>
+    <dimen name="h1Size">16sp</dimen>
 </resources>

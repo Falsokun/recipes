@@ -13,7 +13,7 @@
 
             <TextView
                 android:id="@+id/title"
-                android:textSize="16dp"
+                android:textSize="@dimen/h1Size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -30,7 +30,7 @@
                 android:layout_below="@id/content_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="OK" />
+                android:text="@string/OK" />
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

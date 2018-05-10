@@ -2,32 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/padding_dimen">
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:text="@string/write_your_instructions"
-        android:textColor="@color/colorPrimaryDark" />
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.hotger.recipes.view.LinedEditText
-        android:background="@android:color/white"
-        android:id="@+id/editable_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/name"
-        android:textColorHint="@color/colorHint"
-        android:gravity="top"
-        android:hint="Write here, write now"
-        android:textColor="@color/colorPrimaryDark" />
+        <com.hotger.recipes.view.LinedEditText
+            android:id="@+id/editable_text"
+            style="@style/TextTheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/name"
+            android:background="@android:color/white"
+            android:gravity="top"
+            android:hint="@string/write_instructions" />
     </android.support.v7.widget.CardView>
 </RelativeLayout>
