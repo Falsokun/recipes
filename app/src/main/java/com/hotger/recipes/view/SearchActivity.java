@@ -70,7 +70,7 @@ public class SearchActivity extends ControllableActivity {
 
     public void setSearchAttr() {
         mBinding.filterBtn.setOnClickListener(v -> slideAnimation(mBinding.filter.filterContainer));
-        mBinding.filter.rangebar.setOnRangeBarChangeListener((rangeBar, leftPinIndex, rightPinIndex, leftPinValue, rightPinValue) -> {
+        mBinding.filter.rangeBar.setOnRangeBarChangeListener((rangeBar, leftPinIndex, rightPinIndex, leftPinValue, rightPinValue) -> {
             model.setTimeInMinutes(rightPinValue);
             if (mBinding.filter.checkbox.isChecked()) {
                 mBinding.filter.checkbox.setText(rightPinValue);
@@ -79,7 +79,7 @@ public class SearchActivity extends ControllableActivity {
 
         mBinding.filter.checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                buttonView.setText(mBinding.filter.rangebar.getRightPinValue());
+                buttonView.setText(mBinding.filter.rangeBar.getRightPinValue());
             } else {
                 buttonView.setText("");
             }

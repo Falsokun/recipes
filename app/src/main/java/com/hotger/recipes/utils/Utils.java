@@ -1,10 +1,14 @@
 package com.hotger.recipes.utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.util.SparseIntArray;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.hotger.recipes.R;
 
@@ -22,6 +26,14 @@ public class Utils {
         bottomNavigationTabs.put(R.id.menu_fridge, 2);
         bottomNavigationTabs.put(R.id.menu_profile, 3);
         bottomNavigationTabs.put(R.id.menu_search, 4);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        View v = activity.getCurrentFocus();
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
     }
 
     /**
@@ -97,5 +109,32 @@ public class Utils {
         } catch (IllegalAccessException e) {
             Log.e("BNVHelper", "Unable to change value of shift mode", e);
         }
+    }
+
+    public static int levenshteinDistance2(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        int[] D1;
+        int[] D2 = new int[n + 1];
+
+        for (int i = 0; i <= n; i++)
+            D2[i] = i;
+
+        for (int i = 1; i <= m; i++) {
+            D1 = D2;
+            D2 = new int[n + 1];
+            for (int j = 0; j <= n; j++) {
+                if (j == 0) D2[j] = i;
+                else {
+                    int cost = (s1.charAt(i - 1) != s2.charAt(j - 1)) ? 1 : 0;
+                    if (D2[j - 1] < D1[j] && D2[j - 1] < D1[j - 1] + cost)
+                        D2[j] = D2[j - 1] + 1;
+                    else if (D1[j] < D1[j - 1] + cost)
+                        D2[j] = D1[j] + 1;
+                    else
+                        D2[j] = D1[j - 1] + cost;
+                }
+            }
+        }
+        return D2[n];
     }
 }

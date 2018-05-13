@@ -1,6 +1,7 @@
 package com.hotger.recipes.view.redactor;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -62,10 +64,10 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
         mBinding.photoSrcBtn.setOnClickListener(v -> chooseImage());
         mBinding.caloriesContainer.setOnClickListener(v -> openNumberPickerDialog(getContext(),
                 mBinding.calSelector, getString(R.string.number_of_calories),
-                getValueChangedListener(true), 20, 1000, 5));
+                getValueChangedListener(true, 5), 20, 1000, 5));
         mBinding.portionsContainer.setOnClickListener(v -> openNumberPickerDialog(getContext(),
                 mBinding.portionsSelector, getString(R.string.persons_number),
-                getValueChangedListener(false), 1, 20, 1));
+                getValueChangedListener(false, 1), 1, 20, 1));
         return mBinding.getRoot();
     }
 
@@ -169,6 +171,7 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
             view.setText(String.valueOf(np.getValue()));
             d.dismiss();
         });
+
         d.show();
     }
 
@@ -178,10 +181,13 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
      * @param isCalories
      * @return
      */
-    public NumberPicker.OnValueChangeListener getValueChangedListener(boolean isCalories) {
+    public NumberPicker.OnValueChangeListener getValueChangedListener(boolean isCalories, int step) {
         return (picker, oldVal, newVal) -> {
             if (isCalories) {
-                mRedactorModel.getCurrentRecipe().setCalories(newVal);
+                int minValue = picker.getMinValue();
+                int nvalue = (newVal - minValue) * step + minValue;
+                mRedactorModel.getCurrentRecipe().setCalories(nvalue);
+                mBinding.calSelector.setText(String.valueOf(nvalue));
             } else {
                 mRedactorModel.getCurrentRecipe().setNumberOfServings(newVal);
             }

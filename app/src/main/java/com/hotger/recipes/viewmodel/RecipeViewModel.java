@@ -19,6 +19,7 @@ import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.MeasureUtils;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
@@ -126,11 +127,11 @@ public class RecipeViewModel extends ViewModel {
         }
 
         String s1 = closestIngredients.get(0);
-        minDistance = levenshteinDistance2(productLine, s1);
+        minDistance = Utils.levenshteinDistance2(productLine, s1);
         int tempDistance;
         for (int i = 1; i < productLine.split(" ").length; i++) {
             String s2 = closestIngredients.get(i);
-            tempDistance = levenshteinDistance2(productLine, s2);
+            tempDistance = Utils.levenshteinDistance2(productLine, s2);
             if (tempDistance < minDistance) {
                 s1 = s2;
                 minDistance = tempDistance;
@@ -149,7 +150,7 @@ public class RecipeViewModel extends ViewModel {
             List<Ingredient> ingredientList = db.getIngredientDao().getIngredientRange(i * 500, 500);
             for (int j = 0; j < ingredientList.size(); j++) {
                 String s = ingredientList.get(j).getEn();
-                tempDistance = levenshteinDistance2(s, ingredient);
+                tempDistance = Utils.levenshteinDistance2(s, ingredient);
                 if (minDistance == -1 || minDistance > tempDistance) {
                     minDistance = tempDistance;
                     closestIngredient = ingredientList.get(j).getEn();
@@ -162,33 +163,6 @@ public class RecipeViewModel extends ViewModel {
         }
 
         return closestIngredient;
-    }
-
-    private static int levenshteinDistance2(String s1, String s2) {
-        int m = s1.length(), n = s2.length();
-        int[] D1;
-        int[] D2 = new int[n + 1];
-
-        for (int i = 0; i <= n; i++)
-            D2[i] = i;
-
-        for (int i = 1; i <= m; i++) {
-            D1 = D2;
-            D2 = new int[n + 1];
-            for (int j = 0; j <= n; j++) {
-                if (j == 0) D2[j] = i;
-                else {
-                    int cost = (s1.charAt(i - 1) != s2.charAt(j - 1)) ? 1 : 0;
-                    if (D2[j - 1] < D1[j] && D2[j - 1] < D1[j - 1] + cost)
-                        D2[j] = D2[j - 1] + 1;
-                    else if (D1[j] < D1[j - 1] + cost)
-                        D2[j] = D1[j] + 1;
-                    else
-                        D2[j] = D1[j - 1] + cost;
-                }
-            }
-        }
-        return D2[n];
     }
 
     public Rational getIngredientsAmount(String line) {

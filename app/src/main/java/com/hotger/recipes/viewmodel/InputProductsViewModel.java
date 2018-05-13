@@ -3,6 +3,8 @@ package com.hotger.recipes.viewmodel;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.databinding.Bindable;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
@@ -22,6 +24,7 @@ import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.List;
@@ -38,7 +41,9 @@ public class InputProductsViewModel extends ViewModel {
         this.products = products;
         this.activity = activity;
         productsAdapter = new ProductsAdapter(activity, products, isEditable, isDetailed, isShoppingList);
-        dataHintAdapter = new DataListAdapter(activity, R.layout.item_list, AppDatabase.getDatabase(activity), "en");
+        List<String> data = AppDatabase.getDatabase(activity).getIngredientDao().getEnglishNames();
+        data.addAll(AppDatabase.getDatabase(activity).getIngredientDao().getRussianNames());
+        dataHintAdapter = new DataListAdapter(activity, R.layout.item_list, data);
     }
 
     @Override
@@ -86,7 +91,7 @@ public class InputProductsViewModel extends ViewModel {
     public AdapterView.OnItemClickListener getOnHintItemClickListener(EditText inputView) {
         return (adapterView, view, i, l) -> {
             onHintItemClickAction(view);
-//            Utils.hideKeyboard(view);
+            Utils.hideKeyboard(activity);
             inputView.setText("");
         };
     }
@@ -153,7 +158,7 @@ public class InputProductsViewModel extends ViewModel {
     }
 
     public ItemTouchHelper getItemTouchListener() {
-        ItemTouchHelper.SimpleCallback callback =  new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -177,7 +182,7 @@ public class InputProductsViewModel extends ViewModel {
         }
 
         List<Product> products = getProducts();
-        for(Product product : products) {
+        for (Product product : products) {
             product.setRecipeId(listId);
         }
 
@@ -195,5 +200,9 @@ public class InputProductsViewModel extends ViewModel {
             getProducts()
                     .addAll(list);
         }
+    }
+
+    public Keyboard getKeyboard(KeyboardView kview) {
+        return productsAdapter.initKeyboard(kview);
     }
 }

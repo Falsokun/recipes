@@ -84,6 +84,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/next"
+            android:background="@color/colorPrimary"
             android:theme="@style/EntireLineBtn" />
+
+        <android.inputmethodservice.KeyboardView
+            android:id="@+id/keyboard_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="gone"
+            android:translationZ="10dp"/>
     </RelativeLayout>
 </layout>

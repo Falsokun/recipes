@@ -1,6 +1,8 @@
 package com.hotger.recipes.view.redactor;
 
 import android.databinding.DataBindingUtil;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,8 +31,9 @@ public class ProductsRedactorFragment extends Fragment {
         mBinding.setModel(inputModel);
         mBinding.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.productsLineRv.setAdapter(inputModel.getProductsAdapter());
+        KeyboardView keyboard = ((RedactorActivity) getActivity()).getKeyboard();
+        keyboard.setKeyboard(inputModel.getKeyboard(keyboard));
         mBinding.productsLineRv.setLayoutManager(new LinearLayoutManager(getContext()));
-
         messageModel = new MessageModel(getString(R.string.add_products_hint), 0, false);
         mBinding.setMessageModel(messageModel);
         initListeners();
@@ -41,7 +44,6 @@ public class ProductsRedactorFragment extends Fragment {
         mBinding.addProductName.addTextChangedListener(inputModel.getProductTextChangeListener());
         mBinding.listView.setOnItemClickListener(inputModel.getOnHintItemClickListener(mBinding.addProductName));
         mBinding.addProductName.setOnEditorActionListener(inputModel.getOnEditorActionListener(mBinding.listView.getCount()));
-//        mBinding.addProductName.setOnFocusChangeListener(mRedactorModel.getOnFocusChangedListener());
     }
 
     public void setInputModel(InputProductsViewModel model) {

@@ -67,8 +67,8 @@
                     android:width="64dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:gravity="center"
-                    android:inputType="numberDecimal"
                     android:minWidth="40dp"
+                    android:text="0"
                     android:textSize="14sp" />
 
                 <ImageButton

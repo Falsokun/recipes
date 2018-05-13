@@ -23,11 +23,11 @@
         android:id="@+id/input_products"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/padding_dimen"
-        android:paddingRight="@dimen/padding_dimen">
+        android:orientation="vertical">
 
         <EditText
+            android:paddingLeft="@dimen/padding_dimen"
+            android:paddingRight="@dimen/padding_dimen"
             android:id="@+id/addProductName"
             style="@style/TextTheme"
             android:layout_width="match_parent"
@@ -41,6 +41,8 @@
             android:text="@={model.productName}" />
 
         <ListView
+            android:paddingLeft="@dimen/padding_dimen"
+            android:paddingRight="@dimen/padding_dimen"
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -53,6 +55,8 @@
             android:visibility="@{model.productName.length() != 0 ? View.VISIBLE : View.GONE}" />
 
         <android.support.v7.widget.RecyclerView
+            android:layout_marginLeft="@dimen/padding_dimen"
+            android:layout_marginRight="@dimen/padding_dimen"
             android:id="@+id/products_line_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,8 +71,9 @@
             android:layout_height="match_parent"
             android:layout_below="@id/addProductName"
             android:layout_centerInParent="true"
-            android:visibility="@{model.emptyData ? View.VISIBLE : View.GONE}"
+            android:visibility="gone"
             bind:model="@{messageModel}" />
+        <!--android:visibility="@{model.emptyData ? View.VISIBLE : View.GONE}"-->
 
     </RelativeLayout>
 </layout>

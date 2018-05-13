@@ -2,6 +2,7 @@ package com.hotger.recipes.view.redactor;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -157,5 +158,9 @@ public class RedactorActivity extends ControllableActivity {
     @Override
     public AppBarLayout getAppBar() {
         return null;
+    }
+
+    public KeyboardView getKeyboard() {
+        return mBinding.keyboardView;
     }
 }

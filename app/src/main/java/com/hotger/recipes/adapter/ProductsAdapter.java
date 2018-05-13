@@ -1,8 +1,11 @@
 package com.hotger.recipes.adapter;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -12,6 +15,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
@@ -47,6 +51,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     private boolean isDetailed;
 
     private boolean isShoppingList;
+
+    private Keyboard mKeyboard;
+
+    private KeyboardView mKeyboardView;
 
     /**
      * All selected products
@@ -85,7 +93,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         holder.binding.finalAmount.setText(Product.doubleToStringWithKoeff(productLine.getAmount(), koeff));
-        if (holder.binding.getIsDetailed() && productLine.getAmount().getNumerator() == 0) {
+        if (holder.binding.getIsDetailed() && !holder.binding.getIsEditable() && productLine.getAmount().getNumerator() == 0) {
             holder.binding.finalAmount.setVisibility(View.GONE);
         }
 
@@ -203,7 +211,56 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public KeyboardView.OnKeyboardActionListener getOnKeyboardActionListener() {
+        return new KeyboardView.OnKeyboardActionListener() {
+            @Override
+            public void onPress(int primaryCode) {
+
+            }
+
+            @Override
+            public void onRelease(int primaryCode) {
+
+            }
+
+            @Override
+            public void onKey(int primaryCode, int[] keyCodes) {
+
+            }
+
+            @Override
+            public void onText(CharSequence text) {
+
+            }
+
+            @Override
+            public void swipeLeft() {
+
+            }
+
+            @Override
+            public void swipeRight() {
+
+            }
+
+            @Override
+            public void swipeDown() {
+
+            }
+
+            @Override
+            public void swipeUp() {
+
+            }
+        };
+    }
     //endregion
+
+    public Keyboard initKeyboard(KeyboardView keyboardView) {
+        mKeyboard = new Keyboard(activity, R.xml.keyboard);
+        mKeyboardView = keyboardView;
+        return mKeyboard;
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         /**
@@ -221,6 +278,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             itemView.setOnLongClickListener(this);
 
             if (isEditable) {
+                if (mKeyboardView != null) {
+                    mKeyboardView.setOnKeyboardActionListener(getOnKeyboardActionListener());
+                    binding.finalAmount.setOnClickListener(v -> openKeyboard(v));
+                }
+
                 View.OnClickListener listener = view -> {
                     double temp = Double.parseDouble(binding.finalAmount.getText().toString());
                     if (view.getId() == R.id.btn_sub) {
@@ -265,6 +327,13 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                 binding.btnAdd.setVisibility(View.GONE);
                 binding.finalAmount.setEnabled(false);
             }
+        }
+
+        public void openKeyboard(View v) {
+            mKeyboardView.setVisibility(View.VISIBLE);
+            mKeyboardView.setEnabled(true);
+            if (v != null)
+                ((InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
 
         /**
