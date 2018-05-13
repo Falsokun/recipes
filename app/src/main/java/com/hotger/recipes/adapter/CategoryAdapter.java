@@ -72,7 +72,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         bundle.putSerializable(Utils.IntentVars.RECIPE_CATEGORY, searchValue);
         bundle.putSerializable(Utils.IntentVars.RECIPE_TYPE, type);
         fragment.setArguments(bundle);
-        activity.setCurrentFragment(fragment, true, fragment.getTag());
+        activity.setCurrentFragment(fragment, true, RecipeListFragment.class.getName());
     }
 
     @Override

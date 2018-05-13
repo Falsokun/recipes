@@ -54,6 +54,7 @@ public class Utils {
         public static final String RECIPE_CATEGORY = "RECIPE_CATEGORY";
         public static final String RECIPE_TYPE = "RECIPE_TYPE";
         public static final String NEED_INIT = "NEED_INIT";
+        public static final String SEARCH_TITLE = "SEARCH_TITLE";
     }
 
     /**

@@ -23,7 +23,7 @@ public class AsyncCalls {
      * @param sendMessage
      */
     public static void saveCategoryToDB(Context context, String searchValue, boolean sendMessage) {
-        Call<ResponseAPI> call;
+        Call<ResponseAPI<RecipePrev>> call;
         YummlyAPI api = App.getApi();
         String category = searchValue.split("\\^")[0];
         switch (category) {
@@ -43,10 +43,10 @@ public class AsyncCalls {
         call.enqueue(getCallback(context, searchValue, sendMessage));
     }
 
-    public static Callback<ResponseAPI> getCallback(Context context, String searchValue, boolean shouldSendMessage) {
-        return new Callback<ResponseAPI>() {
+    public static Callback<ResponseAPI<RecipePrev>> getCallback(Context context, String searchValue, boolean shouldSendMessage) {
+        return new Callback<ResponseAPI<RecipePrev>>() {
             @Override
-            public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
+            public void onResponse(Call<ResponseAPI<RecipePrev>> call, Response<ResponseAPI<RecipePrev>> response) {
                 if (response.body() == null) {
                     return;
                 }
@@ -65,7 +65,7 @@ public class AsyncCalls {
             }
 
             @Override
-            public void onFailure(Call<ResponseAPI> call, Throwable t) {
+            public void onFailure(Call<ResponseAPI<RecipePrev>> call, Throwable t) {
             }
         };
     }

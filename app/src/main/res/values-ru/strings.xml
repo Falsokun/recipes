@@ -3,7 +3,7 @@
     <string name="app_name">Recipes</string>
     <string name="action_settings">Настройки</string>
     <string name="action_favorite">Избранные</string>
-    <string name="home">Домой</string>
+    <string name="home">Главная</string>
     <string name="my_recipes">Мои рецепты</string>
     <string name="write_name">Напишите имя рецепта</string>
     <string name="add_products">Добавить продукты</string>

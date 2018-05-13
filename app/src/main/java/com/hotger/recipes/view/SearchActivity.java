@@ -27,6 +27,7 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.databinding.ActivitySearchBinding;
 import com.hotger.recipes.database.FirebaseUtils;
+import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
@@ -84,6 +85,7 @@ public class SearchActivity extends ControllableActivity {
                 buttonView.setText("");
             }
         });
+
         mBinding.searchView.setIconified(true);
         mBinding.searchView.onActionViewExpanded();
         new Handler().postDelayed(() -> mBinding.searchView.clearFocus(), 300);
@@ -218,16 +220,16 @@ public class SearchActivity extends ControllableActivity {
         String searchValue = YummlyAPI.SEARCH + model.getSearchValue(mBinding.filter.checkbox.isChecked());
         App.getApi()
                 .search(searchValue)
-                .enqueue(new Callback<ResponseAPI>() {
+                .enqueue(new Callback<ResponseAPI<RecipePrev>>() {
                              @Override
-                             public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
+                             public void onResponse(Call<ResponseAPI<RecipePrev>> call, Response<ResponseAPI<RecipePrev>> response) {
                                  FirebaseUtils.searchRecipes(model.getCategories(), cardAdapter);
                                  cardAdapter.setData(response.body().getMatches());
                                  mBinding.progress.setVisibility(View.GONE);
                              }
 
                              @Override
-                             public void onFailure(Call<ResponseAPI> call, Throwable t) {
+                             public void onFailure(Call<ResponseAPI<RecipePrev>> call, Throwable t) {
                                  Toast.makeText(SearchActivity.this, "failed", Toast.LENGTH_SHORT).show();
                                  mBinding.progress.setVisibility(View.GONE);
                              }
@@ -261,12 +263,12 @@ public class SearchActivity extends ControllableActivity {
         fragment.setArguments(recipeBundle);
         updateCollapsing(mBinding.appbar, false);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, fragment, RecipeListFragment.TAG).commit();
+                .add(R.id.container, fragment, RecipeListFragment.class.getName()).commit();
     }
 
     @Override
     public Fragment getCurrentFragment() {
-        return (getSupportFragmentManager().findFragmentByTag(RecipeListFragment.TAG));
+        return (getSupportFragmentManager().findFragmentByTag(RecipeListFragment.class.getName()));
     }
 
     public CardAdapter getCardAdapter() {

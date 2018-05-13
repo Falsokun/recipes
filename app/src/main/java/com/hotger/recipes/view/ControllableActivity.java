@@ -3,6 +3,7 @@ package com.hotger.recipes.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -113,6 +114,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
 
     public abstract AppBarLayout getAppBar();
 
+
     public void openRecipeFromDB(String id) {
         Recipe recipe = getRecipeFromDBByID(id);
         RecipeFragment fragment = new RecipeFragment();
@@ -136,7 +138,9 @@ public abstract class ControllableActivity extends AppCompatActivity {
         return recipe;
     }
 
-    public String getTitleByTag(String tag) {
-        return "my title";
+    public void setTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 }

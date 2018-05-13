@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.relations.RelationRecipeTypeViewModel;
@@ -29,6 +31,7 @@ import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +41,11 @@ public class RecipeListFragment extends BackStackFragment {
 
     private CardAdapter cardAdapter;
 
-    public static String TAG = "RecipeListFragment";
     public static final int ID = 123456;
 
     private MessageModel model;
     private BroadcastReceiver mMessageReceiver;
+    private String title = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class RecipeListFragment extends BackStackFragment {
                 filter);
     }
 
+
     public BroadcastReceiver getRefreshReceiver() {
         return new BroadcastReceiver() {
             @Override
@@ -114,8 +118,8 @@ public class RecipeListFragment extends BackStackFragment {
     }
 
     private void setData() {
+        checkForSwipe();
         checkForCategory();
-        checkForInit();
         checkForPassingFromApi();
         checkForFavorites();
     }
@@ -125,13 +129,15 @@ public class RecipeListFragment extends BackStackFragment {
     }
 
     private void checkForPassingFromApi() {
-        ResponseAPI rra = (ResponseAPI) getArguments().getSerializable(Utils.IntentVars.RECIPE_OBJ);
+        ResponseAPI<RecipePrev> rra = (ResponseAPI<RecipePrev>) getArguments().getSerializable(Utils.IntentVars.RECIPE_OBJ);
         if (rra != null) {
             cardAdapter.setData(rra.getMatches());
+            title = getString(R.string.you_can_cook_now);
+            ((ControllableActivity) getActivity()).setTitle(title);
         }
     }
 
-    private void checkForInit() {
+    private void checkForSwipe() {
         if (getArguments().getBoolean(Utils.IntentVars.NEED_INIT, false)) {
             ((SearchActivity) getActivity()).setCardAdapter(cardAdapter);
         }
@@ -142,13 +148,31 @@ public class RecipeListFragment extends BackStackFragment {
             return;
 
         String searchValue = getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY);
+        AppDatabase db = AppDatabase.getDatabase(getActivity());
+        updateTitle();
         String type = getArguments().getString(Utils.IntentVars.RECIPE_TYPE);
         if (!searchValue.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
-            List<String> ids = AppDatabase.getDatabase(getContext()).getRelationRecipeTypeDao().getRecipesByType(searchValue);
+            List<String> ids = db.getRelationRecipeTypeDao().getRecipesByType(searchValue);
             FirebaseUtils.getRecipesByType(searchValue, cardAdapter);
-            cardAdapter.setData(AppDatabase.getDatabase(getActivity()).getRecipePrevDao().findPrevsFromList(ids));
+            cardAdapter.setData(db.getRecipePrevDao().findPrevsFromList(ids));
         } else {
             FirebaseUtils.getAllRecipesInCategory(type, cardAdapter);
+        }
+    }
+
+    private void updateTitle() {
+        if (getArguments() == null)
+            return;
+
+        String searchValue = getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY);
+        if (searchValue != null) {
+            title = AppDatabase.getDatabase(getActivity())
+                    .getCategoryDao()
+                    .getCategoryById(searchValue)
+                    .get(0)
+                    .getTitle();
+            ((ControllableActivity) getActivity())
+                    .setTitle(title);
         }
     }
 
@@ -167,5 +191,9 @@ public class RecipeListFragment extends BackStackFragment {
                 AsyncCalls.saveCategoryToDB(getContext(), searchValue, true);
             }
         };
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

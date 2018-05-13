@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
+import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
@@ -58,9 +59,9 @@ public class MainActivity extends ControllableActivity {
 
             Fragment nextFragment = getNavigationFragment(Utils.bottomNavigationTabs.get(item.getItemId()));
             updateToolbar(nextFragment);
-            updateTitle();
             updateCollapsing(mBinding.appbar, false);
             mBinding.viewPager.setCurrentItem(Utils.bottomNavigationTabs.get(item.getItemId()), false);
+            updateTitle();
             return true;
         });
     }
@@ -96,14 +97,7 @@ public class MainActivity extends ControllableActivity {
     }
 
     public void updateTitle() {
-        Fragment curFragment = getNavigationFragment(mBinding.viewPager.getCurrentItem());
-        FragmentManager fm = curFragment.getChildFragmentManager();
-        String title = "";
-        if (fm.getBackStackEntryCount() == 0) {
-            title = getTitleByTag(curFragment.getTag());
-        }
-
-        mBinding.toolbar.setTitle(title);
+        getSupportActionBar().setTitle(getStringTitle());
     }
 
     public Fragment getNavigationFragment(int position) {
@@ -125,6 +119,7 @@ public class MainActivity extends ControllableActivity {
                 setUpNavigation(false);
             }
 
+            updateTitle();
             updateCollapsing(mBinding.appbar, false);
         } else {
             super.onBackPressed();
@@ -165,10 +160,6 @@ public class MainActivity extends ControllableActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateTitle(String name) {
-        mBinding.toolbar.setTitle(name);
-    }
-
     @Override
     public ImageView getToolbarImageView() {
         return mBinding.backdrop;
@@ -179,14 +170,41 @@ public class MainActivity extends ControllableActivity {
         return mBinding.appbar;
     }
 
+    public String getStringTitle() {
+        Fragment curFragment = getNavigationFragment(mBinding.viewPager.getCurrentItem());
+        FragmentManager fm = curFragment.getChildFragmentManager();
+        if (fm.getBackStackEntryCount() == 0) {
+            return getTitleByNum(mBinding.viewPager.getCurrentItem());
+        } else {
+            String name = fm
+                    .getBackStackEntryAt(fm.getBackStackEntryCount() - 1)
+                    .getName();
+            Fragment visibleFragment;
+            if (name.equals(RecipeListFragment.class.getName())) {
+                visibleFragment = fm.findFragmentByTag(name);
+                return ((RecipeListFragment) visibleFragment).getTitle();
+            }
+
+            return name;
+        }
+    }
+
+    private String getTitleByNum(int currentItem) {
+        switch (currentItem) {
+            case 0:
+                return getString(R.string.app_name);
+            case 1:
+                return getString(R.string.categories);
+            case 2:
+                return getString(R.string.fridge);
+            default:
+                return getString(R.string.my_recipes);
+        }
+    }
+
     @Override
     public Fragment getCurrentFragment() {
         return getNavigationFragment(mBinding.viewPager.getCurrentItem());
-    }
-
-    private void openRedactorFraqment(Context context) {
-        Intent intent = new Intent(context, RedactorActivity.class);
-        startActivity(intent);
     }
 
     @Override

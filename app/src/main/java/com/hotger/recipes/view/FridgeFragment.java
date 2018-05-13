@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentFridgeBinding;
+import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
@@ -82,7 +83,7 @@ public class FridgeFragment extends BackStackFragment {
         mBinding.fragmentRedactor.inputProducts.setVisibility(View.GONE);
         mBinding.progress.setVisibility(View.VISIBLE);
         ArrayList<String> ingredients = new ArrayList<>();
-        for(Product product : products) {
+        for (Product product : products) {
             ingredients.add(product.getIngredientId());
         }
 
@@ -97,30 +98,31 @@ public class FridgeFragment extends BackStackFragment {
 
         App.getApi()
                 .search(builder.toString())
-                .enqueue(new Callback<ResponseAPI>() {
-                             @Override
-                             public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
-                                 Fragment fragment = new BackStackFragment();
-                                 Bundle bundle = new Bundle();
-                                 bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, response.body());
-                                 if (response.body() != null && response.body().getMatches().size() == 0) {
-                                     Toast.makeText(getContext(), "no matches found", Toast.LENGTH_SHORT).show();
-                                     mBinding.progress.setVisibility(View.VISIBLE);
-                                 } else {
-                                     bundle.putInt(Utils.EXTRA_NAVIGATION_ID, RecipeListFragment.ID);
-                                     fragment.setArguments(bundle);
-                                     ((ControllableActivity) getActivity()).setCurrentFragment(fragment, true, fragment.getTag());
-                                 }
+                .enqueue(new Callback<ResponseAPI<RecipePrev>>() {
+                    @Override
+                    public void onResponse(Call<ResponseAPI<RecipePrev>> call, Response<ResponseAPI<RecipePrev>> response) {
+                        Fragment fragment = new BackStackFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, response.body());
+                        if (response.body() != null && response.body().getMatches().size() == 0) {
+                            Toast.makeText(getContext(), "no matches found", Toast.LENGTH_SHORT).show();
+                            mBinding.progress.setVisibility(View.VISIBLE);
+                        } else {
+                            bundle.putInt(Utils.EXTRA_NAVIGATION_ID, RecipeListFragment.ID);
+                            fragment.setArguments(bundle);
+                            ((ControllableActivity) getActivity())
+                                    .setCurrentFragment(fragment, true,
+                                            RecipeListFragment.class.getName());
+                        }
 
-                                 mBinding.progress.setVisibility(View.GONE);
-                             }
+                        mBinding.progress.setVisibility(View.GONE);
+                    }
 
-                             @Override
-                             public void onFailure(Call<ResponseAPI> call, Throwable t) {
-                                 mBinding.fragmentRedactor.inputProducts.setVisibility(View.VISIBLE);
-                                 mBinding.progress.setVisibility(View.GONE);
-                             }
-                         }
-                );
+                    @Override
+                    public void onFailure(Call<ResponseAPI<RecipePrev>> call, Throwable t) {
+                        mBinding.fragmentRedactor.inputProducts.setVisibility(View.VISIBLE);
+                        mBinding.progress.setVisibility(View.GONE);
+                    }
+                });
     }
 }

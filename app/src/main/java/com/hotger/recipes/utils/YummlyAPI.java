@@ -1,6 +1,7 @@
 package com.hotger.recipes.utils;
 
 import com.hotger.recipes.model.RecipeNF;
+import com.hotger.recipes.model.RecipePrev;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -36,20 +37,20 @@ public interface YummlyAPI {
     Call<RecipeNF> getRecipeByID(@Path("id") String recipeID);
 
     @GET("/v1/api/recipes?" + BASE)
-    Call<ResponseAPI> getCategoryList(@Query("allowedCuisine[]") String cuisine, @Query("maxResult") int maxResult);
+    Call<ResponseAPI<RecipePrev>> getCategoryList(@Query("allowedCuisine[]") String cuisine, @Query("maxResult") int maxResult);
 
     @GET("/v1/api/recipes?" + BASE)
-    Call<ResponseAPI> getHolidayList(@Query("allowedHoliday[]") String holiday, @Query("maxResult") int maxResult);
+    Call<ResponseAPI<RecipePrev>> getHolidayList(@Query("allowedHoliday[]") String holiday, @Query("maxResult") int maxResult);
 
     @GET("/v1/api/recipes?" + BASE)
-    Call<ResponseAPI> getCourseList(@Query("allowedCourse[]") String course, @Query("maxResult") int maxResult);
+    Call<ResponseAPI<RecipePrev>> getCourseList(@Query("allowedCourse[]") String course, @Query("maxResult") int maxResult);
 
     @GET("/v1/api/recipes?" + BASE)
-    Call<ResponseAPI> getDietList(@Query("allowedDiet[]") String diet, @Query("maxResult") int maxResult);
+    Call<ResponseAPI<RecipePrev>> getDietList(@Query("allowedDiet[]") String diet, @Query("maxResult") int maxResult);
 
     @GET("/v1/api/" + BASE)
-    Call<ResponseAPI> searchByIngredients(@Query("") String searchIngredients, @Query("maxResult") int maxResult);
+    Call<ResponseAPI<RecipePrev>> searchByIngredients(@Query("") String searchIngredients, @Query("maxResult") int maxResult);
 
     @GET
-    Call<ResponseAPI> search(@Url String url);
+    Call<ResponseAPI<RecipePrev>> search(@Url String url);
 }

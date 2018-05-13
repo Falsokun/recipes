@@ -80,6 +80,7 @@ public class RedactorActivity extends ControllableActivity {
         setSupportActionBar(mBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle(getString(R.string.redactor));
     }
     /**
      * Adding to viewpager all fragments of the recipe

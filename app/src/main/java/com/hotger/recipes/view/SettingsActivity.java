@@ -26,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setTitle(R.string.action_settings);
         }
 
         pref  = getPreferences(Context.MODE_PRIVATE);

@@ -100,7 +100,7 @@ public class RecipeFragment extends Fragment {
         mBinding.progress.setVisibility(View.GONE);
         mBinding.container.setVisibility(View.VISIBLE);
         mBinding.recipeSteps.setText(Html.fromHtml(model.getCurrentRecipe().getPreparations()));
-//        ((ControllableActivity) getActivity()).updateTitle(model.getCurrentRecipe().getName());
+        ((ControllableActivity) getActivity()).setTitle(model.getCurrentRecipe().getName());
     }
 
     @Override
