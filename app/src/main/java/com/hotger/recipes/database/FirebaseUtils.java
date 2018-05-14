@@ -54,9 +54,9 @@ public class FirebaseUtils {
     /**
      * Save initial ingredients from firebase
      *
-     * @param db - local database
+     * @param context - context var
      */
-    public static void saveIngredientsToDatabase(AppDatabase db) {
+    public static void saveIngredientsToDatabase(Context context) {
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference ref = database.collection(INGREDIENT_REF);
         ref.get().addOnCompleteListener(task -> {
@@ -69,7 +69,10 @@ public class FirebaseUtils {
                 ingredients.add(in);
             }
 
-            db.getIngredientDao().insertAll(ingredients);
+            AppDatabase.getDatabase(context).getIngredientDao().insertAll(ingredients);
+
+            Intent intent = new Intent(Utils.IntentVars.INIT_ON_START);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
     }
 
@@ -77,9 +80,8 @@ public class FirebaseUtils {
      * Save initial categories from firebase
      *
      * @param context - context
-     * @param db      - database
      */
-    public static void saveCategoryToDatabase(Context context, AppDatabase db) {
+    public static void saveCategoryToDatabase(Context context) {
         final FirebaseFirestore database = FirebaseFirestore.getInstance();
         CollectionReference ref = database.collection(CATEGORIES_REF);
         ref.get().addOnCompleteListener(task -> {
@@ -92,8 +94,11 @@ public class FirebaseUtils {
                 categories.add(in);
             }
 
-            db.getCategoryDao().insertAll(categories);
+            AppDatabase.getDatabase(context).getCategoryDao().insertAll(categories);
             saveToDatabase(context);
+
+            Intent intent = new Intent(Utils.IntentVars.INIT_ON_START);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
     }
 

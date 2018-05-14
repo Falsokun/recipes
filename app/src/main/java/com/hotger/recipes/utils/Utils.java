@@ -65,6 +65,7 @@ public class Utils {
         public static final String NEED_INIT = "NEED_INIT";
         public static final String SHOULD_OPEN_RECIPE = "SHOULD_OPEN_RECIPE";
         public static final String SHARE_TEXT = "SHARE_TEXT";
+        public static final String INIT_ON_START = "INIT_ON_START";
     }
 
     /**

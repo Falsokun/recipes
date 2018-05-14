@@ -1,7 +1,11 @@
 package com.hotger.recipes.view;
 
 import android.arch.persistence.room.Room;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.hotger.recipes.R;
@@ -13,6 +17,8 @@ import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;
 
 public class SplashActivity extends AwesomeSplash {
+
+    private int initReferences = 0;
 
     @Override
     public void initSplash(ConfigSplash configSplash) {
@@ -52,11 +58,18 @@ public class SplashActivity extends AwesomeSplash {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "populus-database").allowMainThreadQueries().build();
         if (db.getRecipePrevDao().getAll().size() == 0) {
-            FirebaseUtils.saveCategoryToDatabase(this, db);
-            FirebaseUtils.saveIngredientsToDatabase(db);
+            LocalBroadcastManager
+                    .getInstance(this)
+                    .registerReceiver(getReceiver(), new IntentFilter(Utils.IntentVars.INIT_ON_START));
+            FirebaseUtils.saveCategoryToDatabase(this);
+            FirebaseUtils.saveIngredientsToDatabase(this);
             //может вот тут не пропускать пока он не сохранит все чо надо
+        } else {
+            openActivity();
         }
+    }
 
+    private void openActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         if (getIntent() != null) {
             Intent sent = getIntent();
@@ -65,5 +78,18 @@ public class SplashActivity extends AwesomeSplash {
 
         startActivity(intent);
         finish();
+    }
+
+    public BroadcastReceiver getReceiver() {
+        return new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                initReferences++;
+                if (initReferences == 2) {
+                    LocalBroadcastManager.getInstance(SplashActivity.this).unregisterReceiver(this);
+                    openActivity();
+                }
+            }
+        };
     }
 }
