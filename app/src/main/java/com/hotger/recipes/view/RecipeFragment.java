@@ -105,8 +105,10 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (shouldShowOptions) {
-            inflater.inflate(R.menu.menu_fragment, menu);
+        inflater.inflate(R.menu.menu_fragment, menu);
+        if (!shouldShowOptions) {
+            menu.removeItem(R.id.menu_delete);
+            menu.removeItem(R.id.menu_edit);
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -114,15 +116,27 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_edit) {
-            Intent intent = new Intent(getActivity(), RedactorActivity.class);
-            intent.putExtra(Utils.IntentVars.RECIPE_ID, model.getCurrentRecipe().getId());
-            intent.putExtra(Utils.IntentVars.SHOULD_OPEN_RECIPE, false);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.menu_delete) {
-            model.deleteRecipeFromDatabase((ControllableActivity) getActivity(),
-                    model.getCurrentRecipe().getId());
-            getActivity().onBackPressed();
+        switch (item.getItemId()) {
+            case R.id.menu_edit:
+                Intent intent = new Intent(getActivity(), RedactorActivity.class);
+                intent.putExtra(Utils.IntentVars.RECIPE_ID, model.getCurrentRecipe().getId());
+                intent.putExtra(Utils.IntentVars.SHOULD_OPEN_RECIPE, false);
+                startActivity(intent);
+                break;
+            case R.id.menu_delete:
+                model.deleteRecipeFromDatabase((ControllableActivity) getActivity(),
+                        model.getCurrentRecipe().getId());
+                getActivity().onBackPressed();
+                break;
+            case R.id.menu_share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, model.getCurrentRecipe().asString(getContext()));
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

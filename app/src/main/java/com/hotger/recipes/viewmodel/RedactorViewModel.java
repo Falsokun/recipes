@@ -91,7 +91,7 @@ public class RedactorViewModel extends ViewModel {
             errorText = activity.getString(R.string.add_products);
             errorType = 0;
         } else if (currentRecipe.getPreparations() == null) {
-            errorText = activity.getString(R.string.preparations);
+            errorText = activity.getString(R.string.instructions);
             errorType = 2;
         } else if (currentRecipe.getTotalTimeInMinutes() == 0) {
             errorText = activity.getString(R.string.total_time);

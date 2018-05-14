@@ -7,6 +7,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.hotger.recipes.R;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.Utils;
 import com.viksaa.sssplash.lib.activity.AwesomeSplash;
 import com.viksaa.sssplash.lib.cnst.Flags;
 import com.viksaa.sssplash.lib.model.ConfigSplash;
@@ -27,7 +28,7 @@ public class SplashActivity extends AwesomeSplash {
         configSplash.setAnimLogoSplashTechnique(Techniques.Pulse); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
 
         //Customize Path
-//        configSplash.setPathSplash(Constants.DROID_LOGO); //set path String
+        //configSplash.setPathSplash(Constants.DROID_LOGO); //set path String
         configSplash.setOriginalHeight(400); //in relation to your svg (path) resource
         configSplash.setOriginalWidth(400); //in relation to your svg (path) resource
         configSplash.setAnimPathStrokeDrawingDuration(100);
@@ -57,6 +58,11 @@ public class SplashActivity extends AwesomeSplash {
         }
 
         Intent intent = new Intent(this, MainActivity.class);
+        if (getIntent() != null) {
+            Intent sent = getIntent();
+            intent.putExtra(Utils.IntentVars.SHARE_TEXT, sent.getStringExtra(Intent.EXTRA_TEXT));
+        }
+
         startActivity(intent);
         finish();
     }

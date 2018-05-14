@@ -61,13 +61,6 @@ public class Product implements Serializable {
     }
 
     @Ignore
-    public Product(ControllableActivity activity, String ingredientId, Rational amount) {
-        this.ingredientId = ingredientId;
-        measure = "gr";
-        this.amount = amount.toString();
-    }
-
-    @Ignore
     public Product(ControllableActivity activity, String ingredientId, Rational amount, String measure) {
         this.ingredientId = ingredientId;
         this.measure = measure;
@@ -120,9 +113,9 @@ public class Product implements Serializable {
     }
 
     @Ignore
-    public String getIngredientById(ControllableActivity activity) {
+    public static String getIngredientById(Context context, String ingredientId) {
         List<Ingredient> ingredients = AppDatabase
-                .getDatabase(activity)
+                .getDatabase(context)
                 .getIngredientDao()
                 .getIngredientByName(ingredientId);
 
@@ -186,6 +179,26 @@ public class Product implements Serializable {
 
         return Html.fromHtml("<small><sup>" + (rational.getNumerator() % rational.getDenominator()) + "</sup>/<sub>"
                 + rational.getDenominator() + "</sub></small>");
+    }
+
+    @Ignore
+    public static String getStringRational(Rational rational) {
+        if (rational.getDenominator() == 1) {
+            return String.valueOf(rational.getNumerator());
+        }
+
+        if (rational.getNumerator() == 0) {
+            return "0";
+        }
+
+        if (rational.getNumerator() > rational.getDenominator()) {
+            return rational.getNumerator() / rational.getDenominator() +
+                    " " + (rational.getNumerator() % rational.getDenominator()) + "/"
+                    + rational.getDenominator();
+        }
+
+        return rational.getNumerator() % rational.getDenominator() + "/"
+                + rational.getDenominator();
     }
 
     /**
@@ -260,4 +273,10 @@ public class Product implements Serializable {
         this.recipeId = recipeId;
     }
     //endregion
+
+    public String asString(Context context) {
+        return getStringRational(Rational.parseRational(amount)) + " " + measure + " " + getIngredientById(context, ingredientId);
+    }
+
+
 }

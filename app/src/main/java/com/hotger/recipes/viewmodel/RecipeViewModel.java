@@ -192,10 +192,29 @@ public class RecipeViewModel extends ViewModel {
                 // вот тут еще посмотреть, потому что вместое chicken thighs
                 // он просто выдает курицу, хотя мб там в списке оно есть
                 // вместо sour cream выдает cream
-                p.setIngredientId(list.get(0).getEn());
+                Ingredient ingredient = getClosestToLine(string, context, list);
+                p.setIngredientId(ingredient.getEn());
             }
 
             recipe.getProducts().add(p);
         }
+    }
+
+    private Ingredient getClosestToLine(String string, Context context, List<Ingredient> list) {
+        Ingredient closest = list.get(0);
+        int minDistance = Math.min(Utils.levenshteinDistance2(string, closest.getEn()),
+                Utils.levenshteinDistance2(string, closest.getRu()));
+        int tempDistance;
+        for (int i = 1; i < list.size(); i++) {
+            Ingredient temp = list.get(i);
+            tempDistance = Math.min(Utils.levenshteinDistance2(string, temp.getEn()),
+                    Utils.levenshteinDistance2(string, temp.getRu()));
+            if (tempDistance < minDistance) {
+                closest = temp;
+                minDistance = tempDistance;
+            }
+        }
+
+        return closest;
     }
 }

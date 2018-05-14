@@ -17,7 +17,7 @@
     <string name="write_recipe">Напишите рецепт</string>
     <string name="fill_data">Заполните необходимые поля!</string>
     <string name="cooking_time">Время приготовления</string>
-    <string name="preparations">Подготовка</string>
+    <string name="instructions">Подготовка</string>
     <string name="baking">Готово через</string>
     <string name="ingredients">Ингредиенты</string>
     <string name="no_such_product">Продукт не найден</string>
@@ -49,7 +49,7 @@
     <string name="min">мин.</string>
     <string name="hour">ч.</string>
     <string name="total_time">"Общее время"</string>
-    <string name="prep_time">Время\nподготовок</string>
+    <string name="prep_time">Время подготовок</string>
     <string name="delete">Удалить</string>
     <string name="turn_on_translations_to_russian">Включить перевод на русский</string>
     <string name="publish_my_recipes">Публиковать мои рецепты</string>

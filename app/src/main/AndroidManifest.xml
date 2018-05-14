@@ -20,7 +20,9 @@
             android:name=".view.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" >
+
+        </activity>
 
         <activity android:name=".view.redactor.RedactorActivity" />
 
@@ -28,10 +30,17 @@
             android:name=".view.SearchActivity"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".view.SplashActivity">
+        <activity android:name=".view.SplashActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 

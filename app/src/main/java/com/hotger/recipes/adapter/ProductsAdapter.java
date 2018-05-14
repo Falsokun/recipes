@@ -88,12 +88,17 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Product productLine = data.get(position);
-        holder.binding.productName.setText(productLine.getIngredientById(activity));
+        holder.binding.productName.setText(productLine.getIngredientById(activity,
+                productLine.getIngredientId()));
         Drawable drawable = MeasureUtils.getDrawableByMeasure(activity, productLine.getMeasure());
         holder.binding.amountIcon.setText(productLine.getMeasure());
-        holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        holder.binding.finalAmount.setText(Product.doubleToStringWithKoeff(productLine.getRationalAmount(), koeff));
-        if (holder.binding.getIsDetailed() && !holder.binding.getIsEditable() && productLine.getRationalAmount().getNumerator() == 0) {
+        holder.binding.amountIcon
+                .setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        holder.binding.finalAmount
+                .setText(Product.doubleToStringWithKoeff(productLine.getRationalAmount(), koeff));
+        if (holder.binding.getIsDetailed()
+                && !holder.binding.getIsEditable()
+                && productLine.getRationalAmount().getNumerator() == 0) {
             holder.binding.finalAmount.setVisibility(View.GONE);
         }
 
@@ -120,7 +125,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     }
 
     public void clearAllChecked() {
-        List<Product> products = AppDatabase.getDatabase(activity).getProductDao().getProducts(SHOPPING_LIST_CHECKED);
+        List<Product> products = AppDatabase.getDatabase(activity)
+                .getProductDao()
+                .getProducts(SHOPPING_LIST_CHECKED);
         for (Product product : products) {
             removeItemFromList(activity, SHOPPING_LIST_ID, product);
         }

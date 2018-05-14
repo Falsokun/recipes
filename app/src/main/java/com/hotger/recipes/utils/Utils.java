@@ -14,6 +14,8 @@ import com.hotger.recipes.R;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -31,9 +33,16 @@ public class Utils {
     public static void hideKeyboard(Activity activity) {
         View v = activity.getCurrentFocus();
         if (v != null) {
-            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
+    }
+
+    public static boolean matchesUrl(String str) {
+        ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+        Pattern urlPattern = Pattern.compile("^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$");
+        Matcher m = urlPattern.matcher(str);
+        return m.find();
     }
 
     /**
@@ -54,8 +63,8 @@ public class Utils {
         public static final String RECIPE_CATEGORY = "RECIPE_CATEGORY";
         public static final String RECIPE_TYPE = "RECIPE_TYPE";
         public static final String NEED_INIT = "NEED_INIT";
-        public static final String SEARCH_TITLE = "SEARCH_TITLE";
         public static final String SHOULD_OPEN_RECIPE = "SHOULD_OPEN_RECIPE";
+        public static final String SHARE_TEXT = "SHARE_TEXT";
     }
 
     /**
@@ -71,7 +80,7 @@ public class Utils {
     //TODO: formatter
     public static String numberToString(double number) {
         if (number % 1 == 0) {
-            return String.valueOf((int)number);
+            return String.valueOf((int) number);
         }
 
         return String.valueOf(number);

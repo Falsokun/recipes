@@ -16,15 +16,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.utils.ParseUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
+
+import okhttp3.internal.Util;
 
 public class MainActivity extends ControllableActivity {
 
@@ -49,6 +53,20 @@ public class MainActivity extends ControllableActivity {
         mMessageReceiver = getRecipeReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter(Utils.IntentVars.RECIPE_ID));
+        checkForSending();
+    }
+
+    private void checkForSending() {
+        if (getIntent() == null)
+            return;
+
+        String str = getIntent().getStringExtra(Utils.IntentVars.SHARE_TEXT);
+        if (str != null) {
+            if (Utils.matchesUrl(str)) {
+            } else {
+                Toast.makeText(this, "plain text", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void setListeners() {

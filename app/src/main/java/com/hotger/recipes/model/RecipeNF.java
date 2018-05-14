@@ -33,7 +33,7 @@ public class RecipeNF implements Serializable {
     @Ignore
     private ArrayList<String> ingredientLines;
 
-    private String preparations = "";
+    private String instructions = "";
 
     @Expose
     private int cookTimeInSeconds = 0;
@@ -115,12 +115,12 @@ public class RecipeNF implements Serializable {
         this.id = id;
     }
 
-    public String getPreparations() {
-        return preparations;
+    public String getInstructions() {
+        return instructions;
     }
 
-    public void setPreparations(String preparations) {
-        this.preparations = preparations;
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 
     public int getCookTimeInSeconds() {

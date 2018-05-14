@@ -16,7 +16,7 @@
     <string name="write_recipe">Write recipe</string>
     <string name="fill_data">Fill necessary data!</string>
     <string name="cooking_time">Cooking time</string>
-    <string name="preparations">Preparations</string>
+    <string name="instructions">Preparations</string>
     <string name="baking">Ready in</string>
     <string name="ingredients">Ingredients</string>
     <string name="no_such_product">Product not found</string>
@@ -77,6 +77,7 @@
     <string name="ru_title">Russian title</string>
     <string name="en_title">English title</string>
     <string name="enter_ingredient_info">Enter ingredient info</string>
+    <string name="share">Share</string>
 
     <string-array name="measures_array">
         <item></item>
