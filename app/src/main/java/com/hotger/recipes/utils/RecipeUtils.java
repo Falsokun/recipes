@@ -30,12 +30,10 @@ public class RecipeUtils {
     public static void saveToDatabase(Recipe currentRecipe, ControllableActivity activity,
                                       boolean shouldSaveToFirebase, ArrayList<String> categoryTitles,
                                       String type, boolean isBookmark) {
-        if (currentRecipe.getImageURL() == null) {
-            currentRecipe.setImageURL(FirebaseUtils.NO_IMAGE_URL);
-        }
-
         AppDatabase db = AppDatabase.getDatabase(activity);
-        if (shouldSaveToFirebase) {
+        if (currentRecipe.getImageURL() != null &&
+                !currentRecipe.getImageURL().equals(FirebaseUtils.NO_IMAGE_URL)
+                && shouldSaveToFirebase) {
             saveImageToCloudFirebase(currentRecipe, currentRecipe.getRecipe().getImageUrl());
         }
 

@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorPickersBinding;
+import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
 import com.nguyenhoanglam.imagepicker.model.Config;
 import com.nguyenhoanglam.imagepicker.model.Image;
@@ -53,21 +55,23 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_redactor_pickers, container, false);
-        int min = mRedactorModel.getCurrentRecipe().getPrepTimeMinutes();
+        Recipe recipe = mRedactorModel.getCurrentRecipe();
+        int cal = recipe.getCalories();
+        mBinding.calSelector.setText(String.valueOf(cal));
+        int min = recipe.getPrepTimeMinutes();
         mBinding.prepTime.setText(timeFormatter(min / 60, min % 60));
-        min = mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes();
+        min = recipe.getCookingTimeInMinutes();
+        mBinding.portionsSelector.setText(recipe.getStringPortions());
         mBinding.cookingTime.setText(timeFormatter(min / 60, min % 60));
         mBinding.prepContainer.setOnClickListener(v ->
-                openTimePicker(mRedactorModel.getCurrentRecipe().getPrepTimeMinutes(), PREP_TAG));
+                openTimePicker(recipe.getPrepTimeMinutes(), PREP_TAG));
         mBinding.cookingTimeContainer.setOnClickListener(v ->
-                openTimePicker(mRedactorModel.getCurrentRecipe().getCookingTimeInMinutes(), COOKING_TAG));
-        mBinding.photoSrcBtn.setOnClickListener(v -> chooseImage());
+                openTimePicker(recipe.getCookingTimeInMinutes(), COOKING_TAG));
+        mBinding.imageSrcContainer.setOnClickListener(v -> chooseImage());
         mBinding.caloriesContainer.setOnClickListener(v -> openNumberPickerDialog(getContext(),
-                mBinding.calSelector, getString(R.string.number_of_calories),
-                getValueChangedListener(true, 5), 20, 1000, 5));
+                mBinding.calSelector, getString(R.string.number_of_calories), 20, 1000, 5, true));
         mBinding.portionsContainer.setOnClickListener(v -> openNumberPickerDialog(getContext(),
-                mBinding.portionsSelector, getString(R.string.persons_number),
-                getValueChangedListener(false, 1), 1, 20, 1));
+                mBinding.portionsSelector, getString(R.string.persons_number), 1, 20, 1, false));
         return mBinding.getRoot();
     }
 
@@ -119,6 +123,7 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
         if (requestCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
             ArrayList<Image> images = data.getParcelableArrayListExtra(Config.EXTRA_IMAGES);
             String path = images.get(0).getPath();
+            mBinding.photoSrcBtn.setText(path.split("/")[path.split("/").length - 1]);
             mRedactorModel.getCurrentRecipe().setImageURL(path);
         }
 
@@ -148,8 +153,7 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
     }
 
     public void openNumberPickerDialog(Context context, TextView view, String title,
-                                       NumberPicker.OnValueChangeListener valueChangeListener,
-                                       int min, int max, int step) {
+                                       int min, int max, int step, boolean isCalories) {
         final Dialog d = new Dialog(context);
         d.setTitle(title);
         d.setContentView(R.layout.fragment_number_picker);
@@ -164,33 +168,18 @@ public class PickerRedactorFragment extends Fragment implements com.wdullaer.mat
         }
 
         np.setWrapSelectorWheel(false);
-        np.setOnValueChangedListener(valueChangeListener);
         np.setDisplayedValues(array);
 
         okBtn.setOnClickListener(v -> {
-            view.setText(String.valueOf(np.getValue()));
+            int res = np.getValue();
+            if (isCalories) {
+                res = (res - min) * step + min;
+            }
+
+            view.setText(String.valueOf(res));
             d.dismiss();
         });
 
         d.show();
-    }
-
-    /**
-     * Get value changed listener
-     *
-     * @param isCalories
-     * @return
-     */
-    public NumberPicker.OnValueChangeListener getValueChangedListener(boolean isCalories, int step) {
-        return (picker, oldVal, newVal) -> {
-            if (isCalories) {
-                int minValue = picker.getMinValue();
-                int nvalue = (newVal - minValue) * step + minValue;
-                mRedactorModel.getCurrentRecipe().setCalories(nvalue);
-                mBinding.calSelector.setText(String.valueOf(nvalue));
-            } else {
-                mRedactorModel.getCurrentRecipe().setNumberOfServings(newVal);
-            }
-        };
     }
 }

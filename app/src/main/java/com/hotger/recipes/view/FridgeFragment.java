@@ -58,7 +58,6 @@ public class FridgeFragment extends BackStackFragment {
         mBinding.searchBtn.setOnClickListener(view -> searchForRecipeWithIngridients(inputModel.getProductsAdapter().getData()));
         mBinding.fragmentRedactor.addProductName.addTextChangedListener(inputModel.getProductTextChangeListener());
         mBinding.fragmentRedactor.listView.setOnItemClickListener(inputModel.getOnHintItemClickListener(mBinding.fragmentRedactor.addProductName));
-        mBinding.fragmentRedactor.addProductName.setOnEditorActionListener(inputModel.getOnEditorActionListener(mBinding.fragmentRedactor.listView.getCount()));
     }
 
     @Override

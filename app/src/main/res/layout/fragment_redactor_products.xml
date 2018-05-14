@@ -16,6 +16,10 @@
             name="messageModel"
             type="com.hotger.recipes.utils.MessageModel" />
 
+        <variable
+            name="isEmpty"
+            type="android.databinding.ObservableBoolean" />
+
         <import type="android.view.View" />
     </data>
 
@@ -26,9 +30,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:paddingLeft="@dimen/padding_dimen"
-            android:paddingRight="@dimen/padding_dimen"
-            android:id="@+id/addProductName"
+            android:id="@+id/add_product_name"
             style="@style/TextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,30 +39,34 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:elevation="4dp"
             android:hint="@string/add_products"
+            android:imeOptions="actionDone"
+            android:inputType="textNoSuggestions"
             android:maxLines="1"
+            android:paddingLeft="@dimen/padding_dimen"
+            android:paddingRight="@dimen/padding_dimen"
             android:text="@={model.productName}" />
 
         <ListView
-            android:paddingLeft="@dimen/padding_dimen"
-            android:paddingRight="@dimen/padding_dimen"
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/addProductName"
+            android:layout_below="@id/add_product_name"
             android:background="@color/colorPrimaryDarkOpaque"
             android:divider="@color/colorAccent"
             android:dividerHeight="2px"
             android:elevation="4dp"
+            android:paddingLeft="@dimen/padding_dimen"
+            android:paddingRight="@dimen/padding_dimen"
             android:translationZ="10dp"
-            android:visibility="@{model.productName.length() != 0 ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{!isEmpty ? View.VISIBLE : View.GONE}" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginLeft="@dimen/padding_dimen"
-            android:layout_marginRight="@dimen/padding_dimen"
             android:id="@+id/products_line_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/addProductName"
+            android:layout_below="@id/add_product_name"
+            android:layout_marginLeft="@dimen/padding_dimen"
+            android:layout_marginRight="@dimen/padding_dimen"
             android:elevation="10dp"
             android:scrollbars="vertical" />
 
@@ -69,7 +75,7 @@
             layout="@layout/fragment_no_fill"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/addProductName"
+            android:layout_below="@id/add_product_name"
             android:layout_centerInParent="true"
             android:visibility="gone"
             bind:model="@{messageModel}" />

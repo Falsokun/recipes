@@ -73,6 +73,10 @@
     <string name="write_instructions">Write here your recipe instructions</string>
     <string name="redactor">Recipe creator</string>
     <string name="you_can_cook_now">Now you can cook</string>
+    <string name="no_image">No image</string>
+    <string name="ru_title">Russian title</string>
+    <string name="en_title">English title</string>
+    <string name="enter_ingredient_info">Enter ingredient info</string>
 
     <string-array name="measures_array">
         <item></item>

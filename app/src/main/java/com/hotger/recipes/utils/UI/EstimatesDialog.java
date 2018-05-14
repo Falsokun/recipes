@@ -33,7 +33,7 @@ public class EstimatesDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.estimates_dialog);
+        setContentView(R.layout.dialog_estimates);
         Button okButton = findViewById(R.id.ok_btn);
         okButton.setOnClickListener(this);
         RecyclerView recyclerView;

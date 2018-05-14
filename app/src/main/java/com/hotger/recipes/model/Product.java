@@ -3,13 +3,12 @@ package com.hotger.recipes.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.Html;
 import android.util.Rational;
 
-import com.hotger.recipes.database.ObjConverter;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.MeasureUtils;
 import com.hotger.recipes.view.ControllableActivity;
@@ -28,6 +27,7 @@ import java.util.regex.Pattern;
                 childColumns = "recipeId",
                 onDelete = ForeignKey.CASCADE),
         primaryKeys = {"recipeId", "ingredientId"})
+@IgnoreExtraProperties
 public class Product implements Serializable {
 
     @NonNull
@@ -41,8 +41,10 @@ public class Product implements Serializable {
     /**
      * Amount of product
      */
-    @TypeConverters({ObjConverter.class})
-    private Rational amount = new Rational(0, 1);
+//    @TypeConverters({ObjConverter.class})
+//    private Rational amount = new Rational(0, 1);
+//
+    private String amount = "1/1";
 
     /**
      * Measure of product
@@ -62,17 +64,25 @@ public class Product implements Serializable {
     public Product(ControllableActivity activity, String ingredientId, Rational amount) {
         this.ingredientId = ingredientId;
         measure = "gr";
-        this.amount = amount;
+        this.amount = amount.toString();
     }
 
     @Ignore
     public Product(ControllableActivity activity, String ingredientId, Rational amount, String measure) {
         this.ingredientId = ingredientId;
         this.measure = measure;
-        this.amount = amount;
+        this.amount = amount.toString();
     }
 
+    @Ignore
     public Product(String recipeId, String ingredientId, Rational amount, String measure) {
+        this.recipeId = recipeId;
+        this.ingredientId = ingredientId;
+        this.amount = amount.toString();
+        this.measure = measure;
+    }
+
+    public Product(@NonNull String recipeId, @NonNull String ingredientId, String amount, String measure) {
         this.recipeId = recipeId;
         this.ingredientId = ingredientId;
         this.amount = amount;
@@ -80,6 +90,7 @@ public class Product implements Serializable {
     }
 
     //TODO может тут лучше не парсинг, а посмотреть по базе чо есть (нооо это долго наверное)
+    @Ignore
     public static Product getProductByLine(String productLine, ControllableActivity activity) {
         String line = productLine.replaceAll("\\(((\\w+\\s?)+)\\)(\\s|,)?", "");
         line = line.toLowerCase();
@@ -108,6 +119,7 @@ public class Product implements Serializable {
         ingredientId = ingredient.getEn();
     }
 
+    @Ignore
     public String getIngredientById(ControllableActivity activity) {
         List<Ingredient> ingredients = AppDatabase
                 .getDatabase(activity)
@@ -122,6 +134,14 @@ public class Product implements Serializable {
     }
 
     //region rational processing
+    @Ignore
+    public Rational getRationalAmount() {
+        return Rational.parseRational(amount);
+    }
+
+    public void setRationalAmount(Rational amount) {
+        this.amount = amount.toString();
+    }
 
     /**
      * Get value with the multiplied coefficient
@@ -139,7 +159,7 @@ public class Product implements Serializable {
             res = new Rational(rational.getNumerator() * (int) koeff, rational.getDenominator());
         }
 
-        return getStringRational(res);
+        return getHtmlRational(res);
     }
 
     /**
@@ -148,7 +168,8 @@ public class Product implements Serializable {
      * @param rational - rational number
      * @return rational string
      */
-    public static CharSequence getStringRational(Rational rational) {
+    @Ignore
+    public static CharSequence getHtmlRational(Rational rational) {
         if (rational.getDenominator() == 1) {
             return String.valueOf(rational.getNumerator());
         }
@@ -211,11 +232,11 @@ public class Product implements Serializable {
         this.ingredientId = ingredientId;
     }
 
-    public Rational getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(Rational amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

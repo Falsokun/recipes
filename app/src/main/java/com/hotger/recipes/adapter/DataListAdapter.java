@@ -1,24 +1,22 @@
 package com.hotger.recipes.adapter;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.hotger.recipes.R;
-import com.hotger.recipes.model.GsonModel.NutritionEstimates;
-import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,23 +26,26 @@ import java.util.List;
  */
 public class DataListAdapter extends ArrayAdapter<String> implements Filterable {
 
-    private List<NutritionEstimates> estimates;
-
     private List<String> allData = new ArrayList<>();
 
     private List<String> data = new ArrayList<>();
 
     private String prevSeq = "";
 
+    private int FILTERING_LENGTH = 3;
+
+    private ObservableBoolean isEmpty = new ObservableBoolean(false);
+
     public DataListAdapter(@NonNull Context context, @LayoutRes int resource, List<String> data) {
         super(context, resource, R.id.name, data);
         this.data = data;
         this.allData = new ArrayList<>(data);
+        isEmpty.set(true);
     }
 
     @Override
     public int getCount() {
-        return super.getCount();
+        return data.size();
     }
 
     @NonNull
@@ -60,9 +61,27 @@ public class DataListAdapter extends ArrayAdapter<String> implements Filterable 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults result = new FilterResults();
-                if (prevSeq.length() > constraint.length()) {
+                // not filtering by 2 symbols
+                if (constraint.length() < FILTERING_LENGTH) {
+                    if (data.size() != allData.size()) {
+                        data.clear();
+                        data.addAll(allData);
+                    }
+
+                    result.values = data;
+                    result.count = data.size();
+                    return result;
+                }
+
+                if (prevSeq.length() > constraint.length()
+                        || data.size() == 0 ) {
                     data.clear();
                     data.addAll(allData);
+                    if (constraint.length() < FILTERING_LENGTH) {
+                        result.values = data;
+                        result.count = data.size();
+                        return result;
+                    }
                 }
 
                 if (constraint.charAt(constraint.length() - 1) == ' ') {
@@ -102,6 +121,8 @@ public class DataListAdapter extends ArrayAdapter<String> implements Filterable 
                 }
 
                 notifyDataSetChanged();
+                isEmpty.set(data.size() == 0 || data.size() == allData.size());
+                isEmpty.notifyChange();
             }
         };
     }
@@ -112,5 +133,16 @@ public class DataListAdapter extends ArrayAdapter<String> implements Filterable 
             return Utils.levenshteinDistance2(o1, str) -
                     Utils.levenshteinDistance2(o2, str);
         });
+    }
+
+    public ObservableBoolean isEmptyData() {
+        return isEmpty;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        data.add(ingredient.getEn());
+        data.add(ingredient.getRu());
+        allData.add(ingredient.getEn());
+        allData.add(ingredient.getRu());
     }
 }

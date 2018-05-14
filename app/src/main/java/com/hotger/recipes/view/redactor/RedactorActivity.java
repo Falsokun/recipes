@@ -54,6 +54,7 @@ public class RedactorActivity extends ControllableActivity {
         mBinding.redactorProgress.setProgress(getProgress(0));
         initListeners();
         initToolbar();
+        boolean shouldSend = getIntent().getBooleanExtra(Utils.IntentVars.SHOULD_OPEN_RECIPE, true);
         mBinding.btnSave.setOnClickListener(view -> {
             if (mBinding.btnSave.getText()
                     .equals(getResources().getString(R.string.next))) {
@@ -62,9 +63,11 @@ public class RedactorActivity extends ControllableActivity {
                 boolean result = mRedactorModel.onSave(mBinding.recipeVp);
                 if (result) {
                     onBackPressed();
-                    Intent intent = new Intent(Utils.IntentVars.RECIPE_ID);
-                    intent.putExtra(Utils.IntentVars.RECIPE_ID, mRedactorModel.getCurrentRecipe());
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                    if (!shouldSend) {
+                        Intent intent = new Intent(Utils.IntentVars.RECIPE_ID);
+                        intent.putExtra(Utils.IntentVars.RECIPE_ID, mRedactorModel.getCurrentRecipe());
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                    }
                 }
             }
         });

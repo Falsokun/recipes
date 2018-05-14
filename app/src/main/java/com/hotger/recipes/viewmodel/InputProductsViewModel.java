@@ -1,7 +1,9 @@
 package com.hotger.recipes.viewmodel;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,8 @@ import com.hotger.recipes.BR;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.DataListAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
+import com.hotger.recipes.database.FirebaseUtils;
+import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
@@ -63,24 +68,17 @@ public class InputProductsViewModel extends ViewModel {
         if (!productsAdapter.isAlreadyInSet(productName)) {
             products.add(new Product(productName, activity));
             productsAdapter.notifyDataSetChanged();
-            notifyPropertyChanged(BR.emptyData);
         } else {
             Toast.makeText(activity, "Already in list", Toast.LENGTH_LONG).show();
         }
     }
     //endregion
 
-    @Bindable
-    public boolean isEmptyData() {
-        return products.isEmpty();
-    }
-
     //region Listeners
-    public TextView.OnEditorActionListener getOnEditorActionListener(int count) {
+    public TextView.OnEditorActionListener getOnEditorActionListener() {
         return (TextView textView, int actionId, KeyEvent keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                int listNum = count;
-                if (listNum == 0) {
+                if (dataHintAdapter.isEmptyData().get()) {
                     showAlertDialog();
                 }
             }
@@ -132,7 +130,23 @@ public class InputProductsViewModel extends ViewModel {
 
     //region Getters and Setters
     private void addProductToBase() {
-        Toast.makeText(activity, "add product to base", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder adb = new AlertDialog.Builder(activity, AlertDialog.THEME_HOLO_LIGHT);
+        adb.setTitle(activity.getString(R.string.enter_ingredient_info));
+        View v = activity.getLayoutInflater().inflate(R.layout.dialog_ingredient, null);
+        adb.setView(v);
+        adb.setPositiveButton(R.string.OK, (dialog, which) -> {
+            String enTitle = ((EditText)v.findViewById(R.id.en_title)).getText().toString();
+            enTitle = enTitle.substring(0, 1).toUpperCase() + enTitle.substring(1).toLowerCase();
+            String ruTitle = ((EditText)v.findViewById(R.id.ru_title)).getText().toString();
+            ruTitle = ruTitle.substring(0, 1).toUpperCase() + ruTitle.substring(1).toLowerCase();
+            FirebaseUtils.addIngredientToDb(enTitle, ruTitle);
+            AppDatabase.getDatabase(activity).getIngredientDao().insert(new Ingredient(enTitle, ruTitle));
+            dataHintAdapter.addIngredient(new Ingredient(enTitle, ruTitle));
+        });
+
+        AlertDialog ad = adb.create();
+        ad.setCanceledOnTouchOutside(true);
+        ad.show();
     }
 
     public DataListAdapter getDataHintAdapter() {

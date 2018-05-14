@@ -5,6 +5,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Relation;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.GsonModel.Image;
 import com.hotger.recipes.model.GsonModel.NutritionEstimates;
 import com.hotger.recipes.utils.AppDatabase;
@@ -84,7 +85,7 @@ public class Recipe implements Serializable {
      */
     public String getImageURL() {
         if (recipe.getImages().size() == 0) {
-            return null;
+            return FirebaseUtils.NO_IMAGE_URL;
         }
 
         return recipe.getImages().get(0).getUrl();

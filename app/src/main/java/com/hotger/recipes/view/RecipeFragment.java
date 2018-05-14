@@ -117,6 +117,7 @@ public class RecipeFragment extends Fragment {
         if (item.getItemId() == R.id.menu_edit) {
             Intent intent = new Intent(getActivity(), RedactorActivity.class);
             intent.putExtra(Utils.IntentVars.RECIPE_ID, model.getCurrentRecipe().getId());
+            intent.putExtra(Utils.IntentVars.SHOULD_OPEN_RECIPE, false);
             startActivity(intent);
         } else if (item.getItemId() == R.id.menu_delete) {
             model.deleteRecipeFromDatabase((ControllableActivity) getActivity(),

@@ -42,7 +42,7 @@ public class ObjConverter {
     }
 
     @TypeConverter
-    public Rational fromString(String data) {
+    public Rational toRational(String data) {
         return new Rational(Integer.parseInt(data.split("/")[0]),
                 Integer.parseInt(data.split("/")[1]));
     }

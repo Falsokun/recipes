@@ -54,7 +54,7 @@ public class ShoppingListActivity extends ControllableActivity {
         mBinding.fragmentRedactor.listView.setOnItemClickListener(inputModel
                 .getOnHintItemClickListener(mBinding.fragmentRedactor.addProductName));
         mBinding.fragmentRedactor.addProductName.setOnEditorActionListener(inputModel
-                .getOnEditorActionListener(mBinding.fragmentRedactor.listView.getCount()));
+                .getOnEditorActionListener());
     }
 
     @Override

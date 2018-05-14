@@ -21,12 +21,13 @@
                 android:drawableLeft="@drawable/ic_time_white"
                 android:text="@string/prep_time" />
 
-            <Button
+            <TextView
                 android:id="@+id/prep_time"
-                style="@style/BorderlessTextButton"
+                style="@style/TextTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
                 android:text="00:00" />
 
         </RelativeLayout>
@@ -47,13 +48,13 @@
                 android:drawableLeft="@drawable/ic_time_white"
                 android:text="@string/cooking_time" />
 
-            <Button
+            <TextView
                 android:id="@+id/cooking_time"
-                style="@style/BorderlessTextButton"
+                style="@style/TextTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:width="100dp"
+                android:layout_centerInParent="true"
                 android:text="00:00" />
 
         </RelativeLayout>
@@ -75,13 +76,17 @@
                 android:drawableLeft="@drawable/ic_image_black"
                 android:text="@string/select_image" />
 
-            <Button
+            <TextView
                 android:id="@+id/photo_src_btn"
-                style="@style/BorderlessTextButton"
+                style="@style/TextTheme"
                 android:layout_width="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="10"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:hint="..."
+                android:layout_centerInParent="true"
+                android:gravity="right"
+                android:hint="@string/no_image"
                 android:textColorHint="@color/colorText" />
 
         </RelativeLayout>
@@ -102,12 +107,13 @@
                 android:drawableLeft="@drawable/ic_info"
                 android:text="@string/number_of_calories" />
 
-            <Button
+            <TextView
                 android:id="@+id/cal_selector"
-                style="@style/BorderlessTextButton"
+                style="@style/TextTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
                 android:hint="20"
                 android:textColorHint="@color/colorText" />
 
@@ -129,12 +135,13 @@
                 android:drawableLeft="@drawable/ic_persons_num"
                 android:text="@string/persons_number" />
 
-            <Button
+            <TextView
                 android:id="@+id/portions_selector"
-                style="@style/BorderlessTextButton"
+                style="@style/TextTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
                 android:hint="1"
                 android:textColorHint="@color/colorText" />
 

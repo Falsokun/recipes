@@ -29,6 +29,7 @@
 
         <EditText
             android:id="@+id/name"
+            style="@style/TextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
@@ -37,8 +38,7 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:hint="@string/write_name"
             android:maxLines="1"
-            android:text="@={model.currentRecipe.name}"
-            android:theme="@style/TextTheme" />
+            android:text="@={model.currentRecipe.name}" />
 
         <FrameLayout
             android:id="@+id/progress_container"
@@ -83,8 +83,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="@string/next"
             android:background="@color/colorPrimary"
+            android:text="@string/next"
             android:theme="@style/EntireLineBtn" />
 
         <android.inputmethodservice.KeyboardView
@@ -95,7 +95,7 @@
             android:layout_centerHorizontal="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:visibility="gone"
-            android:translationZ="10dp"/>
+            android:translationZ="10dp"
+            android:visibility="gone" />
     </RelativeLayout>
 </layout>

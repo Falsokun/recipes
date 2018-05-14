@@ -40,7 +40,6 @@ import retrofit2.Response;
 public class FirebaseUtils {
 
     public static final String FIREBASE_IMG_STORAGE = "recipe_image";
-    public static final String CATEGORY = "categories";
     public static final String NO_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/falsorecipes.appspot.com/o/storage%2Fno_img.png?alt=media&token=ec61e886-86f7-43d8-a4f4-a609477dd509";
     public static final String RECIPES_REF = "recipes_ref";
     public static final String PRODUCTS_REF = "products_ref";
@@ -49,6 +48,8 @@ public class FirebaseUtils {
     private static final String PREVIEW_REF = "preview_ref";
     public static final String CATEGORY_REF_SEND = "category_ref_send";
     public static final String RECIPE_REF_EXTRA = "recipe_ref_extra";
+    private static final String PRODUCTS_REF_REL = "products_ref_rel";
+    private static final String CATEGORY_REF_REL = "category_ref_rel";
 
     /**
      * Save initial ingredients from firebase
@@ -119,8 +120,8 @@ public class FirebaseUtils {
                                             RecipePrev prev) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RECIPES_REF).add(recipe.getRecipe());
-        CollectionReference productsRef = db.collection(PRODUCTS_REF);
-        CollectionReference categoryRef = db.collection(CATEGORIES_REF);
+        CollectionReference productsRef = db.collection(PRODUCTS_REF_REL);
+        CollectionReference categoryRef = db.collection(CATEGORY_REF_REL);
         db.collection(PREVIEW_REF).add(prev);
         for (Product p : recipe.getProducts()) {
             productsRef.add(p);
@@ -151,7 +152,7 @@ public class FirebaseUtils {
 
             Recipe recipe = new Recipe(recipenf);
 
-            db.collection(CATEGORIES_REF).whereEqualTo("recipeId", id).get().addOnCompleteListener(getOnCompleteListener(new Product(), activity));
+            db.collection(CATEGORIES_REF).whereEqualTo("recipeId", id).get().addOnCompleteListener(getOnCompleteListener(new RelationCategoryRecipe(), activity));
             db.collection(PRODUCTS_REF).whereEqualTo("recipeId", id).get().addOnCompleteListener(getOnCompleteListener(new Product(), activity));
 
             Intent intent = new Intent(Utils.IntentVars.RECIPE_OBJ);
@@ -318,6 +319,11 @@ public class FirebaseUtils {
         });
 
         t.start();
+    }
+
+    public static void addIngredientToDb(String enTitle, String ruTitle) {
+        FirebaseFirestore ref = FirebaseFirestore.getInstance();
+        ref.collection(INGREDIENT_REF).add(new Ingredient(enTitle, ruTitle));
     }
 
     /**

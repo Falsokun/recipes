@@ -92,8 +92,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Drawable drawable = MeasureUtils.getDrawableByMeasure(activity, productLine.getMeasure());
         holder.binding.amountIcon.setText(productLine.getMeasure());
         holder.binding.amountIcon.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-        holder.binding.finalAmount.setText(Product.doubleToStringWithKoeff(productLine.getAmount(), koeff));
-        if (holder.binding.getIsDetailed() && !holder.binding.getIsEditable() && productLine.getAmount().getNumerator() == 0) {
+        holder.binding.finalAmount.setText(Product.doubleToStringWithKoeff(productLine.getRationalAmount(), koeff));
+        if (holder.binding.getIsDetailed() && !holder.binding.getIsEditable() && productLine.getRationalAmount().getNumerator() == 0) {
             holder.binding.finalAmount.setVisibility(View.GONE);
         }
 
@@ -313,9 +313,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                             if (editable.toString().length() != 0) {
                                 double val = Double.valueOf(editable.toString());
                                 //TODO: ТУТ ИСПРАВИТЬ
-                                data.get(getAdapterPosition()).setAmount(new Rational((int) val, 1));
+                                data.get(getAdapterPosition()).setRationalAmount(new Rational((int) val, 1));
                             } else {
-                                data.get(getAdapterPosition()).setAmount(new Rational(0, 1));
+                                data.get(getAdapterPosition()).setRationalAmount(new Rational(0, 1));
                             }
                         }
                     });

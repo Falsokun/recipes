@@ -1,9 +1,11 @@
 package com.hotger.recipes.model.GsonModel;
 
+import java.io.Serializable;
+
 /**
  * Class to get response from {@link com.hotger.recipes.utils.YummlyAPI} by gson
  */
-public class NutritionEstimates {
+public class NutritionEstimates implements Serializable {
     private String attribute;
 
     private String description;

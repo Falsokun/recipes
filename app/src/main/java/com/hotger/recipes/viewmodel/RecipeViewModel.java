@@ -3,7 +3,6 @@ package com.hotger.recipes.viewmodel;
 
 import android.content.Context;
 import android.databinding.Bindable;
-import android.support.v7.app.AlertDialog;
 import android.util.Rational;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,7 +183,7 @@ public class RecipeViewModel extends ViewModel {
         for (String string : recipe.getIngredientLines()) {
             p = new Product();
             List<Ingredient> list = db.getIngredientDao().getIngredientLike(string);
-            p.setAmount(getIngredientsAmount(string));
+            p.setRationalAmount(getIngredientsAmount(string));
             p.setMeasure(MeasureUtils.matchMeasure(string));
             if (list.size() == 0) {
                 String id = getClosestToLine(string, context);
