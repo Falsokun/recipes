@@ -34,4 +34,7 @@ public interface ProductDao extends BaseDao<Product> {
 
     @Query("DELETE FROM product WHERE recipeId = :id")
     void removeWhereId(String id);
+
+    @Query("DELETE FROM product WHERE recipeId = :recipeId AND ingredientId = :ingredientId")
+    void deleteWhereId(String recipeId, String ingredientId);
 }

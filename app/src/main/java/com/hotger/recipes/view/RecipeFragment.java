@@ -105,7 +105,7 @@ public class RecipeFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_fragment, menu);
+        inflater.inflate(R.menu.menu_fragment_recipe, menu);
         if (!shouldShowOptions) {
             menu.removeItem(R.id.menu_delete);
             menu.removeItem(R.id.menu_edit);

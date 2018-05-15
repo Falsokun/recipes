@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import com.hotger.recipes.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 /**
@@ -74,7 +76,7 @@ public class DataListAdapter extends ArrayAdapter<String> implements Filterable 
                 }
 
                 if (prevSeq.length() > constraint.length()
-                        || data.size() == 0 ) {
+                        || data.size() == 0) {
                     data.clear();
                     data.addAll(allData);
                     if (constraint.length() < FILTERING_LENGTH) {
@@ -83,7 +85,6 @@ public class DataListAdapter extends ArrayAdapter<String> implements Filterable 
                         return result;
                     }
                 }
-
                 if (constraint.charAt(constraint.length() - 1) == ' ') {
                     result.values = new ArrayList<>(data);
                     result.count = data.size();

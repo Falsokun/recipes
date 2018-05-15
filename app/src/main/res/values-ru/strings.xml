@@ -56,4 +56,27 @@
     <string name="nothing_selected">Ничего не выбрано</string>
     <string name="OK">ОК</string>
     <string name="enter_url_here">Введите url</string>
+    <string name="number_of_calories">Калорийность</string>
+    <string name="select_image">Выберите изображение</string>
+    <string name="no_image_added">нет изображения</string>
+    <string name="start_searching">Начать поиск</string>
+    <string name="random_recipe">Показать случайный рецепт</string>
+    <string name="my_favs">Избранное</string>
+    <string name="user_recipe">Пользовательские рецепьы</string>
+    <string name="max_cooking_time">Выбрать ограничение по времени</string>
+    <string name="step">Шаг</string>
+    <string name="recipe_name">Название рецепта</string>
+    <string name="nutrition_estimates">Оценки питания</string>
+    <string name="no_data_available">Нет информации</string>
+    <string name="choose_number">Выберите число</string>
+    <string name="translation">Перевод</string>
+    <string name="translate_from_american_metrics">Перевод метрических систе</string>
+    <string name="write_instructions">Напишите инструкции к рецепту</string>
+    <string name="redactor">Редактор рецептов</string>
+    <string name="you_can_cook_now">Можете начинать готовить</string>
+    <string name="no_image">Нет изображения</string>
+    <string name="ru_title">Заголовок на русском</string>
+    <string name="en_title">Заголовок на английском</string>
+    <string name="enter_ingredient_info">Введите информацию об ингредиенте</string>
+    <string name="share">Поделиться</string>
 </resources>

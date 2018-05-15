@@ -66,8 +66,11 @@ public class InputProductsViewModel extends ViewModel {
         TextView childView = view.findViewById(R.id.name);
         String productName = childView.getText().toString();
         if (!productsAdapter.isAlreadyInSet(productName)) {
-            products.add(new Product(productName, activity));
-            productsAdapter.notifyDataSetChanged();
+            if (!productsAdapter.isShoppingList()) {
+                productsAdapter.add(new Product(productName, activity));
+            } else {
+                productsAdapter.addUnchecked(new Product(productName, activity));
+            }
         } else {
             Toast.makeText(activity, "Already in list", Toast.LENGTH_LONG).show();
         }

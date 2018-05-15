@@ -7,4 +7,5 @@
     <dimen name="low_padding">8dp</dimen>
     <dimen name="h1Size">16sp</dimen>
     <dimen name="key_height">32dp</dimen>
+    <dimen name="dimen_width">64dp</dimen>
 </resources>

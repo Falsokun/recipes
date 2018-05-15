@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.hotger.recipes.R;
@@ -17,10 +20,11 @@ import java.util.ArrayList;
 
 public class ShoppingListActivity extends ControllableActivity {
 
-    ActivityShoppingListBinding mBinding;
+    private ActivityShoppingListBinding mBinding;
     InputProductsViewModel inputModel;
     public static String SHOPPING_LIST_ID = "shopping_list_id";
     public static String SHOPPING_LIST_CHECKED = "shopping_list_checked";
+    public static String SHOPPING_LIST_UNCHECKED = "shopping_list_un_checked";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,12 +32,16 @@ public class ShoppingListActivity extends ControllableActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_shopping_list);
         inputModel = new InputProductsViewModel(this, new ArrayList<>(), true, false, true);
         mBinding.setModel(inputModel);
+        setSupportActionBar(mBinding.toolBar);
+        getSupportActionBar().setTitle(getString(R.string.shopping_list));
+        mBinding.fragmentRedactor.setIsEmpty(inputModel.getDataHintAdapter().isEmptyData());
         mBinding.fragmentRedactor.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.fragmentRedactor.productsLineRv.setAdapter(inputModel.getProductsAdapter());
         mBinding.fragmentRedactor.productsLineRv.setLayoutManager(new LinearLayoutManager(this));
         mBinding.fragmentRedactor.productsLineRv.setHasFixedSize(true);
         inputModel.getItemTouchListener().attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
         initListeners();
+        setUpNavigation(true);
     }
 
     @Override
@@ -46,6 +54,29 @@ public class ShoppingListActivity extends ControllableActivity {
     protected void onPause() {
         super.onPause();
         inputModel.saveListData(this, SHOPPING_LIST_ID);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_shopping, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_home:
+                onBackPressed();
+                break;
+            case R.id.menu_clear:
+                inputModel.getProductsAdapter().removeCheckedItems();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initListeners() {

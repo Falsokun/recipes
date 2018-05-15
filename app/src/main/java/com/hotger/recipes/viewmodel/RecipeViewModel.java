@@ -45,6 +45,7 @@ public class RecipeViewModel extends ViewModel {
     public void setCurrentRecipe(Recipe mCurrentRecipe) {
         this.mCurrentRecipe = mCurrentRecipe;
         productsAdapter = new ProductsAdapter(activity, mCurrentRecipe.getProducts(), false, true, false);
+        productsAdapter.sortProducts();
         notifyPropertyChanged(BR.currentRecipe);
     }
 

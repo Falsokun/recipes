@@ -13,6 +13,10 @@
             type="boolean" />
 
         <import type="android.view.View" />
+
+        <import type="android.graphics.Color" />
+
+        <import type="com.hotger.recipes.R" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -45,6 +49,7 @@
             <LinearLayout
                 android:id="@+id/amount_layout"
                 android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/amount_icon"
                 android:visibility="@{isDetailed ? View.VISIBLE : View.GONE}">
@@ -64,10 +69,9 @@
                     style="@style/TextTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:width="64dp"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:width="@{isEditable ? R.dimen.padding_dimen : 0}"
+                    android:backgroundTint="@{isEditable ? R.color.colorPrimary : Color.TRANSPARENT }"
                     android:gravity="center"
-                    android:minWidth="40dp"
                     android:text="0"
                     android:textSize="14sp" />
 

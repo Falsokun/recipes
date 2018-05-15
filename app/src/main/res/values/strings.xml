@@ -78,6 +78,7 @@
     <string name="en_title">English title</string>
     <string name="enter_ingredient_info">Enter ingredient info</string>
     <string name="share">Share</string>
+    <string name="remove_bought">Remove bought ingredients</string>
 
     <string-array name="measures_array">
         <item></item>

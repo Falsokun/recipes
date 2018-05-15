@@ -1,5 +1,7 @@
 package com.hotger.recipes.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
@@ -19,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
+import com.hotger.recipes.database.dao.ProductDao;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
@@ -29,10 +32,12 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_CHECKED;
 import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_ID;
+import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_UNCHECKED;
 
 /**
  * Adapter for handling entering products and its quanitity
@@ -63,6 +68,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     private double koeff = 1;
 
+    private List<Product> unchecked;
     private List<Product> checked;
 
     public ProductsAdapter(ControllableActivity context, List<Product> data, boolean isEditable,
@@ -73,9 +79,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         this.isDetailed = isDetailed;
         this.isShoppingList = isShoppingList;
         if (isShoppingList) {
-            checked = AppDatabase.getDatabase(context)
-                    .getProductDao()
-                    .getProducts(SHOPPING_LIST_CHECKED);
+            ProductDao dao = AppDatabase.getDatabase(context)
+                    .getProductDao();
+            unchecked = dao.getProducts(SHOPPING_LIST_UNCHECKED);
+            checked = dao.getProducts(SHOPPING_LIST_CHECKED);
+            data.addAll(unchecked);
+            data.addAll(checked);
         }
     }
 
@@ -104,24 +113,40 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
         holder.binding.lottieAnim.setOnClickListener(view -> {
             checkAnimStatus(holder.binding.lottieAnim, productLine);
-            animateView(holder.binding.lottieAnim, true, 0f, 0.5f);
+            animateView(holder.binding.lottieAnim, true, 0f, 0.5f, null);
         });
 
         if (isShoppingList) {
-            if (checked.contains(productLine)) {
-                holder.binding.lottieAnim.setProgress(1f);
-            }
-
             holder.binding.checkAnim.setAnimation(R.raw.check_animation);
             holder.binding.checkAnim.setVisibility(View.VISIBLE);
-            holder.binding.checkAnim.setOnClickListener(view -> {
-                animateView(holder.binding.checkAnim, false, 0f, 1f);
+            if (checked.contains(productLine)) {
+                holder.binding.checkAnim.setProgress(1f);
                 holder.binding.checkAnim.setEnabled(false);
-                saveItemToList(activity, SHOPPING_LIST_CHECKED, productLine);
-                Collections.swap(data, position, 0);
-                notifyItemMoved(position, 0);
+            }
+
+            holder.binding.checkAnim.setOnClickListener(view -> {
+                AnimatorListenerAdapter animEnd = new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        data.remove(position);
+                        changeItemList(productLine);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, data.size() - 1);
+                        super.onAnimationEnd(animation);
+                    }
+                };
+
+                animateView(holder.binding.checkAnim, false, 0f, 1f, animEnd);
             });
         }
+    }
+
+    private void changeItemList(Product product) {
+        unchecked.remove(product);
+        checked.add(product);
+        data.add(product);
+        saveItemToList(activity, SHOPPING_LIST_CHECKED, product);
+        removeItemToList(activity, SHOPPING_LIST_UNCHECKED, product);
     }
 
     public void clearAllChecked() {
@@ -154,6 +179,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         AppDatabase.getDatabase(activity).getProductDao().insert(product);
     }
 
+    private void removeItemToList(ControllableActivity activity, String shoppingListId, Product product) {
+        AppDatabase.getDatabase(activity).getProductDao()
+                .deleteWhereId(shoppingListId, product.getIngredientId());
+    }
+
+
     //TODO: Эта функция удаляет весь продукт, надо вставить ID
     public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
         AppDatabase.getDatabase(activity).getProductDao().delete(product);
@@ -167,7 +198,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
      * @param start           - start value
      * @param end             - end value
      */
-    private void animateView(LottieAnimationView animationView, boolean shouldCalculate, float start, float end) {
+    private void animateView(LottieAnimationView animationView, boolean shouldCalculate, float start, float end, AnimatorListenerAdapter onEnd) {
         float anim_start;
         float anim_end;
         if (shouldCalculate) {
@@ -178,8 +209,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             anim_end = end;
         }
 
-        ValueAnimator animator = ValueAnimator.ofFloat(anim_start, anim_end).setDuration(1000);
+        ValueAnimator animator = ValueAnimator.ofFloat(anim_start, anim_end).setDuration(500);
         animator.addUpdateListener(valueAnimator -> animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
+        animator.addListener(onEnd);
         animator.start();
     }
 
@@ -191,7 +223,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     /**
      * Checks if product is already in set
      *
-     * @param productName - product name to be checked
+     * @param productName - product name to be unchecked
      * @return <code>true</code> if is in set
      */
     public boolean isAlreadyInSet(String productName) {
@@ -201,6 +233,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         }
 
         return false;
+    }
+
+    public boolean isShoppingList() {
+        return isShoppingList;
+    }
+
+    public void setShoppingList(boolean shoppingList) {
+        isShoppingList = shoppingList;
     }
 
     //region Getters and Setters
@@ -267,6 +307,32 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         mKeyboard = new Keyboard(activity, R.xml.keyboard);
         mKeyboardView = keyboardView;
         return mKeyboard;
+    }
+
+    public void addUnchecked(Product product) {
+        unchecked.add(0, product);
+        data.add(0, product);
+        saveItemToList(activity, SHOPPING_LIST_UNCHECKED, product);
+        notifyDataSetChanged();
+    }
+
+    public void removeCheckedItems() {
+        int exSize = data.size() - 1;
+        data.removeAll(checked);
+        checked.clear();
+        AppDatabase.getDatabase(activity).getProductDao().removeWhereId(SHOPPING_LIST_CHECKED);
+        notifyItemRangeRemoved(unchecked.size(), exSize);
+    }
+
+    public void sortProducts() {
+        if (data.size() > 0) {
+            Collections.sort(data, (o1, o2) -> Rational.parseRational(o2.getAmount())
+                    .compareTo(Rational.parseRational(o1.getAmount())));
+        }
+    }
+
+    public void add(Product product) {
+        data.add(product);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
