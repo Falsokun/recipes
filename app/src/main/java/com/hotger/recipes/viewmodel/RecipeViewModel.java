@@ -22,6 +22,7 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,6 +199,11 @@ public class RecipeViewModel extends ViewModel {
             }
 
             recipe.getProducts().add(p);
+        }
+
+        if (recipe.getProducts().size() > 0) {
+            Collections.sort(recipe.getProducts(), (o1, o2) -> Rational.parseRational(o2.getAmount())
+                    .compareTo(Rational.parseRational(o1.getAmount())));
         }
     }
 

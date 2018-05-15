@@ -11,9 +11,15 @@ import android.widget.Toast;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentHomeBinding;
+import com.hotger.recipes.model.RecipePrev;
+import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.ParseUtils;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 import com.hotger.recipes.view.redactor.RedactorActivity;
+
+import java.util.List;
+import java.util.Random;
 
 public class HomeFragment extends BackStackFragment {
 
@@ -24,18 +30,19 @@ public class HomeFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         mBinding.addReceipt.setOnClickListener(view -> startActivity(new Intent(view.getContext(), RedactorActivity.class)));
-        mBinding.randomRecipe.setOnClickListener(view -> test());
+        mBinding.randomRecipe.setOnClickListener(view -> ((ControllableActivity) getActivity())
+                .openRecipe(Utils.getRandomId((ControllableActivity) getActivity()), true));
         mBinding.shoppingList.setOnClickListener(view -> startActivity(new Intent(view.getContext(), ShoppingListActivity.class)));
         return mBinding.getRoot();
     }
 
-    public void test() {
-        if (mBinding.recipeText.getText().toString().length() == 0) {
-            Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String url = mBinding.recipeText.getText().toString(); //"http://redmond.company/ru/recipes/82/2777/"
-        ParseUtils.parseRecipe(url, getContext(), false);
-    }
+//    public void test() {
+//        if (mBinding.recipeText.getText().toString().length() == 0) {
+//            Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        String url = mBinding.recipeText.getText().toString(); //"http://redmond.company/ru/recipes/82/2777/"
+//        ParseUtils.parseRecipe(url, getContext(), false);
+//    }
 }

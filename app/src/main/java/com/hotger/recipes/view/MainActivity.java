@@ -197,6 +197,9 @@ public class MainActivity extends ControllableActivity {
             String name = fm
                     .getBackStackEntryAt(fm.getBackStackEntryCount() - 1)
                     .getName();
+            if (name == null)
+                return getString(R.string.app_name);
+
             Fragment visibleFragment;
             if (name.equals(RecipeListFragment.class.getName())) {
                 visibleFragment = fm.findFragmentByTag(name);

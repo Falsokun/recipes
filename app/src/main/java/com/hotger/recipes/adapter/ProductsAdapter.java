@@ -32,7 +32,6 @@ import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_CHECKED;
@@ -147,17 +146,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         data.add(product);
         saveItemToList(activity, SHOPPING_LIST_CHECKED, product);
         removeItemToList(activity, SHOPPING_LIST_UNCHECKED, product);
-    }
-
-    public void clearAllChecked() {
-        List<Product> products = AppDatabase.getDatabase(activity)
-                .getProductDao()
-                .getProducts(SHOPPING_LIST_CHECKED);
-        for (Product product : products) {
-            removeItemFromList(activity, SHOPPING_LIST_ID, product);
-        }
-
-        AppDatabase.getDatabase(activity).getProductDao().removeWhereId(SHOPPING_LIST_CHECKED);
     }
 
     private void checkAnimStatus(LottieAnimationView animationView, Product product) {

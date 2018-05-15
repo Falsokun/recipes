@@ -66,7 +66,7 @@ public class ShoppingListActivity extends ControllableActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_home:
+            case android.R.id.home:
                 onBackPressed();
                 break;
             case R.id.menu_clear:

@@ -11,9 +11,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.hotger.recipes.R;
+import com.hotger.recipes.model.RecipePrev;
+import com.hotger.recipes.view.ControllableActivity;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +49,14 @@ public class Utils {
         return m.find();
     }
 
+    public static String getRandomId(ControllableActivity activity) {
+        List<RecipePrev> all = AppDatabase.getDatabase(activity).getRecipePrevDao().getAll();
+        Random random = new Random();
+        int num = random.nextInt(all.size());
+        RecipePrev prev = all.get(num);
+        return prev.getId();
+    }
+
     /**
      * Shared preferences variables
      */
@@ -66,6 +78,7 @@ public class Utils {
         public static final String SHOULD_OPEN_RECIPE = "SHOULD_OPEN_RECIPE";
         public static final String SHARE_TEXT = "SHARE_TEXT";
         public static final String INIT_ON_START = "INIT_ON_START";
+        public static final String INIT_GESTURES = "INIT_GESTURES";
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.hotger.recipes.view;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +14,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
@@ -45,6 +49,9 @@ import static com.hotger.recipes.utils.AppDatabase.getDatabase;
 
 public class RecipeFragment extends Fragment {
 
+    static final int MIN_DISTANCE = 300;
+    private float downX, downY, upX, upY;
+
     private FragmentRecipeShowBinding mBinding;
     private RecipeViewModel model;
     private BroadcastReceiver mMessageReceiver;
@@ -70,9 +77,66 @@ public class RecipeFragment extends Fragment {
         mBinding.plus.setOnClickListener(model.getOnClickListener(mBinding.portionsValue, true));
         mBinding.nutritionEstimates.setOnClickListener(v -> new EstimatesDialog(getContext(),
                 model.getCurrentRecipe().getNutritionEstimates()).show());
+        if (getArguments() != null
+                && getArguments().getBoolean(Utils.IntentVars.INIT_GESTURES, false)) {
+            mBinding.scrollView.setOnTouchListener(getOnTouchListener());
+        }
+
         ((ControllableActivity) getActivity()).updateCollapsing(((ControllableActivity) getActivity()).getAppBar(), true);
         checkForPassingFromDB();
         return mBinding.getRoot();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private View.OnTouchListener getOnTouchListener() {
+        return (v, event) -> {
+            if (isSwipe(event)) {
+                Toast.makeText(getContext(), "reload", Toast.LENGTH_SHORT).show();
+                openRandomRecipe();
+                return true;
+            }
+
+            return false;
+        };
+    }
+
+    private void openRandomRecipe() {
+        mBinding.progress.setVisibility(View.VISIBLE);
+        mBinding.container.setVisibility(View.GONE);
+        String id = Utils.getRandomId((ControllableActivity) getActivity());
+        ((ControllableActivity)getActivity()).loadRecipe(id);
+
+    }
+
+    private boolean isSwipe(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                downX = event.getX();
+                downY = event.getY();
+            }
+
+            case MotionEvent.ACTION_UP: {
+                upX = event.getX();
+                upY = event.getY();
+
+                float deltaX = downX - upX;
+
+                // swipe horizontal
+                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                    // left or right
+                    if (deltaX < 0) {
+                        Toast.makeText(getContext(), "left to right", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    if (deltaX > 0) {
+                        Toast.makeText(getContext(), "right to left", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     private void checkForPassingFromDB() {
@@ -106,6 +170,7 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment_recipe, menu);
+        menu.removeItem(R.id.menu_search);
         if (!shouldShowOptions) {
             menu.removeItem(R.id.menu_delete);
             menu.removeItem(R.id.menu_edit);

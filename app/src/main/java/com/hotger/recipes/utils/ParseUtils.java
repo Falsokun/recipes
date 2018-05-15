@@ -49,7 +49,7 @@ public class ParseUtils {
 //            recipeText = getRecipeSteps(recipeText, context, isFromApi);
             if (!isFromApi) {
 //                displayAlert(recipeText, context);
-                getRecipeInfo(recipeText, context);
+//                getRecipeInfo(recipeText, context);
             } else {
                 Intent intent = new Intent(YummlyAPI.REC_DIRECTIONS);
                 intent.putExtra(YummlyAPI.REC_DIRECTIONS, recipeText);

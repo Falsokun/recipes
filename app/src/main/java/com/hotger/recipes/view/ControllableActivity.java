@@ -53,9 +53,22 @@ public abstract class ControllableActivity extends AppCompatActivity {
     }
 
     public void openRecipe(String recipeId) {
-        RecipeFragment fragment = new RecipeFragment();
-        setCurrentFragment(fragment, true, fragment.getTag());
+        openRecipe(recipeId, false);
+    }
 
+    public void openRecipe(String recipeId, boolean addGestures) {
+        RecipeFragment fragment = new RecipeFragment();
+        if (addGestures) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Utils.IntentVars.INIT_GESTURES, true);
+            fragment.setArguments(bundle);
+        }
+
+        setCurrentFragment(fragment, true, fragment.getTag());
+        loadRecipe(recipeId);
+    }
+
+    public void loadRecipe(String recipeId) {
         App.getApi()
                 .getRecipeByID(recipeId)
                 .enqueue(new Callback<RecipeNF>() {
@@ -80,7 +93,6 @@ public abstract class ControllableActivity extends AppCompatActivity {
                              }
                          }
                 );
-
     }
 
     public void updateToolbar(Fragment fragment) {
