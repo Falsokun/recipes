@@ -13,18 +13,15 @@ import android.widget.ImageView;
 
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.ActivityShoppingListBinding;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 import java.util.ArrayList;
 
-
 public class ShoppingListActivity extends ControllableActivity {
 
     private ActivityShoppingListBinding mBinding;
-    InputProductsViewModel inputModel;
-    public static String SHOPPING_LIST_ID = "shopping_list_id";
-    public static String SHOPPING_LIST_CHECKED = "shopping_list_checked";
-    public static String SHOPPING_LIST_UNCHECKED = "shopping_list_un_checked";
+    private InputProductsViewModel inputModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +36,7 @@ public class ShoppingListActivity extends ControllableActivity {
         mBinding.fragmentRedactor.productsLineRv.setAdapter(inputModel.getProductsAdapter());
         mBinding.fragmentRedactor.productsLineRv.setLayoutManager(new LinearLayoutManager(this));
         mBinding.fragmentRedactor.productsLineRv.setHasFixedSize(true);
-        inputModel.getItemTouchListener().attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
+        inputModel.getItemTouchListener(Utils.SP_RECIPES_ID.TYPE_SHOPPING_LIST).attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
         initListeners();
         setUpNavigation(true);
     }
@@ -47,13 +44,13 @@ public class ShoppingListActivity extends ControllableActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        inputModel.restoreListData(this, SHOPPING_LIST_ID);
+        inputModel.restoreListData(this, Utils.SP_RECIPES_ID.TYPE_SHOPPING_LIST);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        inputModel.saveListData(this, SHOPPING_LIST_ID);
+        inputModel.saveListData(this, Utils.SP_RECIPES_ID.TYPE_SHOPPING_LIST);
     }
 
     @Override

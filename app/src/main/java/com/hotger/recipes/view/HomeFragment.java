@@ -30,9 +30,20 @@ public class HomeFragment extends BackStackFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         mBinding.addReceipt.setOnClickListener(view -> startActivity(new Intent(view.getContext(), RedactorActivity.class)));
-        mBinding.randomRecipe.setOnClickListener(view -> ((ControllableActivity) getActivity())
-                .openRecipe(Utils.getRandomId((ControllableActivity) getActivity()), true));
-        mBinding.shoppingList.setOnClickListener(view -> startActivity(new Intent(view.getContext(), ShoppingListActivity.class)));
+        mBinding.randomRecipe.setOnClickListener(view -> {
+            RecipePrev prev = Utils.getRandomPrev((ControllableActivity) getActivity());
+            if (prev.isFromYummly()) {
+                ((ControllableActivity) getActivity())
+                        .openRecipe(prev.getId(), true);
+            } else {
+                ((ControllableActivity) getActivity())
+                        .openRecipeFromDB(prev.getId(), true);
+            }
+        });
+
+        mBinding.shoppingList.setOnClickListener(view ->
+
+                startActivity(new Intent(view.getContext(), ShoppingListActivity.class)));
         return mBinding.getRoot();
     }
 

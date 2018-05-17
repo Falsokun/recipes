@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +31,7 @@ import com.hotger.recipes.database.dao.RelationRecipeTypeDao;
 import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.Category;
+import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.UI.EstimatesDialog;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
@@ -103,9 +103,12 @@ public class RecipeFragment extends Fragment {
     private void openRandomRecipe() {
         mBinding.progress.setVisibility(View.VISIBLE);
         mBinding.container.setVisibility(View.GONE);
-        String id = Utils.getRandomId((ControllableActivity) getActivity());
-        ((ControllableActivity)getActivity()).loadRecipe(id);
-
+        RecipePrev prev = Utils.getRandomPrev((ControllableActivity) getActivity());
+        if (prev.isFromYummly()) {
+            ((ControllableActivity) getActivity()).loadRecipe(prev.getId());
+        } else {
+            ((ControllableActivity) getActivity()).loadRecipeFromDB(prev.getId());
+        }
     }
 
     private boolean isSwipe(MotionEvent event) {
@@ -229,14 +232,14 @@ public class RecipeFragment extends Fragment {
     private void initHotButtons() {
         List<RelationRecipeType> type = AppDatabase.getDatabase(getContext())
                 .getRelationRecipeTypeDao()
-                .getRelation(model.getCurrentRecipe().getId(), Utils.TYPE.TYPE_MY_FAVS);
+                .getRelation(model.getCurrentRecipe().getId(), Utils.SP_RECIPES_ID.TYPE_MY_FAVS);
         if (type.size() != 0) {
             mBinding.favorite.setProgress(1f);
         }
 
         type = AppDatabase.getDatabase(getContext())
                 .getRelationRecipeTypeDao()
-                .getRelation(model.getCurrentRecipe().getId(), Utils.TYPE.TYPE_BOOKMARK);
+                .getRelation(model.getCurrentRecipe().getId(), Utils.SP_RECIPES_ID.TYPE_BOOKMARK);
         if (type.size() != 0) {
             mBinding.bookmark.setProgress(1f);
         }
@@ -255,10 +258,10 @@ public class RecipeFragment extends Fragment {
     private void checkSavedRecipes(boolean isAlreadyInset, Recipe recipe) {
         //RelationRecipeTypeDao dao = getDatabase(getContext()).getRelationRecipeTypeDao();
         if (!isAlreadyInset) {
-            //dao.insert(new RelationRecipeType(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK));
-            RecipeUtils.saveToDatabase(recipe, (ControllableActivity) getActivity(), false, null, Utils.TYPE.TYPE_BOOKMARK, true);
+            //dao.insert(new RelationRecipeType(recipe.getId(), Utils.SP_RECIPES_ID.TYPE_BOOKMARK));
+            RecipeUtils.saveToDatabase(recipe, (ControllableActivity) getActivity(), false, null, Utils.SP_RECIPES_ID.TYPE_BOOKMARK, true);
         } else {
-            //dao.delete(new RelationRecipeType(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK));
+            //dao.delete(new RelationRecipeType(recipe.getId(), Utils.SP_RECIPES_ID.TYPE_BOOKMARK));
             RecipeUtils.deleteBookmarkFromDatabase(recipe, (ControllableActivity) getActivity(), false);
         }
     }
@@ -266,9 +269,9 @@ public class RecipeFragment extends Fragment {
     private void checkFavorites(boolean isAlreadyInset, String id) {
         RelationRecipeTypeDao dao = getDatabase(getContext()).getRelationRecipeTypeDao();
         if (!isAlreadyInset) {
-            dao.insert(new RelationRecipeType(id, Utils.TYPE.TYPE_MY_FAVS));
+            dao.insert(new RelationRecipeType(id, Utils.SP_RECIPES_ID.TYPE_MY_FAVS));
         } else {
-            dao.delete(new RelationRecipeType(id, Utils.TYPE.TYPE_MY_FAVS));
+            dao.delete(new RelationRecipeType(id, Utils.SP_RECIPES_ID.TYPE_MY_FAVS));
         }
     }
 
@@ -308,9 +311,13 @@ public class RecipeFragment extends Fragment {
                     case Utils.IntentVars.RECIPE_OBJ:
                         Recipe recipe = (Recipe) intent.getSerializableExtra(Utils.IntentVars.RECIPE_OBJ);
                         model.setCurrentRecipe(recipe);
-                        shouldWait = true;
-                        if (!intent.getBooleanExtra(FirebaseUtils.RECIPES_REF, false)) {
-                            model.prepareProducts(recipe, getContext());
+                        if (intent.getBooleanExtra(Utils.IntentVars.SHOULD_WAIT, true)) {
+                            shouldWait = true;
+                            if (!intent.getBooleanExtra(FirebaseUtils.RECIPES_REF, false)) {
+                                model.prepareProducts(recipe, getContext());
+                            }
+                        } else {
+                            setData();
                         }
 
                         break;

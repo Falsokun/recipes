@@ -26,9 +26,6 @@ public interface ProductDao extends BaseDao<Product> {
     @Delete
     void delete(Product product);
 
-    @Query("SELECT * FROM product")
-    List<Product> getAllProducts();
-
     @Query("SELECT * FROM product WHERE recipeId LIKE :recipeId")
     List<Product> getProducts(String recipeId);
 

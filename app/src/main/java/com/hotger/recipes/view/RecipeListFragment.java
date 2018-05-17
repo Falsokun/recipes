@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.relations.RelationRecipeTypeViewModel;
@@ -31,7 +29,6 @@ import com.hotger.recipes.utils.ResponseAPI;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +99,7 @@ public class RecipeListFragment extends BackStackFragment {
         if (navId == null)
             return;
 
-        if (navId.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
+        if (navId.equals(Utils.SP_RECIPES_ID.TYPE_MY_RECIPES)) {
             RelationRecipeTypeDao dao = AppDatabase.getDatabase(getActivity()).getRelationRecipeTypeDao();
             ViewModelProviders.of(getActivity())
                     .get(RelationRecipeTypeViewModel.class)
@@ -151,7 +148,7 @@ public class RecipeListFragment extends BackStackFragment {
         AppDatabase db = AppDatabase.getDatabase(getActivity());
         updateTitle();
         String type = getArguments().getString(Utils.IntentVars.RECIPE_TYPE);
-        if (!searchValue.equals(Utils.TYPE.TYPE_MY_RECIPES)) {
+        if (!searchValue.equals(Utils.SP_RECIPES_ID.TYPE_MY_RECIPES)) {
             List<String> ids = db.getRelationRecipeTypeDao().getRecipesByType(searchValue);
             FirebaseUtils.getRecipesByType(searchValue, cardAdapter);
             cardAdapter.setData(db.getRecipePrevDao().findPrevsFromList(ids));

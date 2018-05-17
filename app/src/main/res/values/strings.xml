@@ -79,6 +79,7 @@
     <string name="enter_ingredient_info">Enter ingredient info</string>
     <string name="share">Share</string>
     <string name="remove_bought">Remove bought ingredients</string>
+    <string name="publish_description">To publish all my created recipes for other users</string>
 
     <string-array name="measures_array">
         <item></item>

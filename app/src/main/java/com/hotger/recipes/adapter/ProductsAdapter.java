@@ -34,10 +34,6 @@ import com.hotger.recipes.view.ControllableActivity;
 import java.util.Collections;
 import java.util.List;
 
-import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_CHECKED;
-import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_ID;
-import static com.hotger.recipes.view.ShoppingListActivity.SHOPPING_LIST_UNCHECKED;
-
 /**
  * Adapter for handling entering products and its quanitity
  * <p>
@@ -80,8 +76,8 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         if (isShoppingList) {
             ProductDao dao = AppDatabase.getDatabase(context)
                     .getProductDao();
-            unchecked = dao.getProducts(SHOPPING_LIST_UNCHECKED);
-            checked = dao.getProducts(SHOPPING_LIST_CHECKED);
+            unchecked = dao.getProducts(Utils.SP_RECIPES_ID.TYPE_SL_UNCHECKED);
+            checked = dao.getProducts(Utils.SP_RECIPES_ID.TYPE_SL_CHECKED);
             data.addAll(unchecked);
             data.addAll(checked);
         }
@@ -144,15 +140,15 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         unchecked.remove(product);
         checked.add(product);
         data.add(product);
-        saveItemToList(activity, SHOPPING_LIST_CHECKED, product);
-        removeItemToList(activity, SHOPPING_LIST_UNCHECKED, product);
+        saveItemToList(activity, Utils.SP_RECIPES_ID.TYPE_SL_CHECKED, product);
+        removeItemFromList(activity, Utils.SP_RECIPES_ID.TYPE_SL_UNCHECKED, product);
     }
 
     private void checkAnimStatus(LottieAnimationView animationView, Product product) {
         if (animationView.getProgress() == 0.5f) {
-            removeItemFromList(activity, SHOPPING_LIST_ID, product);
+            removeItemFromList(activity, Utils.SP_RECIPES_ID.TYPE_SHOPPING_LIST, product);
         } else {
-            saveItemToList(activity, SHOPPING_LIST_ID, product);
+            saveItemToList(activity, Utils.SP_RECIPES_ID.TYPE_SHOPPING_LIST, product);
         }
     }
 
@@ -167,15 +163,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         AppDatabase.getDatabase(activity).getProductDao().insert(product);
     }
 
-    private void removeItemToList(ControllableActivity activity, String shoppingListId, Product product) {
+    public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
         AppDatabase.getDatabase(activity).getProductDao()
                 .deleteWhereId(shoppingListId, product.getIngredientId());
-    }
-
-
-    //TODO: Эта функция удаляет весь продукт, надо вставить ID
-    public void removeItemFromList(ControllableActivity activity, String shoppingListId, Product product) {
-        AppDatabase.getDatabase(activity).getProductDao().delete(product);
     }
 
     /**
@@ -297,10 +287,13 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         return mKeyboard;
     }
 
-    public void addUnchecked(Product product) {
-        unchecked.add(0, product);
+    public void addAndSaveToDB(Product product, boolean shouldAddToUnchecked, String spRecipeId) {
+        if (shouldAddToUnchecked) {
+            unchecked.add(0, product);
+        }
+
         data.add(0, product);
-        saveItemToList(activity, SHOPPING_LIST_UNCHECKED, product);
+        saveItemToList(activity, spRecipeId, product);
         notifyDataSetChanged();
     }
 
@@ -308,7 +301,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         int exSize = data.size() - 1;
         data.removeAll(checked);
         checked.clear();
-        AppDatabase.getDatabase(activity).getProductDao().removeWhereId(SHOPPING_LIST_CHECKED);
+        AppDatabase.getDatabase(activity).getProductDao().removeWhereId(Utils.SP_RECIPES_ID.TYPE_SL_CHECKED);
         notifyItemRangeRemoved(unchecked.size(), exSize);
     }
 
@@ -323,13 +316,16 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         data.add(product);
     }
 
+    public boolean isDetailed() {
+        return isDetailed;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         /**
          * Data binding variable
          */
         ItemProductLineBinding binding;
 
-        //TODO: стринговое представление 1 1/2 во вьюхе
         ViewHolder(final View itemView) {
             super(itemView);
 
@@ -373,7 +369,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
                         public void afterTextChanged(Editable editable) {
                             if (editable.toString().length() != 0) {
                                 double val = Double.valueOf(editable.toString());
-                                //TODO: ТУТ ИСПРАВИТЬ
                                 data.get(getAdapterPosition()).setRationalAmount(new Rational((int) val, 1));
                             } else {
                                 data.get(getAdapterPosition()).setRationalAmount(new Rational(0, 1));
@@ -425,7 +420,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
         @Override
         public boolean onLongClick(View v) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), android.app.AlertDialog.THEME_HOLO_LIGHT);
             List<Ingredient> list = AppDatabase.getDatabase(v.getContext())
                     .getIngredientDao()
                     .getEnTranslation(binding.productName.getText().toString());

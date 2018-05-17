@@ -3,6 +3,7 @@ package com.hotger.recipes.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 import com.hotger.recipes.App;
 import com.hotger.recipes.database.relations.RelationRecipeType;
@@ -66,6 +67,7 @@ public class AsyncCalls {
 
             @Override
             public void onFailure(Call<ResponseAPI<RecipePrev>> call, Throwable t) {
+                Toast.makeText(context, "yummly error", Toast.LENGTH_SHORT).show();
             }
         };
     }

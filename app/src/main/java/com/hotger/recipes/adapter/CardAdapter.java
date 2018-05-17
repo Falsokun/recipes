@@ -54,7 +54,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 .transition(withCrossFade()).into(holderBinding.recipeImg);
         holderBinding.listItem.setOnClickListener(v -> {
             if (recipe.isFromYummly()) {
-                List<String> ids = AppDatabase.getDatabase(activity).getRelationRecipeTypeDao().getRecipesById(recipe.getId(), Utils.TYPE.TYPE_BOOKMARK);
+                List<String> ids = AppDatabase.getDatabase(activity).getRelationRecipeTypeDao().getRecipesById(recipe.getId(), Utils.SP_RECIPES_ID.TYPE_BOOKMARK);
                 if (ids.size() != 0) {
                     activity.openRecipeFromDB(recipe.getId());
                 } else {

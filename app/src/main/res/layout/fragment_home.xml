@@ -12,6 +12,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_dimen"
             android:elevation="4dp"
+            android:backgroundTint="@color/colorPrimary"
             android:hint="@string/enter_url_here"
             android:textColorHint="@color/colorPrimaryDarkOpaque" />
 

@@ -18,7 +18,7 @@ public class RelationRecipeTypeViewModel extends ViewModel {
 
     public LiveData<List<String>> getAllPrevs(RelationRecipeTypeDao dao) {
         if (myRecipes == null) {
-            myRecipes = dao.getLiveRecipesByType(Utils.TYPE.TYPE_MY_RECIPES);
+            myRecipes = dao.getLiveRecipesByType(Utils.SP_RECIPES_ID.TYPE_MY_RECIPES);
         }
 
         return myRecipes;
@@ -26,7 +26,7 @@ public class RelationRecipeTypeViewModel extends ViewModel {
 
     public LiveData<List<String>> getAllFavs(RelationRecipeTypeDao dao) {
         if (favs == null) {
-            favs = dao.getLiveRecipesByType(Utils.TYPE.TYPE_MY_FAVS);
+            favs = dao.getLiveRecipesByType(Utils.SP_RECIPES_ID.TYPE_MY_FAVS);
         }
 
         return favs;

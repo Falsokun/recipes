@@ -236,7 +236,7 @@ public class FirebaseUtils {
         q.get().addOnCompleteListener(task -> {
             if (task.getResult().size() > 0) {
                 categories.add(new Category("https://data.whicdn.com/images/303393554/large.jpg",
-                        "user recipes", "пользовательские рецепты", categoryName, Utils.TYPE.TYPE_MY_RECIPES));
+                        "user recipes", "пользовательские рецепты", categoryName, Utils.SP_RECIPES_ID.TYPE_MY_RECIPES));
             }
         });
     }

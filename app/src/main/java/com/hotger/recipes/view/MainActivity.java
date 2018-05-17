@@ -1,5 +1,6 @@
 package com.hotger.recipes.view;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -208,6 +209,12 @@ public class MainActivity extends ControllableActivity {
 
             return name;
         }
+    }
+
+    @Override
+    public void invalidateOptionsMenu() {
+        super.invalidateOptionsMenu();
+        getWindow().getDecorView().requestLayout();
     }
 
     private String getTitleByNum(int currentItem) {

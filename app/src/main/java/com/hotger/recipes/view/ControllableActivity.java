@@ -126,16 +126,23 @@ public abstract class ControllableActivity extends AppCompatActivity {
 
     public abstract AppBarLayout getAppBar();
 
-
-    public void openRecipeFromDB(String id) {
+    public void openRecipeFromDB(String id, boolean addGestures) {
         Recipe recipe = getRecipeFromDBByID(id);
         RecipeFragment fragment = new RecipeFragment();
         Bundle bundle = new Bundle();
 //        recipe.prepareDataForShowing(ControllableActivity.this);
+        if (addGestures) {
+            bundle.putBoolean(Utils.IntentVars.INIT_GESTURES, true);
+        }
+
         bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, recipe);
         fragment.setArguments(bundle);
 
         setCurrentFragment(fragment, true, fragment.getTag());
+    }
+
+    public void openRecipeFromDB(String id) {
+        openRecipeFromDB(id, false);
     }
 
     public Recipe getRecipeFromDBByID(String id) {
@@ -154,5 +161,13 @@ public abstract class ControllableActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    public void loadRecipeFromDB(String id) {
+        Recipe recipe = getRecipeFromDBByID(id);
+        Intent intent = new Intent(Utils.IntentVars.RECIPE_OBJ);
+        intent.putExtra(Utils.IntentVars.RECIPE_OBJ, recipe);
+        intent.putExtra(Utils.IntentVars.SHOULD_WAIT, false);
+        LocalBroadcastManager.getInstance(ControllableActivity.this).sendBroadcast(intent);
     }
 }

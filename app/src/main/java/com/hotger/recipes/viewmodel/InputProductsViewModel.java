@@ -1,9 +1,7 @@
 package com.hotger.recipes.viewmodel;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.databinding.Bindable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -16,7 +14,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,10 +63,17 @@ public class InputProductsViewModel extends ViewModel {
         TextView childView = view.findViewById(R.id.name);
         String productName = childView.getText().toString();
         if (!productsAdapter.isAlreadyInSet(productName)) {
-            if (!productsAdapter.isShoppingList()) {
-                productsAdapter.add(new Product(productName, activity));
+            if (!productsAdapter.isDetailed()) { //for fridge and shopping
+                boolean shouldAdd = true;
+                String spId =  Utils.SP_RECIPES_ID.TYPE_SL_UNCHECKED;
+                if (!productsAdapter.isShoppingList()) {
+                    shouldAdd = false;
+                    spId = Utils.SP_RECIPES_ID.TYPE_FRIDGE_ID;
+                }
+
+                productsAdapter.addAndSaveToDB(new Product(productName, activity), shouldAdd, spId);
             } else {
-                productsAdapter.addUnchecked(new Product(productName, activity));
+                productsAdapter.add(new Product(productName, activity));
             }
         } else {
             Toast.makeText(activity, "Already in list", Toast.LENGTH_LONG).show();
@@ -115,7 +119,7 @@ public class InputProductsViewModel extends ViewModel {
     }
 
     private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, AlertDialog.THEME_HOLO_LIGHT);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Light_Dialog_Alert);
         builder.setTitle(activity.getString(R.string.no_such_product))
                 .setMessage(activity.getString(R.string.should_add))
                 .setCancelable(false)
@@ -133,14 +137,14 @@ public class InputProductsViewModel extends ViewModel {
 
     //region Getters and Setters
     private void addProductToBase() {
-        AlertDialog.Builder adb = new AlertDialog.Builder(activity, AlertDialog.THEME_HOLO_LIGHT);
+        AlertDialog.Builder adb = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Light_Dialog_Alert);
         adb.setTitle(activity.getString(R.string.enter_ingredient_info));
         View v = activity.getLayoutInflater().inflate(R.layout.dialog_ingredient, null);
         adb.setView(v);
         adb.setPositiveButton(R.string.OK, (dialog, which) -> {
-            String enTitle = ((EditText)v.findViewById(R.id.en_title)).getText().toString();
+            String enTitle = ((EditText) v.findViewById(R.id.en_title)).getText().toString();
             enTitle = enTitle.substring(0, 1).toUpperCase() + enTitle.substring(1).toLowerCase();
-            String ruTitle = ((EditText)v.findViewById(R.id.ru_title)).getText().toString();
+            String ruTitle = ((EditText) v.findViewById(R.id.ru_title)).getText().toString();
             ruTitle = ruTitle.substring(0, 1).toUpperCase() + ruTitle.substring(1).toLowerCase();
             FirebaseUtils.addIngredientToDb(enTitle, ruTitle);
             AppDatabase.getDatabase(activity).getIngredientDao().insert(new Ingredient(enTitle, ruTitle));
@@ -174,7 +178,7 @@ public class InputProductsViewModel extends ViewModel {
         return products;
     }
 
-    public ItemTouchHelper getItemTouchListener() {
+    public ItemTouchHelper getItemTouchListener(String recipeId) {
         ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -183,7 +187,8 @@ public class InputProductsViewModel extends ViewModel {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                productsAdapter.getData().remove(viewHolder.getAdapterPosition());
+                Product product = productsAdapter.getData().remove(viewHolder.getAdapterPosition());
+                productsAdapter.removeItemFromList(activity, recipeId, product);
                 productsAdapter.notifyDataSetChanged();
             }
         };

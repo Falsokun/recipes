@@ -30,8 +30,6 @@ import retrofit2.Response;
 
 public class FridgeFragment extends BackStackFragment {
 
-    public static final String ID = "fridge-products-id";
-
     FragmentFridgeBinding mBinding;
     InputProductsViewModel inputModel;
 
@@ -50,7 +48,7 @@ public class FridgeFragment extends BackStackFragment {
         mBinding.fragmentRedactor.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.fragmentRedactor.productsLineRv.setAdapter(inputModel.getProductsAdapter());
         mBinding.fragmentRedactor.productsLineRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        inputModel.getItemTouchListener().attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
+        inputModel.getItemTouchListener(Utils.SP_RECIPES_ID.TYPE_FRIDGE_ID).attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
         initListeners();
         return mBinding.getRoot();
     }
@@ -64,7 +62,7 @@ public class FridgeFragment extends BackStackFragment {
     @Override
     public void onStart() {
         super.onStart();
-        inputModel.restoreListData(getContext(), FridgeFragment.ID);
+        inputModel.restoreListData(getContext(), Utils.SP_RECIPES_ID.TYPE_FRIDGE_ID);
     }
 
     @Override
@@ -75,7 +73,6 @@ public class FridgeFragment extends BackStackFragment {
 
     @Override
     public void onStop() {
-        inputModel.saveListData(getContext(), FridgeFragment.ID);
         super.onStop();
     }
 

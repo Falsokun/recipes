@@ -1,9 +1,7 @@
 package com.hotger.recipes.viewmodel;
 
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hotger.recipes.R;
@@ -76,7 +74,7 @@ public class RedactorViewModel extends ViewModel {
             return false;
         }
 
-        RecipeUtils.saveToDatabase(currentRecipe, activity, true, categoryTitles, Utils.TYPE.TYPE_MY_RECIPES, false);
+        RecipeUtils.saveToDatabase(currentRecipe, activity, true, categoryTitles, Utils.SP_RECIPES_ID.TYPE_MY_RECIPES, false);
         return true;
     }
 

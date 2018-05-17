@@ -56,6 +56,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 app:trackTint="@color/grey" />
+
+            <TextView
+                style="@style/TextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/switch2"
+                android:textSize="@dimen/small_text_size"
+                android:textColor="@color/colorHint"
+                android:text="@string/publish_description" />
         </RelativeLayout>
 
 

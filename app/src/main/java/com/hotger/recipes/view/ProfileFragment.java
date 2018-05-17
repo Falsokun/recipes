@@ -38,14 +38,14 @@ public class ProfileFragment extends BackStackFragment {
         Fragment recipeFragment = new BackStackFragment();
         Bundle recipesBundle = new Bundle();
         recipesBundle.putInt(Utils.EXTRA_NAVIGATION_ID, MENU_MY_RECIPE_ID);
-        recipesBundle.putString(Utils.IntentVars.EXTRA_TYPE, Utils.TYPE.TYPE_MY_RECIPES);
+        recipesBundle.putString(Utils.IntentVars.EXTRA_TYPE, Utils.SP_RECIPES_ID.TYPE_MY_RECIPES);
         recipeFragment.setArguments(recipesBundle);
         adapter.addFragment(recipeFragment);
 
         Fragment favFragment = new BackStackFragment();
         Bundle favBundle = new Bundle();
         favBundle.putInt(Utils.EXTRA_NAVIGATION_ID, MENU_MY_RECIPE_ID);
-        favBundle.putString(Utils.IntentVars.EXTRA_TYPE, Utils.TYPE.TYPE_MY_FAVS);
+        favBundle.putString(Utils.IntentVars.EXTRA_TYPE, Utils.SP_RECIPES_ID.TYPE_MY_FAVS);
         favFragment.setArguments(favBundle);
         adapter.addFragment(favFragment);
     }

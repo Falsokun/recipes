@@ -30,7 +30,7 @@ public class SplashActivity extends AwesomeSplash {
 
         //Customize Logo
         configSplash.setLogoSplash(R.mipmap.ic_launcher); //or any other drawable
-        configSplash.setAnimLogoSplashDuration(1000); //int ms
+        configSplash.setAnimLogoSplashDuration(100); //int ms
         configSplash.setAnimLogoSplashTechnique(Techniques.Pulse); //choose one form Techniques (ref: https://github.com/daimajia/AndroidViewAnimations)
 
         //Customize Path
@@ -57,13 +57,12 @@ public class SplashActivity extends AwesomeSplash {
     public void animationsFinished() {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "populus-database").allowMainThreadQueries().build();
-        if (db.getRecipePrevDao().getAll().size() == 0) {
+        if (db.getIngredientDao().getAllIngredients().size() == 0) {
             LocalBroadcastManager
                     .getInstance(this)
                     .registerReceiver(getReceiver(), new IntentFilter(Utils.IntentVars.INIT_ON_START));
             FirebaseUtils.saveCategoryToDatabase(this);
             FirebaseUtils.saveIngredientsToDatabase(this);
-            //может вот тут не пропускать пока он не сохранит все чо надо
         } else {
             openActivity();
         }

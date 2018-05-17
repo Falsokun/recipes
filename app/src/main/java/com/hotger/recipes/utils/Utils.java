@@ -49,12 +49,11 @@ public class Utils {
         return m.find();
     }
 
-    public static String getRandomId(ControllableActivity activity) {
+    public static RecipePrev getRandomPrev(ControllableActivity activity) {
         List<RecipePrev> all = AppDatabase.getDatabase(activity).getRecipePrevDao().getAll();
         Random random = new Random();
         int num = random.nextInt(all.size());
-        RecipePrev prev = all.get(num);
-        return prev.getId();
+        return all.get(num);
     }
 
     /**
@@ -79,16 +78,20 @@ public class Utils {
         public static final String SHARE_TEXT = "SHARE_TEXT";
         public static final String INIT_ON_START = "INIT_ON_START";
         public static final String INIT_GESTURES = "INIT_GESTURES";
+        public static final String SHOULD_WAIT = "SHOULD_WAIT";
     }
 
     /**
      * Recipe types
      */
-    public static class TYPE {
-        public static String TYPE_MY_RECIPES = "MY_RECIPES";
-        public static String TYPE_MY_FAVS = "MY_FAVS";
-        public static String TYPE_BOOKMARK = "MY_BOOKMARKS";
-        public static String TYPE_CHECKED = "MY_CHECKED";
+    public static class SP_RECIPES_ID {
+        public static String TYPE_MY_RECIPES = "recipes_id";
+        public static String TYPE_MY_FAVS = "favs_id";
+        public static String TYPE_BOOKMARK = "bookmarks_id";
+        public static String TYPE_FRIDGE_ID = "fridge_products_id";
+        public static String TYPE_SHOPPING_LIST = "shopping_list_id";
+        public static String TYPE_SL_CHECKED = "shopping_list_checked_id";
+        public static String TYPE_SL_UNCHECKED = "shopping_list_un_checked_id";
     }
 
     //TODO: formatter

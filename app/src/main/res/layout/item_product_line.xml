@@ -69,7 +69,6 @@
                     style="@style/TextTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:width="@{isEditable ? R.dimen.padding_dimen : 0}"
                     android:backgroundTint="@{isEditable ? R.color.colorPrimary : Color.TRANSPARENT }"
                     android:gravity="center"
                     android:minWidth="40dp"
