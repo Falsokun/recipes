@@ -256,13 +256,12 @@ public class RecipeFragment extends Fragment {
     }
 
     private void checkSavedRecipes(boolean isAlreadyInset, Recipe recipe) {
-        //RelationRecipeTypeDao dao = getDatabase(getContext()).getRelationRecipeTypeDao();
         if (!isAlreadyInset) {
-            //dao.insert(new RelationRecipeType(recipe.getId(), Utils.SP_RECIPES_ID.TYPE_BOOKMARK));
-            RecipeUtils.saveToDatabase(recipe, (ControllableActivity) getActivity(), false, null, Utils.SP_RECIPES_ID.TYPE_BOOKMARK, true);
+            RecipeUtils.saveToDatabase(recipe, (ControllableActivity) getActivity(), false,
+                    null, Utils.SP_RECIPES_ID.TYPE_BOOKMARK, true);
         } else {
-            //dao.delete(new RelationRecipeType(recipe.getId(), Utils.SP_RECIPES_ID.TYPE_BOOKMARK));
-            RecipeUtils.deleteBookmarkFromDatabase(recipe, (ControllableActivity) getActivity(), false);
+            RecipeUtils.deleteBookmarkFromDatabase(recipe,
+                    (ControllableActivity) getActivity(), false);
         }
     }
 
@@ -277,7 +276,8 @@ public class RecipeFragment extends Fragment {
 
     private void startCheckAnimation(LottieAnimationView animationView) {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000);
-        animator.addUpdateListener(valueAnimator -> animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
+        animator.addUpdateListener(valueAnimator ->
+                animationView.setProgress((Float) valueAnimator.getAnimatedValue()));
 
         if (animationView.getProgress() == 0f) {
             animator.start();
@@ -356,5 +356,13 @@ public class RecipeFragment extends Fragment {
                 }
             }
         };
+    }
+
+    public String getTitle() {
+        if (model != null && model.getCurrentRecipe() != null) {
+            return model.getCurrentRecipe().getName();
+        } else {
+            return getString(R.string.app_name);
+        }
     }
 }

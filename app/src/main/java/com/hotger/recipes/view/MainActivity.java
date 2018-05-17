@@ -80,9 +80,26 @@ public class MainActivity extends ControllableActivity {
             updateToolbar(nextFragment);
             updateCollapsing(mBinding.appbar, false);
             mBinding.viewPager.setCurrentItem(Utils.bottomNavigationTabs.get(item.getItemId()), false);
+            updateOptions();
             updateTitle();
+            invalidateOptionsMenu(); //or respectively its support method.
             return true;
         });
+    }
+
+    private void updateOptions() {
+        for(int i = 0; i < adapter.getCount(); i++){
+            adapter.getItem(i).setHasOptionsMenu(i == mBinding.viewPager.getCurrentItem());
+            FragmentManager fm = adapter.getItem(i).getChildFragmentManager();
+            if (fm.getBackStackEntryCount() != 0) {
+                String name = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName();
+                Fragment childFragment = fm.findFragmentByTag(name);
+                if (childFragment != null) {
+                    childFragment.setHasOptionsMenu(i == mBinding.viewPager.getCurrentItem());
+                }
+            }
+
+        }
     }
 
     private void initAdapter() {
@@ -205,6 +222,13 @@ public class MainActivity extends ControllableActivity {
             if (name.equals(RecipeListFragment.class.getName())) {
                 visibleFragment = fm.findFragmentByTag(name);
                 return ((RecipeListFragment) visibleFragment).getTitle();
+            } else {
+                if (name.equals(RecipeFragment.class.getName())) {
+                    Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+                    if (fragment instanceof RecipeFragment) {
+                        return ((RecipeFragment) fragment).getTitle();
+                    }
+                }
             }
 
             return name;

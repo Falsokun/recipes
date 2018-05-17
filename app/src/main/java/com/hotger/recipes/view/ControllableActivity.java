@@ -64,7 +64,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
             fragment.setArguments(bundle);
         }
 
-        setCurrentFragment(fragment, true, fragment.getTag());
+        setCurrentFragment(fragment, true, RecipeFragment.class.getName());
         loadRecipe(recipeId);
     }
 
@@ -138,7 +138,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
         bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, recipe);
         fragment.setArguments(bundle);
 
-        setCurrentFragment(fragment, true, fragment.getTag());
+        setCurrentFragment(fragment, true, RecipeFragment.class.getName());
     }
 
     public void openRecipeFromDB(String id) {

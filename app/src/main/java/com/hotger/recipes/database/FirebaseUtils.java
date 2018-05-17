@@ -11,6 +11,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hotger.recipes.App;
+import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.relations.RelationCategoryRecipe;
 import com.hotger.recipes.model.Category;
@@ -145,7 +146,7 @@ public class FirebaseUtils {
      */
     public static void getRecipeFromFirebase(String id, ControllableActivity activity) {
         RecipeFragment fragment = new RecipeFragment();
-        activity.setCurrentFragment(fragment, true, fragment.getTag());
+        activity.setCurrentFragment(fragment, true, RecipeFragment.class.getName());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Query query = db.collection(RECIPES_REF).whereEqualTo("id", id).limit(1);
