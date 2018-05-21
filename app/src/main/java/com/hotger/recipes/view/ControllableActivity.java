@@ -3,7 +3,6 @@ package com.hotger.recipes.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -17,13 +16,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.hotger.recipes.App;
 import com.hotger.recipes.R;
+import com.hotger.recipes.model.ApiRecipe;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.UI.DisableAppBarLayoutBehavior;
 import com.hotger.recipes.utils.ParseUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.model.Recipe;
-import com.hotger.recipes.model.RecipeNF;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,9 +70,9 @@ public abstract class ControllableActivity extends AppCompatActivity {
     public void loadRecipe(String recipeId) {
         App.getApi()
                 .getRecipeByID(recipeId)
-                .enqueue(new Callback<RecipeNF>() {
+                .enqueue(new Callback<ApiRecipe>() {
                              @Override
-                             public void onResponse(@NonNull Call<RecipeNF> call, @NonNull Response<RecipeNF> response) {
+                             public void onResponse(@NonNull Call<ApiRecipe> call, @NonNull Response<ApiRecipe> response) {
                                  if (response.body() == null) {
                                      Toast.makeText(ControllableActivity.this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                                      return;
@@ -88,7 +87,7 @@ public abstract class ControllableActivity extends AppCompatActivity {
                              }
 
                              @Override
-                             public void onFailure(@NonNull Call<RecipeNF> call, @NonNull Throwable t) {
+                             public void onFailure(@NonNull Call<ApiRecipe> call, @NonNull Throwable t) {
 
                              }
                          }

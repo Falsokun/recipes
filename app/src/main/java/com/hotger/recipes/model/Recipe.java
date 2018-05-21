@@ -24,7 +24,7 @@ import java.util.List;
 public class Recipe implements Serializable {
 
     @Embedded
-    public RecipeNF recipe;
+    public ApiRecipe recipe;
 
     @Relation(parentColumn = "id", entity = Product.class, entityColumn = "recipeId")
     private List<Product> products = new ArrayList<>();
@@ -38,15 +38,15 @@ public class Recipe implements Serializable {
 
     @Ignore
     public Recipe() {
-        recipe = new RecipeNF();
+        recipe = new ApiRecipe();
     }
 
-    public Recipe(RecipeNF recipe, ControllableActivity activity) {
+    public Recipe(ApiRecipe recipe, ControllableActivity activity) {
         this.recipe = recipe;
         filterCategories(activity, recipe.getAllAttributes());
     }
 
-    public Recipe(RecipeNF recipe) {
+    public Recipe(ApiRecipe recipe) {
         this.recipe = recipe;
     }
 
@@ -154,11 +154,11 @@ public class Recipe implements Serializable {
         this.products = data;
     }
 
-    public RecipeNF getRecipe() {
+    public ApiRecipe getRecipe() {
         return recipe;
     }
 
-    public void setRecipe(RecipeNF recipe) {
+    public void setRecipe(ApiRecipe recipe) {
         this.recipe = recipe;
     }
 

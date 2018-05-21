@@ -44,10 +44,16 @@ public class HomeFragment extends BackStackFragment {
         mBinding.shoppingList.setOnClickListener(view ->
 
                 startActivity(new Intent(view.getContext(), ShoppingListActivity.class)));
+        showInstructions();
         return mBinding.getRoot();
     }
 
-//    public void test() {
+    @Override
+    public void showInstructions() {
+        Utils.showInstructions(mBinding.inputField, "any text", getActivity(), "10");
+    }
+
+    //    public void test() {
 //        if (mBinding.recipeText.getText().toString().length() == 0) {
 //            Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
 //            return;

@@ -2,6 +2,7 @@ package com.hotger.recipes.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +21,10 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class Utils {
 
@@ -163,6 +168,23 @@ public class Utils {
                 }
             }
         }
+
         return D2[n];
+    }
+
+    public static void showInstructions(View view, String text, Activity activity, String id) {
+        new MaterialTapTargetPrompt.Builder(activity)
+                .setTarget(view)
+                .setPrimaryText("Send your first email")
+                .setSecondaryText("Tap the envelop to start composing your first email")
+                .setPromptFocal(new RectanglePromptFocal())
+                .setPromptBackground(new RectanglePromptBackground())
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                    {
+                        // User has pressed the prompt target
+                    }
+                })
+                .show();
     }
 }

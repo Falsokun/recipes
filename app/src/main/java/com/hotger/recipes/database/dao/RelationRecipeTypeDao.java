@@ -17,9 +17,6 @@ public interface RelationRecipeTypeDao extends BaseDao<RelationRecipeType> {
     @Query("SELECT recipeId FROM relationrecipetype WHERE type = :searchValue")
     LiveData<List<String>> getLiveRecipesByType(String searchValue);
 
-    @Query("SELECT recipeId FROM relationrecipetype WHERE type = :type")
-    LiveData<List<String>> getFavorites(String type);
-
     @Query("SELECT * FROM relationrecipetype WHERE recipeId = :id and type = :typeMyFavs")
     List<RelationRecipeType> getRelation(String id, String typeMyFavs);
 

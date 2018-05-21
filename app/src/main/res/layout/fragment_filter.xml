@@ -6,9 +6,10 @@
         android:id="@+id/filter_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDarkOpaque"
+        android:background="@drawable/primary_gradient"
         android:orientation="vertical"
-        android:padding="@dimen/padding_dimen">
+        android:padding="@dimen/padding_dimen"
+        android:elevation="10dp">
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/cuisine_sp"

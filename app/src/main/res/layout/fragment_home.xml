@@ -6,7 +6,7 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/recipe_text"
+            android:id="@+id/input_field"
             style="@style/TextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             style="@style/EntireLineBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_text"
+            android:layout_below="@id/input_field"
             android:layout_marginTop="8dp"
             android:text="@string/add_recipe" />
 

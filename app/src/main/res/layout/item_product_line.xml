@@ -62,7 +62,7 @@
                     android:scaleX="0.6"
                     android:scaleY="0.5"
                     android:src="@drawable/ic_action_remove"
-                    android:tint="@color/colorPrimary" />
+                    android:tint="@color/colorText" />
 
                 <EditText
                     android:id="@+id/final_amount"
@@ -83,7 +83,7 @@
                     android:scaleX="0.4"
                     android:scaleY="0.4"
                     android:src="@drawable/ic_action_add"
-                    android:tint="@color/colorPrimary" />
+                    android:tint="@color/colorText" />
             </LinearLayout>
 
             <TextView
@@ -97,7 +97,7 @@
                 android:gravity="left"
                 android:hint="@string/product_name_hint"
                 android:text="Торт"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorText" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottie_anim"

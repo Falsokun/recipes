@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class RecipeNF implements Serializable {
+public class ApiRecipe implements Serializable {
 
     @NonNull
     @PrimaryKey
@@ -62,7 +62,7 @@ public class RecipeNF implements Serializable {
 
     private int calories;
 
-    public RecipeNF() {
+    public ApiRecipe() {
     }
 
     public int getCookTimeInMinutes() {

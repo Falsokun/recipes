@@ -34,6 +34,8 @@ public class BackStackFragment extends Fragment {
         return view;
     }
 
+    public void showInstructions() {}
+
     private void replaceFragment() {
         if (getChildFragmentManager().getBackStackEntryCount() != 0) {
             return;

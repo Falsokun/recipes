@@ -88,10 +88,10 @@
 
     <style name="MaterialSpinner">
         <item name="android:layout_alignParentStart">true</item>
-        <item name="ms_arrow_tint">@color/colorPrimaryLight</item>
-        <item name="ms_background_selector">@color/colorPrimary</item>
+        <item name="ms_arrow_tint">@android:color/white</item>
+        <item name="ms_background_selector">@drawable/primary_gradient</item>
         <item name="ms_dropdown_height">300dp</item>
-        <item name="ms_text_color">@color/colorPrimaryLight</item>
+        <item name="ms_text_color">@android:color/white</item>
     </style>
 
     <style name="RangeBar">

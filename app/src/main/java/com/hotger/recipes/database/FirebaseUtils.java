@@ -11,14 +11,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hotger.recipes.App;
-import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.CardAdapter;
 import com.hotger.recipes.database.relations.RelationCategoryRecipe;
+import com.hotger.recipes.model.ApiRecipe;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
-import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.model.RecipePrev;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.AsyncCalls;
@@ -151,9 +150,9 @@ public class FirebaseUtils {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Query query = db.collection(RECIPES_REF).whereEqualTo("id", id).limit(1);
         query.get().addOnCompleteListener(task -> {
-            RecipeNF recipenf = null;
+            ApiRecipe recipenf = null;
             for (QueryDocumentSnapshot shot : task.getResult()) {
-                recipenf = shot.toObject(RecipeNF.class);
+                recipenf = shot.toObject(ApiRecipe.class);
             }
 
             Recipe recipe = new Recipe(recipenf);
@@ -205,7 +204,8 @@ public class FirebaseUtils {
      */
     public static void getAllRecipesInCategory(String type, CardAdapter adapter) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(CATEGORIES_REF).orderBy("categoryId")
+        db.collection(CATEGORIES_REF)
+                .orderBy("categoryId")
                 .whereLessThan("categoryId", type)
                 .whereGreaterThan("categoryId", type + "\uf8ff")
                 .get()

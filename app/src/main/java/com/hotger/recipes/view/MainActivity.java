@@ -1,6 +1,5 @@
 package com.hotger.recipes.view;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,14 +21,9 @@ import android.widget.Toast;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityMainBinding;
-import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.Recipe;
-import com.hotger.recipes.utils.ParseUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.redactor.BackStackFragment;
-import com.hotger.recipes.view.redactor.RedactorActivity;
-
-import okhttp3.internal.Util;
 
 public class MainActivity extends ControllableActivity {
 
@@ -88,7 +82,7 @@ public class MainActivity extends ControllableActivity {
     }
 
     private void updateOptions() {
-        for(int i = 0; i < adapter.getCount(); i++){
+        for (int i = 0; i < adapter.getCount(); i++) {
             adapter.getItem(i).setHasOptionsMenu(i == mBinding.viewPager.getCurrentItem());
             FragmentManager fm = adapter.getItem(i).getChildFragmentManager();
             if (fm.getBackStackEntryCount() != 0) {

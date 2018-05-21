@@ -1,6 +1,6 @@
 package com.hotger.recipes.utils;
 
-import com.hotger.recipes.model.RecipeNF;
+import com.hotger.recipes.model.ApiRecipe;
 import com.hotger.recipes.model.RecipePrev;
 
 import retrofit2.Call;
@@ -34,7 +34,7 @@ public interface YummlyAPI {
     }
 
     @GET("/v1/api/recipe/{id}?" + BASE)
-    Call<RecipeNF> getRecipeByID(@Path("id") String recipeID);
+    Call<ApiRecipe> getRecipeByID(@Path("id") String recipeID);
 
     @GET("/v1/api/recipes?" + BASE)
     Call<ResponseAPI<RecipePrev>> getCategoryList(@Query("allowedCuisine[]") String cuisine, @Query("maxResult") int maxResult);

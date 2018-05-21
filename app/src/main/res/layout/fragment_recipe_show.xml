@@ -63,6 +63,7 @@
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/favorite"
                         android:layout_width="100dp"
+                        android:tint="@color/drawableTint"
                         android:layout_height="100dp"
                         app:lottie_rawRes="@raw/animation_fav" />
 
@@ -70,6 +71,7 @@
                         android:id="@+id/bookmark"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:tint="@color/drawableTint"
                         app:lottie_rawRes="@raw/bookmark_animation" />
                 </LinearLayout>
 

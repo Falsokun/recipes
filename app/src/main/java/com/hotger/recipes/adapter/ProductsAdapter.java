@@ -23,9 +23,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.database.dao.ProductDao;
 import com.hotger.recipes.databinding.ItemProductLineBinding;
+import com.hotger.recipes.model.ApiRecipe;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
-import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.MeasureUtils;
 import com.hotger.recipes.utils.Utils;
@@ -154,9 +154,9 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
     public void saveItemToList(ControllableActivity activity, String shoppingListId, Product product) {
         if (AppDatabase.getDatabase(activity).getRecipeDao().getRecipesById(shoppingListId).size() == 0) {
-            RecipeNF recipeNF = new RecipeNF();
-            recipeNF.setId(shoppingListId);
-            AppDatabase.getDatabase(activity).getRecipeDao().insert(recipeNF);
+            ApiRecipe apiRecipe = new ApiRecipe();
+            apiRecipe.setId(shoppingListId);
+            AppDatabase.getDatabase(activity).getRecipeDao().insert(apiRecipe);
         }
 
         product.setRecipeId(shoppingListId);

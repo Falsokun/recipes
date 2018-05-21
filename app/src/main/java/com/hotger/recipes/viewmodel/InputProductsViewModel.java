@@ -22,9 +22,9 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.DataListAdapter;
 import com.hotger.recipes.adapter.ProductsAdapter;
 import com.hotger.recipes.database.FirebaseUtils;
+import com.hotger.recipes.model.ApiRecipe;
 import com.hotger.recipes.model.Ingredient;
 import com.hotger.recipes.model.Product;
-import com.hotger.recipes.model.RecipeNF;
 import com.hotger.recipes.utils.AppDatabase;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
@@ -208,9 +208,9 @@ public class InputProductsViewModel extends ViewModel {
             product.setRecipeId(listId);
         }
 
-        RecipeNF recipeNF = new RecipeNF();
-        recipeNF.setId(listId);
-        AppDatabase.getDatabase(context).getRecipeDao().insert(recipeNF);
+        ApiRecipe apiRecipe = new ApiRecipe();
+        apiRecipe.setId(listId);
+        AppDatabase.getDatabase(context).getRecipeDao().insert(apiRecipe);
         AppDatabase.getDatabase(context).getProductDao().insertAll(products);
     }
 

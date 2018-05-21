@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * Priority class
  */
 @Entity(
-        foreignKeys = @ForeignKey(entity = RecipeNF.class,
+        foreignKeys = @ForeignKey(entity = ApiRecipe.class,
                 parentColumns = "id",
                 childColumns = "recipeId",
                 onDelete = ForeignKey.CASCADE),

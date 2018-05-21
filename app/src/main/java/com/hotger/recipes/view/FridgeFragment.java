@@ -48,8 +48,10 @@ public class FridgeFragment extends BackStackFragment {
         mBinding.fragmentRedactor.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.fragmentRedactor.productsLineRv.setAdapter(inputModel.getProductsAdapter());
         mBinding.fragmentRedactor.productsLineRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        inputModel.getItemTouchListener(Utils.SP_RECIPES_ID.TYPE_FRIDGE_ID).attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
+        inputModel.getItemTouchListener(Utils.SP_RECIPES_ID.TYPE_FRIDGE_ID)
+                .attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
         initListeners();
+//        Utils.showInstructions(mBinding.fragmentRedactor.addProductName, "any text", getActivity(), "2");
         return mBinding.getRoot();
     }
 

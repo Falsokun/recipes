@@ -90,18 +90,18 @@ public class DataListAdapter extends ArrayAdapter<String> implements Filterable 
                     result.count = data.size();
                 } else {
                     ArrayList<String> filteredList = new ArrayList<>();
-                    for (String z : data) {
+                    for (String ingredient : data) {
                         String[] words = constraint.toString().split(" ");
                         boolean shouldInclude = true;
                         for (String word : words) {
-                            if (!z.toLowerCase().contains(word)) {
+                            if (!ingredient.toLowerCase().contains(word)) {
                                 shouldInclude = false;
                                 break;
                             }
                         }
 
                         if (shouldInclude) {
-                            filteredList.add(z);
+                            filteredList.add(ingredient);
                         }
                     }
 
