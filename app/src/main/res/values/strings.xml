@@ -80,6 +80,12 @@
     <string name="share">Share</string>
     <string name="remove_bought">Remove bought ingredients</string>
     <string name="publish_description">To publish all my created recipes for other users</string>
+    <string name="choose_category_to_filter">Category filter</string>
+    <string name="choose_category_to_filter_full">Choose category from list to filter recipes</string>
+    <string name="products_filter">Adding products</string>
+    <string name="products_filter_hint">Add your products from fridge and search for recipes!</string>
+    <string name="input_recipe">Input recipe</string>
+    <string name="input_recipe_description">Input recipe or recipe url to process it</string>
 
     <string-array name="measures_array">
         <item></item>

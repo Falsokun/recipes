@@ -19,7 +19,7 @@ import com.hotger.recipes.R;
 import com.hotger.recipes.model.ApiRecipe;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.utils.AppDatabase;
-import com.hotger.recipes.utils.UI.DisableAppBarLayoutBehavior;
+import com.hotger.recipes.UI.DisableAppBarLayoutBehavior;
 import com.hotger.recipes.utils.ParseUtils;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.model.Recipe;
@@ -168,5 +168,9 @@ public abstract class ControllableActivity extends AppCompatActivity {
         intent.putExtra(Utils.IntentVars.RECIPE_OBJ, recipe);
         intent.putExtra(Utils.IntentVars.SHOULD_WAIT, false);
         LocalBroadcastManager.getInstance(ControllableActivity.this).sendBroadcast(intent);
+    }
+
+    public void openSearch() {
+
     }
 }

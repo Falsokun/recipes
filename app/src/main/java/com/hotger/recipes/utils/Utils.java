@@ -67,6 +67,9 @@ public class Utils {
     public class SharedPref {
         public static final String TRANSLATIONS_REF = "translations_ref";
         public static final String PUBLISH_REF = "publish_ref";
+        public static final String HOME_PREF = "home_pref";
+        public static final String CATEGORY_PREF = "category_pref";
+        public static final String FRIDGE_PREF = "fridge_pref";
     }
 
     /**
@@ -172,19 +175,14 @@ public class Utils {
         return D2[n];
     }
 
-    public static void showInstructions(View view, String text, Activity activity, String id) {
+    public static void showInstructions(View view, String title, String text, Activity activity, String id) {
         new MaterialTapTargetPrompt.Builder(activity)
                 .setTarget(view)
-                .setPrimaryText("Send your first email")
-                .setSecondaryText("Tap the envelop to start composing your first email")
+                .setPrimaryText(title)
+                .setSecondaryText(text)
+                .setBackgroundColour(activity.getResources().getColor(R.color.colorHint))
                 .setPromptFocal(new RectanglePromptFocal())
                 .setPromptBackground(new RectanglePromptBackground())
-                .setPromptStateChangeListener((prompt, state) -> {
-                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                    {
-                        // User has pressed the prompt target
-                    }
-                })
                 .show();
     }
 }

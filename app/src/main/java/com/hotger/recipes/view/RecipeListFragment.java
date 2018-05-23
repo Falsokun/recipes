@@ -47,9 +47,9 @@ public class RecipeListFragment extends BackStackFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         cardAdapter = new CardAdapter((ControllableActivity) getActivity(), new ArrayList<>());
-        model = new MessageModel(getString(R.string.favorite_hint), 0, true);
+        model = new MessageModel((ControllableActivity) getActivity(),
+                getString(R.string.favorite_hint), 0, true);
         mMessageReceiver = getRefreshReceiver();
         if (getArguments() != null) {
             setData();
@@ -60,7 +60,11 @@ public class RecipeListFragment extends BackStackFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recipes_list, container, false);
-        mBinding.setData(cardAdapter);
+        mBinding.setIsEmpty(cardAdapter.getEmpty());
+        if (getArguments() != null && getArguments().getString(Utils.IntentVars.RECIPE_CATEGORY) == null) {
+            mBinding.setMessageModel(model);
+        }
+
         mBinding.setMessageModel(model);
         mBinding.listRv.setAdapter(cardAdapter);
         mBinding.listRv.setLayoutManager(new GridLayoutManager(getContext(), CardAdapter.COLUMNS_COUNT, GridLayoutManager.VERTICAL, false));
@@ -72,6 +76,7 @@ public class RecipeListFragment extends BackStackFragment {
         } else {
             mBinding.swipeRefresh.setEnabled(false);
         }
+
         return mBinding.getRoot();
     }
 
@@ -136,6 +141,7 @@ public class RecipeListFragment extends BackStackFragment {
 
     private void checkForSwipe() {
         if (getArguments().getBoolean(Utils.IntentVars.NEED_INIT, false)) {
+            model = null;
             ((SearchActivity) getActivity()).setCardAdapter(cardAdapter);
         }
     }

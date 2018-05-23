@@ -1,6 +1,8 @@
 package com.hotger.recipes.view;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import com.hotger.recipes.adapter.CategoryAdapter;
 import com.hotger.recipes.databinding.FragmentCategoriesBinding;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.utils.AppDatabase;
+import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.utils.YummlyAPI;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.view.redactor.BackStackFragment;
@@ -95,5 +98,17 @@ public class CategoryFragment extends BackStackFragment {
         }
 
         return categories;
+    }
+
+    @Override
+    public void showInstructions() {
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        if (!pref.getBoolean(Utils.SharedPref.CATEGORY_PREF, false)) {
+            pref.edit().putBoolean(Utils.SharedPref.CATEGORY_PREF, true).apply();
+            View v = mBinding.spinnerCategories;
+            Utils.showInstructions(v, getString(R.string.choose_category_to_filter),
+                    getString(R.string.choose_category_to_filter_full), getActivity(),
+                    String.valueOf(v.getId()));
+        }
     }
 }

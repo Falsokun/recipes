@@ -43,15 +43,15 @@
                 android:text="@{model.msg}"/>
 
             <android.support.design.widget.FloatingActionButton
+                android:id="@+id/btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/msg_tv"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_action_add"
+                android:src="@drawable/ic_search"
                 android:visibility="@{model.additionalBtnVisible ? View.VISIBLE : View.GONE}"
                 android:tint="@android:color/white"
-                app:rippleColor="@android:color/white"
-                android:clickable="true"/>
+                app:rippleColor="@android:color/white"/>
         </RelativeLayout>
     </FrameLayout>
 </layout>

@@ -1,6 +1,7 @@
 package com.hotger.recipes.adapter;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableBoolean;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private List<RecipePrev> data;
 
+    private ObservableBoolean isEmpty = new ObservableBoolean(false);
+
     public CardAdapter(ControllableActivity activity, List<RecipePrev> data) {
         this.activity = activity;
+        isEmpty.set(data.size() == 0);
         this.data = data;
     }
 
@@ -79,10 +83,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public void clearData() {
         data.clear();
         notifyDataSetChanged();
+        isEmpty.set(true);
     }
 
     public void addData(List<RecipePrev> data) {
         this.data.addAll(0, data);
+        isEmpty.set(data.size() == 0);
         notifyDataSetChanged();
     }
 
@@ -96,12 +102,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         }
     }
 
-    public List<RecipePrev> getData() {
-        return data;
-    }
-
     public void setData(List<RecipePrev> data) {
         this.data = data;
+        isEmpty.set(data.size() == 0);
         notifyDataSetChanged();
+    }
+
+    public ObservableBoolean getEmpty() {
+        return isEmpty;
     }
 }

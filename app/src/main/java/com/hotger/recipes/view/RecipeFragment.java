@@ -32,7 +32,7 @@ import com.hotger.recipes.databinding.FragmentRecipeShowBinding;
 import com.hotger.recipes.database.FirebaseUtils;
 import com.hotger.recipes.model.Category;
 import com.hotger.recipes.model.RecipePrev;
-import com.hotger.recipes.utils.UI.EstimatesDialog;
+import com.hotger.recipes.UI.EstimatesDialog;
 import com.hotger.recipes.model.Product;
 import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.AppDatabase;
@@ -50,7 +50,7 @@ import static com.hotger.recipes.utils.AppDatabase.getDatabase;
 public class RecipeFragment extends Fragment {
 
     static final int MIN_DISTANCE = 300;
-    private float downX, downY, upX, upY;
+    private float downX,upX;
 
     private FragmentRecipeShowBinding mBinding;
     private RecipeViewModel model;
@@ -115,12 +115,10 @@ public class RecipeFragment extends Fragment {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 downX = event.getX();
-                downY = event.getY();
             }
 
             case MotionEvent.ACTION_UP: {
                 upX = event.getX();
-                upY = event.getY();
 
                 float deltaX = downX - upX;
 

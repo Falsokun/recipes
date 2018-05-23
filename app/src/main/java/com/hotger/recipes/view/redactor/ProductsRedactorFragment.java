@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.hotger.recipes.R;
 import com.hotger.recipes.databinding.FragmentRedactorProductsBinding;
 import com.hotger.recipes.utils.MessageModel;
+import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.InputProductsViewModel;
 
 public class ProductsRedactorFragment extends Fragment {
@@ -31,10 +32,12 @@ public class ProductsRedactorFragment extends Fragment {
         mBinding.listView.setAdapter(inputModel.getDataHintAdapter());
         mBinding.productsLineRv.setAdapter(inputModel.getProductsAdapter());
         mBinding.setIsEmpty(inputModel.getDataHintAdapter().isEmptyData());
-        KeyboardView keyboard = ((RedactorActivity) getActivity()).getKeyboard();
-        keyboard.setKeyboard(inputModel.getKeyboard(keyboard));
+//        KeyboardView keyboard = ((RedactorActivity) getActivity()).getKeyboard();
+//        keyboard.setKeyboard(inputModel.getKeyboard(keyboard));
         mBinding.productsLineRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        messageModel = new MessageModel(getString(R.string.add_products_hint), 0, false);
+        messageModel = new MessageModel((ControllableActivity) getActivity(),
+                getString(R.string.add_products_hint), 0, false);
+        mBinding.message.btn.setOnClickListener(v -> ((ControllableActivity) getActivity()).openSearch());
         mBinding.setMessageModel(messageModel);
         initListeners();
         return mBinding.getRoot();

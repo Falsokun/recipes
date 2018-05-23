@@ -77,6 +77,7 @@ public class MainActivity extends ControllableActivity {
             updateOptions();
             updateTitle();
             invalidateOptionsMenu(); //or respectively its support method.
+            showInstructions();
             return true;
         });
     }
@@ -287,6 +288,19 @@ public class MainActivity extends ControllableActivity {
         openRecipeFromDB(idToOpen);
         dialog.cancel();
         idToOpen = null;
+    }
+
+    public void showInstructions() {
+        int id = mBinding.viewPager.getCurrentItem();
+        BackStackFragment navFragment = (BackStackFragment)getNavigationFragment(id);
+        Fragment container = navFragment.getChildFragmentManager().findFragmentById(R.id.fragment_container);
+        if (container instanceof CategoryFragment) {
+            ((CategoryFragment)container).showInstructions();
+        } else if (container instanceof FridgeFragment) {
+            ((FridgeFragment)container).showInstructions();
+        } if (container instanceof HomeFragment) {
+            ((HomeFragment)container).showInstructions();
+        }
     }
 }
 

@@ -1,5 +1,7 @@
 package com.hotger.recipes.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,7 +53,6 @@ public class FridgeFragment extends BackStackFragment {
         inputModel.getItemTouchListener(Utils.SP_RECIPES_ID.TYPE_FRIDGE_ID)
                 .attachToRecyclerView(mBinding.fragmentRedactor.productsLineRv);
         initListeners();
-//        Utils.showInstructions(mBinding.fragmentRedactor.addProductName, "any text", getActivity(), "2");
         return mBinding.getRoot();
     }
 
@@ -99,7 +100,8 @@ public class FridgeFragment extends BackStackFragment {
                 .search(builder.toString())
                 .enqueue(new Callback<ResponseAPI<RecipePrev>>() {
                     @Override
-                    public void onResponse(Call<ResponseAPI<RecipePrev>> call, Response<ResponseAPI<RecipePrev>> response) {
+                    public void onResponse(Call<ResponseAPI<RecipePrev>> call,
+                                           Response<ResponseAPI<RecipePrev>> response) {
                         Fragment fragment = new BackStackFragment();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(Utils.IntentVars.RECIPE_OBJ, response.body());
@@ -123,5 +125,16 @@ public class FridgeFragment extends BackStackFragment {
                         mBinding.progress.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    @Override
+    public void showInstructions() {
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        if (!pref.getBoolean(Utils.SharedPref.FRIDGE_PREF, false)) {
+            pref.edit().putBoolean(Utils.SharedPref.FRIDGE_PREF, true).apply();
+            View show = mBinding.fragmentRedactor.addProductName;
+            Utils.showInstructions(show, getString(R.string.products_filter), getString(R.string.products_filter_hint), getActivity(),
+                    String.valueOf(show.getId()));
+        }
     }
 }

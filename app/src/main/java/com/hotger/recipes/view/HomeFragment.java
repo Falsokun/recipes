@@ -1,6 +1,8 @@
 package com.hotger.recipes.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -50,7 +52,12 @@ public class HomeFragment extends BackStackFragment {
 
     @Override
     public void showInstructions() {
-        Utils.showInstructions(mBinding.inputField, "any text", getActivity(), "10");
+        SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        if (!pref.getBoolean(Utils.SharedPref.HOME_PREF, false)) {
+            pref.edit().putBoolean(Utils.SharedPref.HOME_PREF, true).apply();
+            Utils.showInstructions(mBinding.inputField, getString(R.string.input_recipe),
+                    getString(R.string.input_recipe_description), getActivity(), "10");
+        }
     }
 
     //    public void test() {

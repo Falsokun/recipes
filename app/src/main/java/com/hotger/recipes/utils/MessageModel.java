@@ -1,7 +1,12 @@
 package com.hotger.recipes.utils;
 
+import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.view.View;
+
+import com.hotger.recipes.BR;
+import com.hotger.recipes.view.ControllableActivity;
 
 /**
  * Model to use in dummy fragments
@@ -14,7 +19,11 @@ public class MessageModel extends BaseObservable {
 
     private boolean additionalBtnVisible;
 
-    public MessageModel(String msg, int drawable, boolean additionalBtnVisible) {
+    private ControllableActivity activity;
+
+    public MessageModel(ControllableActivity activity, String msg,
+                        int drawable, boolean additionalBtnVisible) {
+        this.activity = activity;
         this.msg = msg;
         this.drawable = drawable;
         this.additionalBtnVisible = additionalBtnVisible;
@@ -37,5 +46,10 @@ public class MessageModel extends BaseObservable {
     @Bindable
     public boolean isAdditionalBtnVisible() {
         return additionalBtnVisible;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+        notifyPropertyChanged(BR.msg);
     }
 }

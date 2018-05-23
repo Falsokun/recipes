@@ -30,7 +30,12 @@
                 android:hint="Recipe name"
                 android:paddingLeft="@dimen/low_padding"
                 android:paddingRight="@dimen/low_padding"
-                android:textSize="@dimen/small_text_size" />
+                android:shadowColor="#000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="20"
+                android:textSize="@dimen/small_text_size"
+                android:textStyle="bold" />
         </RelativeLayout>
 
     </FrameLayout>
