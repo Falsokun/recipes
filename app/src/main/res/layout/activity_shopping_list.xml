@@ -22,7 +22,7 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:layout_behavior="com.hotger.recipes.utils.UI.DisableAppBarLayoutBehavior">
+            app:layout_behavior="com.hotger.recipes.UI.DisableAppBarLayoutBehavior">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing"

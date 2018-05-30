@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="@drawable/primary_gradient"
-            app:layout_behavior="com.hotger.recipes.utils.UI.DisableAppBarLayoutBehavior">
+            app:layout_behavior="com.hotger.recipes.UI.DisableAppBarLayoutBehavior">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing"

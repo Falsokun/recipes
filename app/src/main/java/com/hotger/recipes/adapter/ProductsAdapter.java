@@ -236,7 +236,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    public KeyboardView.OnKeyboardActionListener getOnKeyboardActionListener() {
+    private KeyboardView.OnKeyboardActionListener getOnKeyboardActionListener() {
         return new KeyboardView.OnKeyboardActionListener() {
             @Override
             public void onPress(int primaryCode) {

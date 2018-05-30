@@ -86,6 +86,7 @@
     <string name="products_filter_hint">Add your products from fridge and search for recipes!</string>
     <string name="input_recipe">Input recipe</string>
     <string name="input_recipe_description">Input recipe or recipe url to process it</string>
+    <string name="process_recipe">Process recipe</string>
 
     <string-array name="measures_array">
         <item></item>

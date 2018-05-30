@@ -17,11 +17,20 @@
             android:textColorHint="@color/colorPrimaryDarkOpaque" />
 
         <Button
-            android:id="@+id/addReceipt"
+            android:id="@+id/parseRecipe"
             style="@style/EntireLineBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/input_field"
+            android:layout_marginTop="8dp"
+            android:text="@string/process_recipe" />
+
+        <Button
+            android:id="@+id/addReceipt"
+            style="@style/EntireLineBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/parseRecipe"
             android:layout_marginTop="8dp"
             android:text="@string/add_recipe" />
 

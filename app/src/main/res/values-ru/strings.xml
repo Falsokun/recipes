@@ -79,4 +79,13 @@
     <string name="en_title">Заголовок на английском</string>
     <string name="enter_ingredient_info">Введите информацию об ингредиенте</string>
     <string name="share">Поделиться</string>
+    <string name="remove_bought">Удалить купленные ингредиенты</string>
+    <string name="publish_description">Опубликовать рецепты в общий доступ</string>
+    <string name="choose_category_to_filter">Фильтр категорий</string>
+    <string name="choose_category_to_filter_full">Выберите категории по которым будут фильтроваться рецепты</string>
+    <string name="products_filter">Добавление продуктов</string>
+    <string name="products_filter_hint">Внесите продукты из вашего холодильника и сделайте поиск по имеющимся ингредиентам!</string>
+    <string name="input_recipe">Введите рецепт</string>
+    <string name="input_recipe_description">Введите рецепт или URL рецепта и нажмите кнопку ниже чтобы начать обработку</string>
+    <string name="process_recipe">Обработать рецепт</string>
 </resources>

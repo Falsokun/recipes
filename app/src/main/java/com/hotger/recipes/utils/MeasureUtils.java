@@ -26,14 +26,14 @@ public class MeasureUtils {
             "pinch", "pn", "gallon", "quart", "qt", "pint", "pt", "c",
             "fl oz", "gill", "gallon", "gal", "quart", "qt", "pint", "pt", "стакан");
     private static List<String> LITTLE = Arrays.asList("smidgen", "drop", "clove",
-            "зубчик", "щепотк", "кап[ельяию]{2,3}");
+            "зубчик", "щепотк", "кап[ельяию]{2,3}", "to taste", "по вкусу");
     private static List<String> PCS = Arrays.asList("pcs", "pieces?", "штук", "шт");
 
     private static List<List<String>> measures = Arrays.asList(TBSP, TSP, ML, L, DRY, LIQUID, LITTLE, PCS);
 
     public static String matchMeasure(String str) {
         for (List<String> tempUnit : measures) {
-            Pattern p = Pattern.compile("(" + TextUtils.join("\\|", tempUnit) + ").*?[. ,]");
+            Pattern p = Pattern.compile(" (" + TextUtils.join("|", tempUnit) + ")[. ,]");
             Matcher m;
             if (tempUnit != TBSP) {
                 m = p.matcher(str.toLowerCase());

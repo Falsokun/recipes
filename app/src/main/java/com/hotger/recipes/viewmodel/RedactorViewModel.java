@@ -43,6 +43,16 @@ public class RedactorViewModel extends ViewModel {
         }
     }
 
+    public RedactorViewModel(ControllableActivity activity, Recipe recipe) {
+        this.activity = activity;
+        currentRecipe = recipe;
+        isEdited = true;
+        inputProductsViewModel = new InputProductsViewModel(activity, currentRecipe.getProducts(), true, true, false);
+        for(Category category : currentRecipe.getCategories()) {
+            categoryTitles.add(category.getTitle());
+        }
+    }
+
     //region listeners
     public CompoundButton.OnCheckedChangeListener getCheckedListener() {
         return (compoundButton, b) -> {

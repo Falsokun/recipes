@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.hotger.recipes.R;
 import com.hotger.recipes.adapter.ViewPagerAdapter;
 import com.hotger.recipes.databinding.ActivityRedactorBinding;
+import com.hotger.recipes.model.Recipe;
 import com.hotger.recipes.utils.Utils;
 import com.hotger.recipes.view.ControllableActivity;
 import com.hotger.recipes.viewmodel.RedactorViewModel;
@@ -41,6 +42,9 @@ public class RedactorActivity extends ControllableActivity {
         if (getIntent().getStringExtra(Utils.IntentVars.RECIPE_ID) != null) {
             mRedactorModel = new RedactorViewModel(this,
                     getIntent().getStringExtra(Utils.IntentVars.RECIPE_ID));
+        } else if (getIntent().getSerializableExtra(Utils.IntentVars.RECIPE_OBJ) != null) {
+            mRedactorModel = new RedactorViewModel(this,
+                    (Recipe)getIntent().getSerializableExtra(Utils.IntentVars.RECIPE_OBJ));
         } else {
             mRedactorModel = new RedactorViewModel(this);
         }

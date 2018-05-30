@@ -3,6 +3,12 @@ package com.hotger.recipes.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
+
+import java.net.URL;
+import java.net.HttpURLConnection;
+import com.hotger.recipes.model.Recipe;
+import com.hotger.recipes.view.redactor.RedactorActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,61 +18,80 @@ import org.jsoup.select.Elements;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParseUtils {
 
     private static Pattern instructionsPattern = Pattern.compile("(instructions?|directions?|preparations?" +
-            "|приготовление|инструкции|(инструкция|способ|рецепт|порядок) приготовления|пошаговый( фото)? рецепт( приготовления)|подготовка)");//.*?( |:|\n|<.*?>)
-    private static Pattern ingredientsPattern = Pattern.compile("(ингредиенты|вам понадоб[ия]тся|ingredients)");//.*?( |:|\n|<.*?>)
-    private static Pattern portionsPattern = Pattern.compile("(на \\d+ (персон.?|порци.?)|количество (порций|персон)? \\d+|(\\d+)? ?порци. (\\d+)?)");
-    private static Pattern timePattern = Pattern.compile("(общее время )?(\\d+ час.*? )?\\d+ мин(\\w+|\\.| )");
+            "|приготовление|инструкции|(инструкция|способ|рецепт|порядок) приготовления|пошаговый( фото)? рецепт" +
+            "( приготовления)|подготовка)");//.*?( |:|\n|<.*?>)
+    //    private static Pattern ingredientsPattern = Pattern.compile("(ингредиенты|вам понадоб[ия]тся|ingredients)");//.*?( |:|\n|<.*?>)
+    private static Pattern portionsPattern = Pattern.compile("(на [\\d-]+ (персон.?|порци.?)|количество " +
+            "(порций|персон)? [\\d-]+|([\\d-]+)? ?порци. (\\d+)?)");
+    private static Pattern timePattern = Pattern.compile("(общее время )?([\\d-]+ час.*? )?[\\d-]+ мин(\\w+|\\.| )");
     private static Pattern caloriesPattern = Pattern.compile("(калорий.*? )?\\d+( ккал| калорий)");
-//    Количество порций
-//    Порций
-//    порции
-//    количество персон
-    private static Pattern relatedPattern = Pattern.compile("(похож.*? рецепт?| вам (также|могут) понравит|подбор( рецепта)?)");
-    private static String[] keyWordsEn = {"cook for", "bon appetit", "rest", "serving", "serve", "hour", "until", "bake"};
+    //    private static Pattern relatedPattern = Pattern.compile("(похож.*? рецепт?| вам (также|могут) понравит|подбор( рецепта)?)");
+    private static String[] keyWordsEn = {"cook for", "bon appetit", "rest", "serving", "serve", "hour", "until", "bake",
+            "put", "hour", "hr", "plate", "heat", "oven", "degree", "mix", "dry", "dust", "scatter", "place",
+    "cool", "baking", "pull", "cut", "skillet", "drain", "chop", "slice", "sprinkle", "fry", "fold",
+            "combine", "stir", "toss", "stuff", "prepare", "cut", "fridge", "spoon", "warm", "add",
+            "whisk", "melt", "fill", "frige", "cover", };
     private static String[] keyWordsRu = {"приятного аппетита", "подавать к столу", "посол", "запек",
-            "постоять", "остудит", "час", "постав", "тарелк", "лепит", "сковород",
-            "подавать", "подавай", "украс", "спасибо", "посол", "сахар", "обжар", "сковород",
+            "постоять", "остудит", "час", "постав", "тарелк", "лепит",
+            "подавать", "подавай", "украс", "спасибо", "посол", "сахар", "обжар", "очист",
             "перемеш", "взбить", "подготов", "смешат", "духовк", "смешай", "накрой", "пропита", "грей",
             "грел", "противень", "градус", "отделит", "взбей", "однородн", "охлажд", "охлад", "скалк",
-            "кастрюл", "тщательно", "резат", "режьт", "холодильник", "ложк", "затем",
-            "молок", "стакан", "мелко", "выпека", "растер", "залит", "замесит"};
+            "кастрюл", "тщательно", "резат", "режьт", "холодильник", "затем",
+            "молок", "стакан", "мелко", "выпека", "растер", "залит", "замесит", "градус"};
+    private static String[] keywords;
 
     public static void parseRecipe(String url, Context context, boolean isFromApi) {
         Thread t = new Thread(() -> {
-            String recipeText = "";
-//            String finalUrl = getRedirectIfAny(url);
-//            String body = getBody(getRecipeText(finalUrl));
-//            recipeText = removeRedundantLabels(body);
-//            recipeText = getRecipeSteps(recipeText, context, isFromApi);
+            initData();
+            Recipe recipe = new Recipe();
+            String recipeText;
+            String finalUrl = getRedirectIfAny(url);
+            String body = getBody(getRecipeText(finalUrl));
+            recipeText = getRecipeSteps(Jsoup.parse(body), isFromApi);
+            recipe.setPreparations(fromHtml(recipeText));
             if (!isFromApi) {
-//                displayAlert(recipeText, context);
-//                getRecipeInfo(recipeText, context);
+                getRecipeInfo(recipeText, recipe);
+                Intent intent = new Intent(context, RedactorActivity.class);
+                intent.putExtra(Utils.IntentVars.RECIPE_OBJ, recipe);
+                context.startActivity(intent);
             } else {
                 Intent intent = new Intent(YummlyAPI.REC_DIRECTIONS);
                 intent.putExtra(YummlyAPI.REC_DIRECTIONS, recipeText);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         });
+
         t.start();
     }
 
+    private static String fromHtml(String recipeText) {
+        return Html.fromHtml(recipeText).toString().replaceAll("\n+", "\n");
+    }
+
+    private static void initData() {
+        keywords = new String[keyWordsEn.length + keyWordsRu.length];
+        System.arraycopy(keyWordsEn, 0, keywords, 0, keyWordsEn.length);
+        System.arraycopy(keyWordsRu, 0, keywords, keyWordsEn.length, keyWordsRu.length);
+    }
+
     //тут надо найти продукты, время, количество калорий, количество порций, название
-    private static void getRecipeInfo(String recipeText, Context context) {
-        String str = recipeText.replaceAll("</?.*?>", "");
+    private static void getRecipeInfo(String recipeText, Recipe recipe) {
+        String str = recipeText.replaceAll("</?.*?>", " ");
         str = str.replaceAll("[:\\-\"]", "");
         str = str.replaceAll("&nbsp;", " ");
+        str = str.replaceAll("[\t .]+]", " ");
         int portions = getNumberByPattern(str, portionsPattern);
         int time = getNumberByPattern(str, timePattern);
         int calories = getNumberByPattern(str, caloriesPattern);
+        recipe.setCookTimeInMinutes(time);
+        recipe.setCalories(calories);
+        recipe.setNumberOfServings(portions);
     }
 
     private static int getNumberByPattern(String str, Pattern pattern) {
@@ -85,23 +110,10 @@ public class ParseUtils {
         return 0;
     }
 
-    public static String getRecipeSteps(String recipeText, Context context, boolean isFromApi) {
-        //минуты в большом количестве встречаются в других местах
-        String[] keywords = new String[keyWordsEn.length + keyWordsRu.length];
-        System.arraycopy(keyWordsEn, 0, keywords, 0, keyWordsEn.length);
-        System.arraycopy(keyWordsRu, 0, keywords, keyWordsEn.length, keyWordsRu.length);
-
-        Element div = getElementWhichContainsMost(recipeText,
-                keywords);
-        div = getElementWithInstructions(div, recipeText);
-//            div = getFinalRecipeDiv(div);
-        String result = getFromInstructions(div.toString());
-//            result = result.replaceAll(">(\n| )*<", "><");
-        result = result.replaceAll("([\n]+[ ]{2,})+", "\n");
-        return result;
-    }
-
-    private static void displayAlert(String result, Context context) {
+    private static String getRecipeSteps(Element htmlText, boolean isFromApi) {
+        Element el = removeComments(htmlText);
+        Document newDoc = removeRedundantLabels(el.toString());
+        return sortByDivs(newDoc.body()).toString();
     }
 
     private static String getFromInstructions(String str) {
@@ -116,25 +128,18 @@ public class ParseUtils {
                 .replaceAll("<.*?/?>", "");
     }
 
-    private static Element getElementWithInstructions(Element div, String text) {
+    private static Element getElementWithInstructions(Element div) {
         if (div.select("div,section,ul,table").size() == 0)
             return div;
 
-        Matcher matcher = ingredientsPattern.matcher(text);
-        int ingredientIndex = 0;
-        if (matcher.find()) {
-            ingredientIndex = text.indexOf(matcher.group());
-        }
-
+        Matcher matcher;
         Element out = div;
         for (Element elem : div.select("div,section,ul,table")) {
             matcher = instructionsPattern.matcher(elem.toString().toLowerCase());
             if (matcher.find()) {
                 if (out.toString().length() > elem.toString().length()
                         && elem.toString().toLowerCase().length() > matcher.group().length() * 3) {
-//                    if (ingredientIndex < text.indexOf(elem.toString())) {
                     out = elem;
-//                    }
                 }
             }
         }
@@ -142,56 +147,106 @@ public class ParseUtils {
         return out;
     }
 
-    //ТУТ ВСЕ ПЛОХО
-    private static Element getElementWhichContainsMost(String str, String[] keyWords) {
-        Element closest = new Element("tag");
-        Document doc = Jsoup.parse(str);
-        Elements elements = doc.body().select("div,section,table,ul");
-        int maxTemp = 0;
-        int closestCount = 0;
-        Element maxElem = new Element("tag");
+    private static Element sortByDivs(Element doc) {
+        Elements elements = doc.select(":root > div");
+        Element firstChild = null;
+        int divCount = 0;
         for (Element element : elements) {
             int tempCount = 0;
-            for (String key : keyWords) {
+            for (String key : keywords) {
                 tempCount += countSubString(element.toString().toLowerCase(), key);
             }
 
-            if (tempCount < 5)
-                continue;
+            if (tempCount != 0 && tempCount >= divCount) {
+                firstChild = element;
+                divCount = tempCount;
+            }
+        }
+//        Element element = sortByNotDivs(firstChild);
+        return getBestElement(getDirectElements(firstChild), true);
+    }
 
-            //сужение
-            if (tempCount >= closestCount) {
-                closestCount = tempCount;
-                closest = element;
-            } else { // другой блок
-                if (tempCount >= maxTemp) {
-                    maxElem = element;
-                    maxTemp = tempCount;
-                }
+    private static Element removeChildrenNesting(Element firstChild) {
+        if (firstChild == null || firstChild.children() == null || firstChild.children().size() == 0)
+            return firstChild;
+
+        if (firstChild.children().size() > 1) {
+            return firstChild;
+        }
+
+        return removeChildrenNesting(firstChild.child(0));
+    }
+
+//    private static Element sortWithManyChildren(Element firstChild) {
+//        Elements nestedDivs = firstChild.select(":root > div");
+//        if (nestedDivs.size() == 1) {
+//            Element div = firstChild.select(":root > div").first();
+//            if (countKeyWords(div) == countKeyWords(firstChild)) {
+//                return removeChildrenNesting(div);
+//            }
+//        }
+//
+//        if (countDifferentChildTags(firstChild) == nestedDivs.size()) {
+//            return getBestElement(nestedDivs, true);
+//        } else {
+//            return getBestElement(getDirectElements(firstChild), false);
+//        }
+//    }
+
+    private static Elements getDirectElements(Element el) {
+        Elements elements = new Elements();
+        elements.addAll(el.select(":root > div"));
+        elements.addAll(el.select(":root > section"));
+        elements.addAll(el.select(":root > ul"));
+        elements.addAll(el.select(":root > table"));
+        elements.addAll(el.select(":root > ol"));
+        return elements;
+    }
+    private static int countDifferentChildTags(Element el) {
+        if (el == null || el.children().size() == 0)
+            return 0;
+
+        return el.select(":root > div").size()
+                + el.select(":root > section").size()
+                + el.select(":root > ul").size()
+                + el.select(":root > table").size()
+                + el.select(":root > ol").size();
+    }
+
+    private static Element getBestElement(Elements doc, boolean isContinue) {
+        Element res = null;
+        int divCount = 0;
+        for (Element element : doc) {
+            Element temp = removeChildrenNesting(element);
+            int tempCount = countKeyWords(temp);
+            if (tempCount != 0 && tempCount >= divCount) {
+                res = temp;
+                divCount = tempCount;
             }
         }
 
-        //тут вообще должно быть другое условие, надо подумать какое
-        //может соотношение длины и количества попавших
-        if (maxTemp / (double) maxElem.toString().length() >
-                closestCount / (double) closest.toString().length()) {
-            return maxElem;
-        } else {
-            return closest;
+        if (isContinue) {
+            if (countDifferentChildTags(res) == res.select(":root > div").size()) {
+                if (res.select("div").size() - 1 > res.select(":root > div").size()) {
+                    return getBestElement(res.select(":root > div"), true);
+                } else {
+                    return res;
+                }
+            } else {
+                return getBestElement(getDirectElements(res), false);
+            }
         }
+
+        return res;
     }
 
-    private static boolean isGoodKoeff(int clCount, Element closest, int elCount, Element element) {
-        double elWords = element
-                .toString()
-                .replaceAll("<.*?>", "")
-                .split("( |\n|&nbsp;)").length;
-        double clWords = closest
-                .toString()
-                .replaceAll("<.*?>", "")
-                .split("( |\n|&nbsp;)").length;
-        return elCount == 0
-                || (elCount / elWords) / (clCount / clWords) > 0.8;
+    private static int countKeyWords(Element element) {
+        int tempCount = 0;
+        for (String key : keywords) {
+            tempCount += countSubString(element.toString().toLowerCase(), key);
+        }
+
+        return tempCount;
     }
 
     private static int countSubString(String str, String substr) {
@@ -233,13 +288,14 @@ public class ParseUtils {
         return stringUrl;
     }
 
-    public static String getRecipeText(String path) {
+    private static String getRecipeText(String path) {
         StringBuffer stringBuffer = new StringBuffer();
         try {
-            URL url = new URL(path);
+            URL url = new URL( path );
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty( "User-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36");
             BufferedReader in = new BufferedReader(
-                    new InputStreamReader(url.openStream()));
-
+                    new InputStreamReader(connection.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 stringBuffer.append(inputLine);
@@ -262,7 +318,7 @@ public class ParseUtils {
         return stringBuffer.toString();
     }
 
-    public static String getBody(String plainText) {
+    private static String getBody(String plainText) {
         Pattern mPattern = Pattern.compile("<body.*?/body>");
         Matcher m = mPattern.matcher(plainText);
         if (m.find()) {
@@ -274,26 +330,24 @@ public class ParseUtils {
         return "";
     }
 
-    public static String removeRedundantLabels(String htmlBody) {
+    private static Document removeRedundantLabels(String htmlBody) {
 //            //.*? - any character until first match
         String str = removeIrrelevant(htmlBody);
-        str = removeComments(str);
 //        str = str.replaceAll(" (class|id|itemprop|align|for|style|itemscope itemtype)=[\"'].*?[\"']", "");
         str = str.replaceAll(" [^ ]*?=[\"'].*?[\"']>", ">");
         str = str.replaceAll("\\t", "");
-        str = str.replaceAll("</?(i|b|span|h\\d||textarea)>", "");
+        str = str.replaceAll("</?(i|b|span|strong|br|h\\d|textarea)>", "");
         str = str.replaceAll("[ ]{2,}", " ");
+        str = str.replaceAll("<(tbody|td|tr).*?>", "");
+        str = str.replaceAll("</(tbody|td|tr)>", "");
+        str = str.replaceAll("<(section|table|article)", "<div");
+        str = str.replaceAll("/(section|table|article)>", "/div>");
         str = removeEmptyTags(str);
-//        String[] textTags = {"span", "p", };
-//        str = str.replaceAll()
-
-        //remove all tags
-//        bodyText.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ")
-        return str;
+        return Jsoup.parse(str);
     }
 
     private static String removeEmptyTags(String str) {
-        String tagPString = "<(?<tag>\\w+)?>((?: |\\t|&nbsp;)*?|.{1,6})</\\k<tag>>";
+        String tagPString = "<(?<tag>\\w+)>((?: |\\n|\\t|&nbsp;)*?|.{1,10})</\\k<tag>>";
         Pattern tagPattern = Pattern.compile(tagPString);
         Matcher m = tagPattern.matcher(str);
         while (m.find()) {
@@ -305,14 +359,16 @@ public class ParseUtils {
 
     private static String removeIrrelevant(String str) {
         //img и другие закрывающие <img/> теги надо удалять по-другому
-        String[] irrelevantTags = {"option", "nav", "form", "input", "img", "style", "iframe", "header"};
+        String[] irrelevantTags = {"option", "nav", "form", "aside", "input", "img", "style", "iframe", "header"};
 
         String out = str
 //                .replaceAll("[\"']http.*?[\"']", "")
                 .replaceAll("<!--.*?-->", "")
                 .replaceAll("<img.*?>", "")
                 .replaceAll("</img>", "")
-                .replaceAll("href=\".*?\"", "");
+                .replaceAll("href=\".*?\"", "")
+                .replaceAll("<a.*?/a>", "")
+                .replaceAll("<input.*?>", "");
         for (String tag : irrelevantTags) {
             out = out.replaceAll("<" + tag + ".*?>.*?</" + tag + "?>", "");
         }
@@ -320,70 +376,16 @@ public class ParseUtils {
         return out;
     }
 
-    //ЧОТ ОЧЕНЬ ДОЛГО
-    private static String removeComments(String str) {
-        Pattern mPattern = Pattern.compile("comment.*?>");
-        Pattern openTag = Pattern.compile("<(.*?) ");
-        Pattern tagWithClassesPattern;
-        Matcher tagMatcher;
-        Matcher m = mPattern.matcher(str);
-        int lastIndex = 0;
-        ArrayList<String> comments = new ArrayList<>();
-        while (m.find()) {
-            String regString = m.group();
-            int tempLast = lastIndex;
-            lastIndex = str.indexOf(regString, lastIndex) + regString.length();
-            //substring containing comment
-            String substr = str.substring(tempLast, lastIndex);
-            String subAfter = str.substring(lastIndex);
-
-            //regString should be screened
-            tagWithClassesPattern = Pattern.compile("<[0-9a-zA-Z:=\" -]*?" + Pattern.quote(regString));
-            tagMatcher = tagWithClassesPattern.matcher(substr);
-            if (tagMatcher.find()) {
-                String tag = tagMatcher.group();
-                tagMatcher = openTag.matcher(tag);
-                tagMatcher.find();
-                tag = tagMatcher.group(1);
-
-                // вот тут должно быть не indexOf а функция, которая пропускает </tag, если до этого были <tag
-                int closeIndex = getEnclosingIndex(subAfter, tag);
-                if (closeIndex == -1) {
-                    continue;
-                }
-
-                int openBrace = substr.lastIndexOf("<" + tag);
-                String comment = str.substring(tempLast + openBrace, tempLast +
-                        substr.length() + closeIndex + 3 + tag.length());
-                comments.add(comment);
+    //надо пересмотреть, может эта хрень вообще делается гораздо проще
+    private static Element removeComments(Element doc) {
+        Elements elements = new Elements();
+        for(Element element : doc.getAllElements()) {
+            if (element.classNames().contains("comment") || element.id().contains("comment")) {
+                elements.add(element);
+                element.remove();
             }
         }
 
-        for (String comment : comments) {
-            if (str.contains(comment))
-                str = str.replaceFirst(Pattern.quote(comment), "");
-        }
-
-        return str;
-    }
-
-    private static int getEnclosingIndex(String str, String tag) {
-        String copyStr = str;
-        int lastIndex = str.indexOf("</" + tag + ">");
-        if (lastIndex == -1)
-            return -1;
-        String substring = copyStr.substring(0, lastIndex);
-        while (lastIndex != -1) {
-            if (substring.contains("<" + tag)) {
-                copyStr = copyStr.replaceFirst("<" + tag, "<anytag");
-                copyStr = copyStr.replaceFirst("</tag", "</anytag");
-                lastIndex = str.indexOf("</" + tag);
-                substring = copyStr.substring(0, lastIndex);
-            } else {
-                return lastIndex;
-            }
-        }
-
-        return -1;
+        return doc;
     }
 }

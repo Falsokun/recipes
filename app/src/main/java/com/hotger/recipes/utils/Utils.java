@@ -48,7 +48,6 @@ public class Utils {
     }
 
     public static boolean matchesUrl(String str) {
-        ///^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
         Pattern urlPattern = Pattern.compile("^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$");
         Matcher m = urlPattern.matcher(str);
         return m.find();
@@ -65,11 +64,11 @@ public class Utils {
      * Shared preferences variables
      */
     public class SharedPref {
-        public static final String TRANSLATIONS_REF = "translations_ref";
-        public static final String PUBLISH_REF = "publish_ref";
-        public static final String HOME_PREF = "home_pref";
-        public static final String CATEGORY_PREF = "category_pref";
-        public static final String FRIDGE_PREF = "fridge_pref";
+        public static final String TRANSLATIONS_REF = "com.hotger.recipes.translations_ref";
+        public static final String PUBLISH_REF = "com.hotger.recipes.publish_ref";
+        public static final String HOME_PREF = "com.hotger.recipes.home_pref";
+        public static final String CATEGORY_PREF = "com.hotger.recipes.category_pref";
+        public static final String FRIDGE_PREF = "com.hotger.recipes.fridge_pref";
     }
 
     /**
